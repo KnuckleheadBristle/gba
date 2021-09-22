@@ -1,6 +1,18 @@
 #[path = "../src/proccore.rs"]
 mod proccore;
 
+/* 
+Contained within are the tests for the translation of thumb instructions into ARM instructions
+
+It's probably a lot of unnecessary work, but oh well, I want to make sure
+
+The names should be fairly self-explanatory, but note that they do not follow the same order as they
+appear in documentation.
+
+Effort also needs to be made to test every possible instruction, as to ensure that things are definitely
+being translated correctly
+*/
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -25,6 +37,7 @@ mod test {
         assert_eq!(arminst, converted);
     }
     #[test]
+
     fn convert_push_pop_reg() {
         let thumbinst: u16  = 0b1011010000011111;
         let arminst: u32    = 0b11101001001011010000000000011111;
@@ -46,8 +59,6 @@ mod test {
 
     #[test]
     fn convert_ld_store_reg_offset() {
-        // thumb format 7 = arm format 9
-        //need to write test
         let thumbinst: u16  = 0b0101000110010011;
         let arminst: u32    = 0b11100111100000100011000000000110;
         let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));

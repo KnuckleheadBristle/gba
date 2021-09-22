@@ -1,6 +1,12 @@
 #[path = "../src/proccore.rs"]
 mod proccore;
 
+/* 
+These tests are to make sure that the different instruction groups are being correcly detected. (ARM and thumb)
+
+Refer to arm7 documentation for more details
+*/
+
 #[cfg(test)]
 mod tests {
     use super::*;
