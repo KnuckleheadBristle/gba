@@ -380,6 +380,10 @@ pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> u32 {
             println!("op: {} rn: {} rs: {} rd: {}", op, rn, rs, rd);
             0b11100000000100000000000000000000 | rn | (rd << 12) | (rs << 16) | (top<<21) | (i << 25)
         }
+        ThumbInstType::UnconditionalBranch => {
+            let off11: u32 = (inst &0x7FF) as u32;
+            0b11101010000000000000000000000000 | (off11 >> 1)
+        }
         _   =>  panic!("Thumb instruction is not implemented!")
     }
 }

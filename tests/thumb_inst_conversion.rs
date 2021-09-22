@@ -146,4 +146,12 @@ mod test {
         let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));
         assert_eq!(arminst, converted);
     }
+
+    #[test]
+    fn convert_uncond_branch() {
+        let thumbinst: u16  = 0b1110011111111110;
+        let arminst: u32    = 0b11101010000000000000001111111111;
+        let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));
+        assert_eq!(arminst, converted);
+    }
 }
