@@ -353,8 +353,9 @@ pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> u32 {
             let mut op: u32 = ((inst & 0x300) >> 8) as u32;
             let h1: u32 = ((inst & 0x80) >> 7) as u32;
             let h2: u32 = ((inst & 0x40) >> 6) as u32;
-            let rshs: u32 = ((inst & 0x38) >> 3) as u32;
-            let rdhd: u32 = (inst & 0x7) as u32;
+            let mut rshs: u32 = ((inst & 0x38) >> 3) as u32;
+            let mut rdhd: u32 = (inst & 0x7) as u32;
+            println!("op: {} h1: {} h2: {} rshs: {} rdhd: {}", op, h1, h2, rshs, rdhd);
             op = match op {
                 0   =>  0b0100,
                 1   =>  0b1010,
@@ -362,13 +363,26 @@ pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> u32 {
                 3   =>  0b0000,
                 _   =>  panic!("Hi Register thumb opcode {} does not exist", op)
             };
+            rshs = rshs | (h2 << 3);
+            rdhd = rdhd | (h1 << 3);
+            println!("op: {} rshs: {} rdhd: {}", op, rshs, rdhd);
             if op == 0 {
-                0b11100001001011111111111100010000 | rshs | (h2 << 3)
+                0b11100001001011111111111100010000 | rshs
             } else {
-                0b11100000000000000000000000000000 | rshs | (h2 << 3) | (rdhd << 12) | (h1 << 16) | (rdhd << 16) | (h1 << 20) | (op << 21)
+                0b11100000000000000000000000000000 | rshs | (rdhd << 12) | (rdhd << 16) | if op==10 {0b1<<20} else {0x0} | (op << 21)
             }
             
         }
         _   =>  panic!("Thumb instruction is not implemented!")
     }
 }
+
+/* 
+1110 0001 0101 0100 0100 0000 0000 1100
+
+1110 0001 0100 0101 0100 0000 0000 1100
+
+1110 0001 0100 0100 0100 0000 0000 1100
+
+if op==10 {0x10000} else {0x0} |
+*/
