@@ -355,7 +355,6 @@ pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> u32 {
             let h2: u32 = ((inst & 0x40) >> 6) as u32;
             let mut rshs: u32 = ((inst & 0x38) >> 3) as u32;
             let mut rdhd: u32 = (inst & 0x7) as u32;
-            println!("op: {} h1: {} h2: {} rshs: {} rdhd: {}", op, h1, h2, rshs, rdhd);
             op = match op {
                 0   =>  0b0100,
                 1   =>  0b1010,
@@ -365,24 +364,32 @@ pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> u32 {
             };
             rshs = rshs | (h2 << 3);
             rdhd = rdhd | (h1 << 3);
-            println!("op: {} rshs: {} rdhd: {}", op, rshs, rdhd);
             if op == 0 {
                 0b11100001001011111111111100010000 | rshs
             } else {
                 0b11100000000000000000000000000000 | rshs | (rdhd << 12) | (rdhd << 16) | if op==10 {0b1<<20} else {0x0} | (op << 21)
             }
-            
+        },
+        ThumbInstType::AddSubtract => {
+            let i: u32 = ((inst & 0x400) >> 10) as u32;
+            let op: u32 = ((inst & 0x200) >> 9) as u32;
+            let rn: u32 = ((inst & 0x1C0) >> 6) as u32;
+            let rs: u32 = ((inst & 0x38) >> 3) as u32;
+            let rd: u32 = (inst & 0x7) as u32;
+            let top: u32 = (op << 1) | ((!op&0b1) << 2);
+            println!("op: {} rn: {} rs: {} rd: {}", op, rn, rs, rd);
+            0b11100000000100000000000000000000 | rn | (rd << 12) | (rs << 16) | (top<<21) | (i << 25)
         }
         _   =>  panic!("Thumb instruction is not implemented!")
     }
 }
 
 /* 
-1110 0001 0101 0100 0100 0000 0000 1100
+11100000100101000000000000000011
+1110 0000 1001 0100 0000 0000 0000 0011
+11100000100100110000000000000100
+111000001001 0011 0000 0000 0000 0100
 
-1110 0001 0100 0101 0100 0000 0000 1100
 
-1110 0001 0100 0100 0100 0000 0000 1100
-
-if op==10 {0x10000} else {0x0} |
+1111 1110 1001 0011 0000 0000 0000 0100
 */

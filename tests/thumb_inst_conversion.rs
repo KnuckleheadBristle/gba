@@ -134,4 +134,16 @@ mod test {
         let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));
         assert_eq!(arminst, converted);
     }
+
+    #[test]
+    fn convert_add_sub() {
+        let thumbinst: u16  = 0b0001100100011000;
+        let arminst: u32    = 0b11100000100100110000000000000100;
+        let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));
+        assert_eq!(arminst, converted);
+        let thumbinst: u16  = 0b0001111110010110;
+        let arminst: u32    = 0b11100010010100100110000000000110;
+        let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));
+        assert_eq!(arminst, converted);
+    }
 }
