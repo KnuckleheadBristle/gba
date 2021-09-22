@@ -154,4 +154,12 @@ mod test {
         let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));
         assert_eq!(arminst, converted);
     }
+
+    #[test]
+    fn convert_pc_rel_load() {
+        let thumbinst: u16  = 0b0100101111010011;
+        let arminst: u32    = 0b11100101100111110011001101001100;
+        let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));
+        assert_eq!(arminst, converted);
+    }
 }

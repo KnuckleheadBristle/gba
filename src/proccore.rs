@@ -379,10 +379,18 @@ pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> u32 {
             let top: u32 = (op << 1) | ((!op&0b1) << 2);
             println!("op: {} rn: {} rs: {} rd: {}", op, rn, rs, rd);
             0b11100000000100000000000000000000 | rn | (rd << 12) | (rs << 16) | (top<<21) | (i << 25)
-        }
+        },
         ThumbInstType::UnconditionalBranch => {
             let off11: u32 = (inst &0x7FF) as u32;
             0b11101010000000000000000000000000 | (off11 >> 1)
+        },
+        ThumbInstType::PCRelativeLoad => {
+            let rd: u32 = ((inst & 0x700) >> 8) as u32;
+            let word8: u32 = (inst & 0xFF) as u32;
+            0b11100101100111110000000000000000 | (word8 << 2) | (rd << 12)
+        },
+        ThumbInstType::LoadStoreHalfword => {
+            0
         }
         _   =>  panic!("Thumb instruction is not implemented!")
     }
