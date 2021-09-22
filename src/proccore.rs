@@ -73,7 +73,7 @@ pub enum ThumbInstType {
     AddSubtract,
     MoveCompareAddSubtractImmediate,
     ALUOperation,
-    HiRegisterOpenationsBranchExchange,
+    HiRegisterOperationsBranchExchange,
     PCRelativeLoad,
     LoadStoreWithRegisterOffset,
     LoadStoreSignExtendedByteHalfword,
@@ -250,6 +250,7 @@ impl Core {
     }
 }
 
+#[allow(dead_code)]
 pub fn decode_arm(inst: u32) -> ArmInstType {
     if bitpat!( _ _ _ _ 0 0 0 1 0 0 1 0 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 1 _ _ _ _ )(inst) {ArmInstType::BranchAndExchange}                       else
     if bitpat!( _ _ _ _ 0 0 0 1 0 _ 0 0 _ _ _ _ _ _ _ _ 0 0 0 0 1 0 0 1 _ _ _ _ )(inst) {ArmInstType::SingleDataSwap}                          else
@@ -270,6 +271,7 @@ pub fn decode_arm(inst: u32) -> ArmInstType {
 }
 
 /* This is not the order instruction appear in the technical reference, but are ordered such that decoding works */
+#[allow(dead_code)]
 pub fn decode_thumb(inst: u16) -> ThumbInstType {
     if bitpat!( 1 1 0 1 1 1 1 1 _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::SoftwareInterrupt} else
     if bitpat!( 1 0 1 1 0 0 0 0 _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::AddOffsetToStackPointer} else
@@ -277,7 +279,7 @@ pub fn decode_thumb(inst: u16) -> ThumbInstType {
     if bitpat!( 0 1 0 1 _ _ 0 _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::LoadStoreWithRegisterOffset} else
     if bitpat!( 0 1 0 1 _ _ 1 _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::LoadStoreSignExtendedByteHalfword} else
     if bitpat!( 0 1 0 0 0 0 _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::ALUOperation} else
-    if bitpat!( 0 1 0 0 0 1 _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::HiRegisterOpenationsBranchExchange} else
+    if bitpat!( 0 1 0 0 0 1 _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::HiRegisterOperationsBranchExchange} else
     if bitpat!( 0 0 0 1 1 _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::AddSubtract} else
     if bitpat!( 1 1 1 0 0 _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::UnconditionalBranch} else
     if bitpat!( 0 1 0 0 1 _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::PCRelativeLoad} else
@@ -293,6 +295,7 @@ pub fn decode_thumb(inst: u16) -> ThumbInstType {
     {ThumbInstType::Undefined}
 }
 
+#[allow(dead_code)]
 pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> u32 {
     match insttype {
         ThumbInstType::SoftwareInterrupt => {
@@ -346,7 +349,7 @@ pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> u32 {
                 0b11100000000100000000000000000000 | rs | (shift << 4) | (rd << 12) | (rd << 16) | (op << 21)
             }
         },
-        ThumbInstType::HiRegisterOpenationsBranchExchange => {
+        ThumbInstType::HiRegisterOperationsBranchExchange => {
             let mut op: u32 = ((inst & 0x300) >> 8) as u32;
             let h1: u32 = ((inst & 0x80) >> 7) as u32;
             let h2: u32 = ((inst & 0x40) >> 6) as u32;
@@ -369,12 +372,3 @@ pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> u32 {
         _   =>  panic!("Thumb instruction is not implemented!")
     }
 }
-
-/*
-11101001001011010000000000011111
-
-11101010001011010000000000011111
-11101000001011010000000000011111
-11111111001011010000000000011111
-11101000001011010000000000011111
-*/

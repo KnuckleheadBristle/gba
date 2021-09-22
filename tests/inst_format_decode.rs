@@ -113,7 +113,7 @@ mod tests {
 
     #[test]
     fn test_thumb_hireg() {
-        assert_eq!(proccore::decode_thumb(0b0100010010111101), proccore::ThumbInstType::HiRegisterOpenationsBranchExchange);
+        assert_eq!(proccore::decode_thumb(0b0100010010111101), proccore::ThumbInstType::HiRegisterOperationsBranchExchange);
     }
 
     #[test]
