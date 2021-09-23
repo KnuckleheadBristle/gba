@@ -174,4 +174,32 @@ mod test {
         let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));
         assert_eq!(arminst, converted);
     }
+
+    #[test]
+    fn convert_sp_rel_ldstr() {
+        let thumbinst: u16  = 0b1001010001111011;
+        let arminst: u32    = 0b11100101100011010100000001111011;
+        let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));
+        assert_eq!(arminst, converted);
+    }
+
+    #[test]
+    fn convert_load_address() {
+        let thumbinst: u16  = 0b1010001010001111;
+        let arminst: u32    = 0b11100010100011110010001010001111;
+        let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));
+        assert_eq!(arminst, converted);
+        let thumbinst: u16  = 0b1010111000110101;
+        let arminst: u32    = 0b11100010100011010110001000110101;
+        let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));
+        assert_eq!(arminst, converted);
+    }
+
+    #[test]
+    fn convert_load_mult_load_store() {
+        let thumbinst: u16  = 0b1010111000110101;
+        let arminst: u32    = 0b11100010100011010110001000110101;
+        let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));
+        assert_eq!(arminst, converted);
+    }
 }
