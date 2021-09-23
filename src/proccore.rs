@@ -411,8 +411,16 @@ pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> u32 {
             0b11100010100011010000001000000000 | word8 | (rd << 12) | ((!sp&0b1) << 17)
         },
         ThumbInstType::MultipleLoadStore => {
-            0
+            let l: u32 = ((inst & 0x800) >> 11) as u32;
+            let rb: u32 = ((inst & 0x700) >> 8) as u32;
+            let rlist: u32 = (inst & 0xFF) as u32;
+            0b11101000101000000000000000000000 | rlist | (rb << 16) | (l << 20)
         },
+        ThumbInstType::ConditionalBranch => {
+            let cond: u32 = ((inst & 0xF00) >> 8) as u32;
+            let soff: u32 = (inst & 0xFF) as u32;
+            0b00001010000000000000000000000000 | soff | (cond << 28)
+        }
         _   =>  panic!("Thumb instruction is not implemented!")
     }
 }

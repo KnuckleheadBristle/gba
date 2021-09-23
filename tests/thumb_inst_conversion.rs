@@ -197,8 +197,16 @@ mod test {
 
     #[test]
     fn convert_load_mult_load_store() {
-        let thumbinst: u16  = 0b1010111000110101;
-        let arminst: u32    = 0b11100010100011010110001000110101;
+        let thumbinst: u16  = 0b1100000010001000;
+        let arminst: u32    = 0b11101000101000000000000010001000;
+        let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));
+        assert_eq!(arminst, converted);
+    }
+
+    #[test]
+    fn convert_cond_branch() {
+        let thumbinst: u16  = 0b1101110000010111;
+        let arminst: u32    = 0b11001010000000000000000000010111;
         let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));
         assert_eq!(arminst, converted);
     }
