@@ -162,4 +162,16 @@ mod test {
         let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));
         assert_eq!(arminst, converted);
     }
+
+    #[test]
+    fn convert_ld_str_halfword() {
+        let thumbinst: u16  = 0b1000011100001110;
+        let arminst: u32    = 0b11100001110000010110001110111000;
+        let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));
+        assert_eq!(arminst, converted);
+        let thumbinst: u16  = 0b1000100010111100;
+        let arminst: u32    = 0b11100001110101110100000010110100;
+        let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));
+        assert_eq!(arminst, converted);
+    }
 }

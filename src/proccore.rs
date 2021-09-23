@@ -377,7 +377,6 @@ pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> u32 {
             let rs: u32 = ((inst & 0x38) >> 3) as u32;
             let rd: u32 = (inst & 0x7) as u32;
             let top: u32 = (op << 1) | ((!op&0b1) << 2);
-            println!("op: {} rn: {} rs: {} rd: {}", op, rn, rs, rd);
             0b11100000000100000000000000000000 | rn | (rd << 12) | (rs << 16) | (top<<21) | (i << 25)
         },
         ThumbInstType::UnconditionalBranch => {
@@ -390,18 +389,15 @@ pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> u32 {
             0b11100101100111110000000000000000 | (word8 << 2) | (rd << 12)
         },
         ThumbInstType::LoadStoreHalfword => {
-            0
-        }
+            /* is equal to arm format 10 (page 76) */
+            let l: u32 = ((inst & 0x800) >> 11) as u32;
+            let offset5: u32 = ((inst & 0x7C0) >> 5) as u32;
+            let offhi: u32 = (offset5 & 0xF0) >> 4;
+            let offlo: u32 = offset5 & 0xF;
+            let rb: u32 = ((inst & 0x38) >> 3) as u32;
+            let rd: u32 = (inst & 0x7) as u32;
+            0b11100001110000000000000010110000 | (rb << 16) | (rd << 12 ) | (l << 20) | (offhi << 8) | offlo
+        },
         _   =>  panic!("Thumb instruction is not implemented!")
     }
 }
-
-/* 
-11100000100101000000000000000011
-1110 0000 1001 0100 0000 0000 0000 0011
-11100000100100110000000000000100
-111000001001 0011 0000 0000 0000 0100
-
-
-1111 1110 1001 0011 0000 0000 0000 0100
-*/
