@@ -431,6 +431,31 @@ pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> u32 {
             let rd: u32 = (inst & 0x7) as u32;
             println!("op {} off5 {} rs {} rd {}", op, off5, rs, rd);
             0b11100001101100000000000000000000 | rs | (op << 5) | (off5 << 7) | (rd << 12)
+        },
+        ThumbInstType::MoveCompareAddSubtractImmediate => {
+            let mut op: u32 = ((inst & 0x1800) >> 11) as u32;
+            let rd: u32 = ((inst & 0x700) >> 8) as u32;
+            let off8: u32 = (inst & 0xFF) as u32;
+            /* Data and PSR transfer */
+            op = match op {
+                0   => 0b1101,
+                1   => 0b1010,
+                2   => 0b0100,
+                3   => 0b0010,
+                _   => panic!("Format 3 opcode {} does not exist", op)
+            };
+            0b11100010000100000000000000000000 | off8 | (rd << 12) | (rd << 16) | (op << 21)
+        },
+        ThumbInstType::LoadStoreWithImmediateOffset => {
+            let b: u32 = ((inst & 0x1000) >> 12) as u32;
+            let l: u32 = ((inst & 0x800) >> 11) as u32;
+            let off5: u32 = ((inst & 0x7C0) >> 6) as u32;
+            let rb: u32 = ((inst & 0x38) >> 3) as u32;
+            let rd: u32 = (inst & 0x7) as u32;
+            0b11100101100000000000000000000000 | off5 | (rd << 12) | (rb << 16) | (l << 20) | (b << 22)
+        },
+        ThumbInstType::Undefined => {
+            0b11100110000000000000000000010000
         }
         _   =>  panic!("Thumb instruction is not implemented!")
     }
