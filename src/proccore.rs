@@ -407,7 +407,6 @@ pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> u32 {
             let sp: u32 = ((inst & 0x800) >> 11) as u32;
             let rd: u32 = ((inst & 0x700) >> 8) as u32;
             let word8: u32 = (inst & 0xFF) as u32;
-            println!("sp {} rd {} word8 {}", sp, rd, word8);
             0b11100010100011010000001000000000 | word8 | (rd << 12) | ((!sp&0b1) << 17)
         },
         ThumbInstType::MultipleLoadStore => {
@@ -420,6 +419,18 @@ pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> u32 {
             let cond: u32 = ((inst & 0xF00) >> 8) as u32;
             let soff: u32 = (inst & 0xFF) as u32;
             0b00001010000000000000000000000000 | soff | (cond << 28)
+        },
+        ThumbInstType::LongBranchWithLink => {
+            /* No equivalent */
+            0
+        },
+        ThumbInstType::MoveShiftedRegister => {
+            let op: u32 = ((inst & 0x1800) >> 11) as u32;
+            let off5: u32 = ((inst & 0x7C0) >> 6) as u32;
+            let rs: u32 = ((inst & 0x38) >> 3) as u32;
+            let rd: u32 = (inst & 0x7) as u32;
+            println!("op {} off5 {} rs {} rd {}", op, off5, rs, rd);
+            0b11100001101100000000000000000000 | rs | (op << 5) | (off5 << 7) | (rd << 12)
         }
         _   =>  panic!("Thumb instruction is not implemented!")
     }

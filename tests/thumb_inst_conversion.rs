@@ -210,4 +210,12 @@ mod test {
         let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));
         assert_eq!(arminst, converted);
     }
+
+    #[test]
+    fn convert_mov_shft_reg() {
+        let thumbinst: u16  = 0b0000111011101010;
+        let arminst: u32    = 0b11100001101100000010110110100101;
+        let converted: u32  = proccore::translate_thumb(thumbinst, proccore::decode_thumb(thumbinst));
+        assert_eq!(arminst, converted);
+    }
 }
