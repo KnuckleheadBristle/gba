@@ -267,3 +267,31 @@ Cycle 2:
 |                           | n     | da++      | w     | 1     | R''       | S cycle       | 1     |
 |                           | n+1   | da++      | w     | 1     | R'''      | S cycle       | 1     |
 |                           |       | pc+12     |       |       |           |               |       |
+
+## Data swap
+
+The data swap instruction is similar in operation to the load and store register instructions, and takes 4 cycles
+
+Cycle 1:
+
+- The address of the register value to be stored is calculated
+
+Cycle 2:
+
+- Data is fetched from external memory
+
+Cycle 3:
+
+- The contens of the source register are written to the external memory
+
+Cycle 4:
+
+- The data read during cycle 3 is written into the destination register
+
+| Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 | Lock  |
+| ----- | --------- | ----- | ----- | --------- | ------------- | ----- | ----- |
+| 1     | pc+8      | w     | 0     | (pc+8)    | N cycle       | 0     | 0     |
+| 2     | Rn        | w/b   | 0     | (Rn)      | N cycle       | 1     | 1     |
+| 3     | Rn        | w/b   | 1     | Rm        | I cycle       | 1     | 1     |
+| 4     | pc+12     | w     | 0     | -         | S cycle       | 1     | 0     |
+|       | pc+12     |       |       |           |               |       |       |
