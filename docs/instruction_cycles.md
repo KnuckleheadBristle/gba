@@ -295,3 +295,28 @@ Cycle 4:
 | 3     | Rn        | w/b   | 1     | Rm        | I cycle       | 1     | 1     |
 | 4     | pc+12     | w     | 0     | -         | S cycle       | 1     | 0     |
 |       | pc+12     |       |       |           |               |       |       |
+
+## Software interrupt and exception entry
+
+Exceptions and software interrupts force the PC to a specific value and refill the instruction pipeline from that address, there are 3 cycles.
+
+Cycle 1:
+
+- The forced address is contructed, and a mode change may take place.
+  - The return address is moved to LR (r14)
+  - CPSR is moved to SPSR_svc
+
+Cycle 2:
+
+- The return address is modified to facilitate return
+
+Cycle 3:
+
+- Refilling of the instruction pipeline
+
+| Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 | Prot1 | Mode              | Tbit  |
+| ----- | --------- | ----- | ----- | --------- | ------------- | ----- | ----- | ----------------- | ----- |
+| 1     | pc+2i     | w/h   | 0     | (pc+2i)   | N cycle       | 0     | s     | old mode          | t     |
+| 2     | Xn        | w'    | 0     | (Xn)      | S cycle       | 0     | 1     | exception mode    | 0     |
+| 3     | Xn+4      | w'    | 0     | (Xn+4)    | S cycle       | 0     | 1     | exception mode    | 0     |
+|       | Xn+8      |       |       |           |               |       |       |                   |       |
