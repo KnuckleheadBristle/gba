@@ -117,19 +117,153 @@ As the PC can be one or more of the register operands, when the PC is the destin
 
 PSR is identical in timing characterisics as data operations except that PC is never used as a source or destination register.
 
-| Cycle         | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 |
-| ------------- | --------- | ----- | ----- | --------- | ------------- | ----- |
-| Normal  1     | pc+2i     | w/h   | 0     | (pc+2i)   | S cycle       | 0     |
-|               | pc+3i     |       |       |           |               |       |
-| dest=pc 1     | pc+2i     | w/h   | 0     | (pc+2i)   | N cycle       | 0     |
-|         2     | pc'       | w/h   | 0     | (pc')     | S cycle       | 0     |
-|         3     | pc'+i     | w/h   | 0     | (pc'+i)   | S cycle       | 0     |
-|               | pc'+2i    |       |       |           |               |       |
-| shift(Rs) 1   | pc+2i     | w/h   | 0     | (pc+2i)   | I cycle       | 0     |
-|           2   | pc+3i     | w/h   | 0     | -         | S cycle       | 1     |
-|               | pc+3i     |       |       |           |               |       |
-| shift(Rs) 1   | pc+8      | w     | 0     | (pc+8)    | I cycle       | 0     |
-| dest=pc   2   | pc+12     | w     | 0     | -         | N cycle       | 1     |
-|           3   | pc'       | w     | 0     | (pc')     | S cycle       | 0     |
-|           4   | pc'+4     | w     | 0     | (pc'+4)   | S cycle       | 0     |
-|               | pc'+8     |       |       |           |               |       |
+| Type                  | Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 |
+| ----                  | ----- | --------- | ----- | ----- | --------- | ------------- | ----- |
+| Normal                | 1     | pc+2i     | w/h   | 0     | (pc+2i)   | S cycle       | 0     |
+|                       |       | pc+3i     |       |       |           |               |       |
+| dest=pc               | 1     | pc+2i     | w/h   | 0     | (pc+2i)   | N cycle       | 0     |
+|                       | 2     | pc'       | w/h   | 0     | (pc')     | S cycle       | 0     |
+|                       | 3     | pc'+i     | w/h   | 0     | (pc'+i)   | S cycle       | 0     |
+|                       |       | pc'+2i    |       |       |           |               |       |
+| shift(Rs)             | 1     | pc+2i     | w/h   | 0     | (pc+2i)   | I cycle       | 0     |
+|                       | 2     | pc+3i     | w/h   | 0     | -         | S cycle       | 1     |
+|                       |       | pc+3i     |       |       |           |               |       |
+| shift(Rs), dest=pc    | 1     | pc+8      | w     | 0     | (pc+8)    | I cycle       | 0     |
+|                       | 2     | pc+12     | w     | 0     | -         | N cycle       | 1     |
+|                       | 3     | pc'       | w     | 0     | (pc')     | S cycle       | 0     |
+|                       | 4     | pc'+4     | w     | 0     | (pc'+4)   | S cycle       | 0     |
+|                       |       | pc'+8     |       |       |           |               |       |
+
+## Multiply and Multiply Accumulate
+
+I don't want to do this because it has a lot of tables, so I'll leave it for later.
+
+## Load register
+
+This instruction takes a variable number of cycles, but there are three defined steps.
+
+Step 1:
+
+- Calculate the address to be loaded
+
+Step 2:
+
+- Fetch the data from memory
+  - Perform base register modification if required
+
+Step 3:
+
+- Transfer the data to the destination register (external memory is not used)
+  - This is normally merged with the next prefetch
+
+| Type      | Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 | Prot1 |
+| --------- | ----- | --------- | ----- | ----- | --------- | ------------- | ----- | ----- |
+| normal    | 1     | pc+2i     | w/h   | 0     | (pc+2i)   | N cycle       | 0     | s     |
+|           | 2     | pc'       | w/h   | 0     | (pc')     | I cycle       | 1     | u/s   |
+|           | 3     | pc+3i     | w/h/b | 0     | -         | S cycle       | 1     | s     |
+|           |       | pc+3i     |       |       |           |               |       |       |
+| dest=pc   | 1     | pc+8      | w     | 0     | (pc+8)    | N cycle       | 0     | s     |
+|           | 2     | da        | w/h/b | 0     | pc'       | I cycle       | 1     | u/s   |
+|           | 3     | pc+12     | w     | 0     | -         | N cycle       | 1     | s     |
+|           | 4     | pc'       | w     | 0     | (pc')     | S cycle       | 0     | s     |
+|           | 5     | pc'+4     | w     | 0     | (pc'+4)   | S cycle       | 0     | s     |
+|           |       | pc'+8     |       |       |           |               |       |       |
+
+The base or destination (or both) may be the PC. If the PC is affected by the instruction, the prefetch sequence changes. If the data fetch aborts, the processor prevents modification of the destination register.
+
+## Store register
+
+There are two cycles:
+
+Cycle 1:
+
+- Calculate the address to be stored
+
+Cycle 2:
+
+- Perform the base modification and write data to memory (if required)
+
+| Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 | Prot1 |
+| ----- | --------- | ----- | ----- | --------- | ------------- | ----- | ----- |
+| 1     | pc+2i     | w/h   | 0     | (pc+2i)   | N cycle       | 0     | s     |
+| 2     | da        | b/h/w | 1     | Rd        | N cycle       | 1     | t     |
+|       | pc+3i     |       |       |           |               |       |       |
+
+t is either 0 when the T bit is specified in the instruction, or C at all other times.
+
+## Load multiple registers
+
+This instruction takes four cycles.
+
+Cycle 1:
+
+- Calculate the address of the first word to be transferred, while performing prefetch from memory
+
+Cycle 2:
+
+- Fetch the first word and perform base modification
+
+Cycle 3:
+
+- Move the first word to the appropriate destination register, fetch the second word from memory
+  - Latches the modified base internally in case of an abort
+  - This cycle is repeated for any subsequent fetches until the last data word has been accessed
+
+Cycle 4:
+
+- Move the last word to its destination register.
+  - May be merged with the next instruction prefetch to form a single memory N-cycle
+
+The instruction continues to completion when an abort occurs, but all register writing is prevented. The final cycle is instead changed to restore the modified base register from cycle 3.
+
+If the PC is in the register list to be loaded, the processor invalidates the pipeline, because the PC is always the last to load, an abort at any point prevents the PC from being written to.
+
+| Type                      | Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 |
+| ------------------------- | ----- | --------- | ----- | ----- | --------- | ------------- | ----- |
+| 1 register dest=pc        | 1     | pc+2i     | w/h   | 0     | (pc+2i)   | N cycle       | 0     |
+|                           | 2     | da        | w     | 0     | pc'       | I cycle       | 1     |
+|                           | 3     | pc+3i     | w/h   | 0     | -         | N cycle       | 1     |
+|                           | 4     | pc'       | w/h   | 0     | (pc')     | S cycle       | 0     |
+|                           | 5     | pc'+i     | w/h   | 0     | (pc'+i)   | S cycle       | 0     |
+|                           |       | pc'+2i    |       |       |           |               |       |
+| n registers (n>1)         | 1     | pc+2i     | w/h   | 0     | (pc+2i)   | N cycle       | 0     |
+|                           | 2     | da        | w     | 0     | da        | S cycle       | 1     |
+|                           | -     | da++      | w     | 0     | (da++)    | S cycle       | 1     |
+|                           | n     | da++      | w     | 0     | (da++)    | S cycle       | 1     |
+|                           | n+1   | da++      | w     | 0     | (da++)    | I cycle       | 1     |
+|                           | n+2   | pc+3i     | w     | 0     | -         | S cycle       | 1     |
+|                           |       | pc+3i     |       |       |           |               |       |
+| n registers (n>1) incl pc | 1     | pc+2i     | w/h   | 0     | (pc+2i)   | N cycle       | 0     |
+|                           | 2     | da        | w     | 0     | da        | S cycle       | 1     |
+|                           | -     | da++      | w     | 0     | (da++)    | S cycle       | 1     |
+|                           | n     | da++      | w     | 0     | (da++)    | S cycle       | 1     |
+|                           | n+1   | da++      | w     | 0     | pc'       | I cycle       | 1     |
+|                           | n+2   | pc+3i     | w/h   | 0     | -         | N cycle       | 1     |
+|                           | n+3   | pc'       | w/h   | 0     | (pc')     | S cycle       | 0     |
+|                           | n+4   | pc'+i     | w/h   | 0     | (pc'+1)   | S cycle       | 0     |
+|                           |       | pc'+2i    |       |       |           |               |       |
+
+## Store multiple registers
+
+This instruction is very similar to the above, but without the last cycle, meaning there are only two cycles
+
+Cycle 1:
+
+- The address of the first word to be stored is calculated
+
+Cycle 2:
+
+- Base modification is performed
+  - Data is written to memory
+
+| Type                      | Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 |
+| ------------------------- | ----- | --------- | ----- | ----- | --------- | ------------- | ----- |
+| 1 register                | 1     | pc+2i     | w/h   | 0     | (pc+2i)   | N cycle       | 0     |
+|                           | 2     | da        | w     | 1     | R         | N cycle       | 1     |
+|                           |       | pc+3i     |       |       |           |               |       |
+| n registers (n>1)         | 1     | pc+8      | w/h   | 0     | (pc+2i)   | N cycle       | 0     |
+|                           | 2     | da        | w     | 1     | R         | S cycle       | 1     |
+|                           | -     | da++      | w     | 1     | R'        | S cycle       | 1     |
+|                           | n     | da++      | w     | 1     | R''       | S cycle       | 1     |
+|                           | n+1   | da++      | w     | 1     | R'''      | S cycle       | 1     |
+|                           |       | pc+12     |       |       |           |               |       |
