@@ -320,3 +320,24 @@ Cycle 3:
 | 2     | Xn        | w'    | 0     | (Xn)      | S cycle       | 0     | 1     | exception mode    | 0     |
 | 3     | Xn+4      | w'    | 0     | (Xn+4)    | S cycle       | 0     | 1     | exception mode    | 0     |
 |       | Xn+8      |       |       |           |               |       |       |                   |       |
+
+## Undefined instructions and coprocessor absent
+
+This occurs when an undefined instruction is executed, or if a coprocessor is not available. This instruction is similar in execution to an exception entry.
+
+| Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 | CPnl  | CPA   | CPB   | Prot1 | Mode  | Tbit  |
+| ----- | --------- | ----- | ----- | --------- | ------------- | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
+| 1     | pc+2i     | w/h   | 0     | (pc+2i)   | I cycle       | 0     | 0     | 1     | 1     | s     | Old   | t     |
+| 2     | pc+2i     | w/h   | 0     | -         | N cycle       | 0     | 1     | 1     | 1     | s     | Old   | t     |
+| 3     | Xn        | w'    | 0     | (Xn)      | S cycle       | 0     | 1     | 1     | 1     | 1     | 00100 | 0     |
+| 4     | Xn+4      | w'    | 0     | (Xn+4)    | S cycle       | 0     | 1     | 1     | 1     | 1     | 00100 | 0     |
+|       | Xn+8      |       |       |           |               |       |       |       |       |       |       |       |
+
+## Unexecuted instructions
+
+This occurs when the condition code of an instruction is not met, and takes one cycle.
+
+| Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 |
+| ----- | --------- | ----- | ----- | --------- | ------------- | ----- |
+| 1     | pc+2i     | w/h   | 0     | (pc+2i)   | S cycle       | 0     |
+|       | pc+3i     |       |       |           |               |       |
