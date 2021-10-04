@@ -248,8 +248,10 @@ pub fn decode_thumb(inst: u16) -> ThumbInstType {
     {ThumbInstType::Undefined}
 }
 
-pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> Option<u32> { /* output is Some(x) if there is an equivalent arm inst, otherwise None */
-    let mut op0: u32 = ((inst & 0x1800) >> 11) as u32;
+#[allow(dead_code)]
+pub fn translate_thumb(inst: u16) -> Option<u32> { /* output is Some(x) if there is an equivalent arm inst, otherwise None */
+    let insttype = decode_thumb(inst);                  //getting the type of the instruction
+    let mut op0: u32 = ((inst & 0x1800) >> 11) as u32;  //declaring all of the unique fields in each instruction
     let off5: u32 = ((inst & 0x7C0) >> 6) as u32;
     let mut rs: u32 = ((inst & 0x38) >> 3) as u32;
     let mut rd0: u32 = (inst & 0x7) as u32;
