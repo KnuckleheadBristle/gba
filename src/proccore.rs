@@ -47,6 +47,41 @@ need a function which maps 0..15 to the desired register for each mode
 
 
 impl CoreContext {
+    pub fn new() -> Self {
+        CoreContext {
+            mode: 0,
+            alubus: 0,
+            oldalubus: 0,
+            pcbus: 0,
+            oldpcbus: 0,
+            incbus: 0,
+            oldincbus: 0,
+            addrinc: 0,
+            oldaddrinc: 0,
+            a: 0,
+            olda: 0,
+            abus: 0,
+            oldabus: 0,
+            bbus: 0,
+            oldbbus: 0,
+            barrel: 0,
+            oldbarrel: 0,
+            barrelfunc: 0,
+            shiftamnt: 0,
+            d: 0,
+            oldd: 0,
+            addrreg: 0,
+            reg_sela: 0,
+            reg_selb: 0,
+            registers: [0; 37],
+            alu_func: 0,
+            carry: 0,
+            cpsr: 0,
+            setcodes: false,
+            tbit: false,
+        }
+    }
+
     /* Input arguments: A sel, B sel, In sel */
     pub fn reg_bank(&mut self) {
         self.pcbus = self.registers[15];
@@ -83,8 +118,16 @@ impl CoreContext {
         self.barrel = match self.barrelfunc {  /* Need to implement these properly (carry, etc) */
             0   => self.bbus << self.shiftamnt, //LSL
             1   => self.bbus >> self.shiftamnt, //LSR
-            2   => self.bbus >> self.shiftamnt, //ASR
-            3   => self.bbus >> self.shiftamnt, //ROR
+            2   => (self.bbus as i32 >> self.shiftamnt) as u32, //ASR
+            3   => (self.bbus >> self.shiftamnt) | (self.bbus << 32-self.shiftamnt), //ROR
+            _   => panic!("Shift type does not exist")
+        };
+        
+        self.carry = match self.barrelfunc {
+            0   => (self.bbus >> 32-self.shiftamnt) & 0b1,
+            1   => (self.bbus >> self.shiftamnt-1) & 0b1,
+            2   => (self.bbus >> self.shiftamnt-1) & 0b1,
+            3   => (self.bbus >> self.shiftamnt-1) & 0b1,
             _   => panic!("Shift type does not exist")
         };
     }
