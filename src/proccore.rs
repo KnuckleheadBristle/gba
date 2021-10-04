@@ -30,6 +30,9 @@ pub struct CoreContext {
     pub registers: [u32; 37],
     pub alu_func: u8,
     pub carry: u32,
+    pub negative: u32,
+    pub zero: u32,
+    pub overflow: u32,
     pub cpsr: u32,
     pub setcodes: bool,
     pub tbit: bool,
@@ -76,6 +79,9 @@ impl CoreContext {
             registers: [0; 37],
             alu_func: 0,
             carry: 0,
+            negative: 0,
+            zero: 0,
+            overflow: 0,
             cpsr: 0,
             setcodes: false,
             tbit: false,
@@ -83,37 +89,46 @@ impl CoreContext {
     }
 
     /* Input arguments: A sel, B sel, In sel */
+    #[allow(dead_code)]
     pub fn reg_bank(&mut self) {
         self.pcbus = self.registers[15];
     }
 
     /* Input arguments: function, cpsr */
+    #[allow(dead_code)]
     pub fn alu(&mut self) {
         let tmp = match self.alu_func {
-            0x0 => (self.abus & self.bbus, false),
-            0x1 => (self.abus ^ self.bbus, false),
-            0x2 => self.abus.overflowing_sub(self.bbus),
-            0x3 => self.bbus.overflowing_sub(self.abus),
-            0x4 => self.abus.overflowing_add(self.bbus),
-            0x5 => self.abus.overflowing_add(self.bbus+self.carry),
-            /* 0x6 => self.abus - self.bbus + self.carry - 1,
-            0x7 => self.bbus - self.abus + self.carry - 1, */
-            0x8 => (self.abus & self.bbus, false),
-            0x9 => (self.abus ^ self.bbus, false),
-            0xA => self.abus.overflowing_sub(self.bbus),
-            0xB => self.abus.overflowing_add(self.bbus),
-            0xC => (self.abus | self.bbus, false),
-            0xD => (self.bbus, false),
-            0xE => (self.abus & !self.bbus, false),
-            0xF => (!self.bbus, false),
+            0x0 => (self.abus & self.barrel, false),
+            0x1 => (self.abus ^ self.barrel, false),
+            0x2 => self.abus.overflowing_sub(self.barrel),
+            0x3 => self.barrel.overflowing_sub(self.abus),
+            0x4 => self.abus.overflowing_add(self.barrel),
+            0x5 => self.abus.overflowing_add(self.barrel+self.carry),
+            /* 0x6 => self.abus - self.barrel + self.carry - 1,
+            0x7 => self.barrel - self.abus + self.carry - 1, */
+            0x8 => (self.abus & self.barrel, false),
+            0x9 => (self.abus ^ self.barrel, false),
+            0xA => self.abus.overflowing_sub(self.barrel),
+            0xB => self.abus.overflowing_add(self.barrel),
+            0xC => (self.abus | self.barrel, false),
+            0xD => (self.barrel, false),
+            0xE => (self.abus & !self.barrel, false),
+            0xF => (!self.barrel, false),
             _   => panic!("ALU function {} does not write to alubus", self.alu_func)
         };
-        if self.alu_func < 0x8 && self.alu_func > 0xB {
+
+        if self.alu_func < 0xB {
             self.alubus = tmp.0;
         }
+
+        self.negative = if tmp.0 > 0x80000000 {1} else {0};
+        self.zero = if tmp.0 == 0 {1} else {0};
+        self.carry = if tmp.1 {1} else {0};
+        self.overflow = if tmp.0 > 0x40000000 {1} else {0};
     }
 
     /* Barrel shifter */
+    #[allow(dead_code)]
     pub fn shift(&mut self) {
         self.barrel = match self.barrelfunc {  /* Need to implement these properly (carry, etc) */
             0   => self.bbus << self.shiftamnt, //LSL
@@ -133,6 +148,7 @@ impl CoreContext {
     }
 
     /* Increment the address depending on the processor mode */
+    #[allow(dead_code)]
     pub fn inc(&mut self) {
         if self.tbit {
             self.incbus = self.addrinc + 2;

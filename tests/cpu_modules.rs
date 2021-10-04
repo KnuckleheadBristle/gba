@@ -60,4 +60,36 @@ mod tests {
         assert_eq!(core.barrel, 0b10010101101010110011001001010010);
         assert_eq!(core.carry, 0b1);
     }
+
+    #[test]
+    fn alu_ops() {
+        let mut core = proccore::CoreContext::new();
+
+        core.abus = 0x123201AD;
+        core.barrel = 0x11231EDA;
+
+        core.alu_func = 0;
+        core.alu();
+        assert_eq!(core.alubus, 0x10220088);
+
+        core.alu_func = 1;
+        core.alu();
+        assert_eq!(core.alubus, 0x03111F77);
+
+        core.alu_func = 2;
+        core.alu();
+        assert_eq!(core.alubus, 0x010EE2D3);
+        
+        core.alu_func = 3;
+        core.alu();
+        assert_eq!(core.alubus, 0xFEF11D2D);
+        
+        core.alu_func = 4;
+        core.alu();
+        assert_eq!(core.alubus, 0x23552087);
+
+        core.alu_func = 5;
+        core.alu();
+        assert_eq!(core.alubus, 0x23552087); // carry is not being set, so this is wrong
+    }
 }
