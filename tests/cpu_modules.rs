@@ -90,6 +90,6 @@ mod tests {
 
         core.alu_func = 5;
         core.alu();
-        assert_eq!(core.alubus, 0x23552087); // carry is not being set, so this is wrong
+        assert_eq!(core.alubus, 0x23552087); // carry is not being set, so this is may be wrong
     }
 }

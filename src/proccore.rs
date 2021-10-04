@@ -50,6 +50,7 @@ need a function which maps 0..15 to the desired register for each mode
 
 
 impl CoreContext {
+    #[allow(dead_code)]
     pub fn new() -> Self {
         CoreContext {
             mode: 0,
@@ -247,164 +248,123 @@ pub fn decode_thumb(inst: u16) -> ThumbInstType {
     {ThumbInstType::Undefined}
 }
 
-/* This needs to be changed to be smaller (possibly declaring instruction fields right at the start to stop repetition) */
-#[allow(dead_code)] //Not being used atm
-pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> Option<u32> { /* output is some(x) if there is an equivalent arm inst, otherwise None */
+pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> Option<u32> { /* output is Some(x) if there is an equivalent arm inst, otherwise None */
+    let mut op0: u32 = ((inst & 0x1800) >> 11) as u32;
+    let off5: u32 = ((inst & 0x7C0) >> 6) as u32;
+    let mut rs: u32 = ((inst & 0x38) >> 3) as u32;
+    let mut rd0: u32 = (inst & 0x7) as u32;
+    let i: u32 = ((inst & 0x400) >> 10) as u32;
+    let op1: u32 = ((inst & 0x200) >> 9) as u32;
+    let rn: u32 = ((inst & 0x1C0) >> 6) as u32;
+    let rd1: u32 = ((inst & 0x700) >> 8) as u32;
+    let off8: u32 = (inst & 0xFF) as u32;
+    let mut op2: u32 = ((inst & 0x3C0) >> 6) as u32;
+    let mut op3: u32 = ((inst & 0x300) >> 8) as u32;
+    let h1: u32 = ((inst & 0x80) >> 7) as u32;
+    let h2: u32 = ((inst & 0x40) >> 6) as u32;
+    let l: u32 = ((inst & 0x800) >> 11) as u32;
+    let b: u32 = ((inst & 0x1000) >> 12) as u32;
+    let word7: u32 = (inst & 0x7F) as u32;
+    let r: u32 = ((inst & 0x100) >> 8) as u32;
+    let cond: u32 = ((inst & 0xF00) >> 8) as u32;
+    let off11: u32 = (inst & 0x7FF) as u32;
     match insttype {    //from the thumbinsttype enum
         ThumbInstType::SoftwareInterrupt => {
-            Some((inst & 0x00FF) as u32 | 0xEF000000)
+            Some(off8 | 0xEF000000)
         },
         ThumbInstType::AddOffsetToStackPointer => {
-            let s: u32 = ((inst & 0x80) >> 7) as u32;
-            let sword7 = (inst & 0x7F) as u32;
-            Some(0b11100000000011011101000000000000 | sword7 | (1 << 23-s))
+            Some(0b11100000000011011101000000000000 | word7 | (1 << 23-h1))
         },
         ThumbInstType::PushPopRegisters => {
-            let l: u32  = ((inst & 0x800) >> 11) as u32;
-            let r: u32  = ((inst & 0x100) >> 8) as u32;
-            let rlist: u32 = (inst & 0xFF) as u32;
-            Some(0b11101000001011010000000000000000 | rlist | (((r&!l)&0b1)<<14) | ((r&l)<<15) | (l << 20) | (l << 23) | ((!l&0b1)<<24))
+            Some(0b11101000001011010000000000000000 | off8 | (((r&!l)&0b1)<<14) | ((r&l)<<15) | (l << 20) | (l << 23) | ((!l&0b1)<<24))
         },
         ThumbInstType::LoadStoreWithRegisterOffset => {
-            let l: u32  = ((inst & 0x800) >> 11) as u32;
-            let b: u32  = ((inst & 0x400) >> 10) as u32;
-            let ro: u32 = ((inst & 0x1C0) >> 6) as u32;
-            let rb: u32 = ((inst & 0x38) >> 3) as u32;
-            let rd: u32 = (inst & 0x7) as u32;
-            Some(0b11100111100000000000000000000000 | ro | (rd << 12) | (rb << 16) | (b << 22) | (l << 20))
+            Some(0b11100111100000000000000000000000 | rn | (rd0 << 12) | (rs << 16) | (i << 22) | (l << 20))
         },
         ThumbInstType::LoadStoreSignExtendedByteHalfword => {
-            let h: u32  = ((inst & 0x800) >> 11) as u32;
-            let s: u32  = ((inst & 0x400) >> 10) as u32;
-            let ro: u32 = ((inst & 0x1C0) >> 6) as u32;
-            let rb: u32 = ((inst & 0x38) >> 3) as u32;
-            let rd: u32 = (inst & 0x7) as u32;
-            Some(0b11100001100000000000000010010000 | ro | (h << 5) | (s << 6) | (rd << 12) | (rb << 16) | ((s|h) << 20))
+            Some(0b11100001100000000000000010010000 | rn | (l << 5) | (i << 6) | (rd0 << 12) | (rs << 16) | ((i|l) << 20))
         },
         ThumbInstType::ALUOperation => {
-            let mut op = ((inst & 0x3C0) >> 6) as u32;
-            let rs = ((inst & 0x38) >> 3) as u32;
-            let rd = (inst & 0x7) as u32;
-            let shift = if op==0x7 {0b0111} else {0b0};
-            if op==0xD {
+            let shift = if op2==0x7 {0b0111} else {0b0};
+            if op2==0xD {
                 /* Multiply instruction */
-                Some(0b11100000000100000000000010010000 | rs | (rd << 8) | (rd << 16))
-            } else if op==0x9 {
-                Some(0b11100010011100000000000000000000 | (rd << 12 ) | (rs << 16))
+                Some(0b11100000000100000000000010010000 | rs | (rd0 << 8) | (rd0 << 16))
+            } else if op2==0x9 {
+                Some(0b11100010011100000000000000000000 | (rd0 << 12 ) | (rs << 16))
             } else {
                 /* Data processing and PSR transfer */
-                op = match op {
+                op2 = match op2 {
                     0x2 ..= 0x4 => 0xC,
                     0x7         => 0xD,
                     0x9         => 0x3,
-                    _           => op
+                    _           => op2
                 };
-                Some(0b11100000000100000000000000000000 | rs | (shift << 4) | (rd << 12) | (rd << 16) | (op << 21))
+                Some(0b11100000000100000000000000000000 | rs | (shift << 4) | (rd0 << 12) | (rd0 << 16) | (op2 << 21))
             }
         },
         ThumbInstType::HiRegisterOperationsBranchExchange => {
-            let mut op: u32 = ((inst & 0x300) >> 8) as u32;
-            let h1: u32 = ((inst & 0x80) >> 7) as u32;
-            let h2: u32 = ((inst & 0x40) >> 6) as u32;
-            let mut rshs: u32 = ((inst & 0x38) >> 3) as u32;
-            let mut rdhd: u32 = (inst & 0x7) as u32;
-            op = match op {
+            op3 = match op3 {
                 0   =>  0b0100,
                 1   =>  0b1010,
                 2   =>  0b1101,
                 3   =>  0b0000,
-                _   =>  panic!("Hi Register thumb opcode {} does not exist", op)
+                _   =>  panic!("Hi Register thumb opcode {} does not exist", op3)
             };
-            rshs = rshs | (h2 << 3);
-            rdhd = rdhd | (h1 << 3);
-            if op == 0 {
-                Some(0b11100001001011111111111100010000 | rshs)
+            rs = rs | (h2 << 3);
+            rd0 = rd0 | (h1 << 3);
+            if op3 == 0 {
+                Some(0b11100001001011111111111100010000 | rs)
             } else {
-                Some(0b11100000000000000000000000000000 | rshs | (rdhd << 12) | (rdhd << 16) | if op==10 {0b1<<20} else {0x0} | (op << 21))
+                Some(0b11100000000000000000000000000000 | rs | (rd0 << 12) | (rd0 << 16) | if op3==10 {0b1<<20} else {0x0} | (op3 << 21))
             }
         },
         ThumbInstType::AddSubtract => {
-            let i: u32 = ((inst & 0x400) >> 10) as u32;
-            let op: u32 = ((inst & 0x200) >> 9) as u32;
-            let rn: u32 = ((inst & 0x1C0) >> 6) as u32;
-            let rs: u32 = ((inst & 0x38) >> 3) as u32;
-            let rd: u32 = (inst & 0x7) as u32;
-            let top: u32 = (op << 1) | ((!op&0b1) << 2);
-            Some(0b11100000000100000000000000000000 | rn | (rd << 12) | (rs << 16) | (top<<21) | (i << 25))
+            let top: u32 = (op1 << 1) | ((!op1&0b1) << 2);
+            Some(0b11100000000100000000000000000000 | rn | (rd0 << 12) | (rs << 16) | (top<<21) | (i << 25))
         },
         ThumbInstType::UnconditionalBranch => {
-            let off11: u32 = (inst &0x7FF) as u32;
             Some(0b11101010000000000000000000000000 | (off11 >> 1))
         },
         ThumbInstType::PCRelativeLoad => {
-            let rd: u32 = ((inst & 0x700) >> 8) as u32;
-            let word8: u32 = (inst & 0xFF) as u32;
-            Some(0b11100101100111110000000000000000 | (word8 << 2) | (rd << 12))
+            Some(0b11100101100111110000000000000000 | (off8 << 2) | (rd1 << 12))
         },
         ThumbInstType::LoadStoreHalfword => {
-            let l: u32 = ((inst & 0x800) >> 11) as u32;
-            let offset5: u32 = ((inst & 0x7C0) >> 5) as u32;
-            let offhi: u32 = (offset5 & 0xF0) >> 4;
-            let offlo: u32 = offset5 & 0xF;
-            let rb: u32 = ((inst & 0x38) >> 3) as u32;
-            let rd: u32 = (inst & 0x7) as u32;
-            Some(0b11100001110000000000000010110000 | (rb << 16) | (rd << 12 ) | (l << 20) | (offhi << 8) | offlo)
+            let offhi: u32 = (off5<<1 & 0xF0) >> 4;
+            let offlo: u32 = off5<<1 & 0xF;
+            Some(0b11100001110000000000000010110000 | (rs << 16) | (rd0 << 12 ) | (l << 20) | (offhi << 8) | offlo)
         },
         ThumbInstType::SPRelativeLoadStore => {
-            let l: u32 = ((inst & 0x800) >> 11) as u32;
-            let rd: u32 = ((inst & 0x700) >> 8) as u32;
-            let word8: u32 = (inst & 0xFF) as u32;
-            Some(0b11100101100011010000000000000000 | word8 | (rd << 12) | (l << 20))
+            Some(0b11100101100011010000000000000000 | off8 | (rd1 << 12) | (l << 20))
         },
         ThumbInstType::LoadAddress => {
-            let sp: u32 = ((inst & 0x800) >> 11) as u32;
-            let rd: u32 = ((inst & 0x700) >> 8) as u32;
-            let word8: u32 = (inst & 0xFF) as u32;
-            Some(0b11100010100011010000001000000000 | word8 | (rd << 12) | ((!sp&0b1) << 17))
+            Some(0b11100010100011010000001000000000 | off8 | (rd1 << 12) | ((!l&0b1) << 17))
         },
         ThumbInstType::MultipleLoadStore => {
-            let l: u32 = ((inst & 0x800) >> 11) as u32;
-            let rb: u32 = ((inst & 0x700) >> 8) as u32;
-            let rlist: u32 = (inst & 0xFF) as u32;
-            Some(0b11101000101000000000000000000000 | rlist | (rb << 16) | (l << 20))
+            Some(0b11101000101000000000000000000000 | off8 | (rd1 << 16) | (l << 20))
         },
         ThumbInstType::ConditionalBranch => {
-            let cond: u32 = ((inst & 0xF00) >> 8) as u32;
-            let soff: u32 = (inst & 0xFF) as u32;
-            Some(0b00001010000000000000000000000000 | soff | (cond << 28))
+            Some(0b00001010000000000000000000000000 | off8 | (cond << 28))
         },
         ThumbInstType::LongBranchWithLink => {
             /* No equivalent */
             None
         },
         ThumbInstType::MoveShiftedRegister => {
-            let op: u32 = ((inst & 0x1800) >> 11) as u32;
-            let off5: u32 = ((inst & 0x7C0) >> 6) as u32;
-            let rs: u32 = ((inst & 0x38) >> 3) as u32;
-            let rd: u32 = (inst & 0x7) as u32;
-            Some(0b11100001101100000000000000000000 | rs | (op << 5) | (off5 << 7) | (rd << 12))
+            Some(0b11100001101100000000000000000000 | rs | (op0 << 5) | (off5 << 7) | (rd0 << 12))
         },
         ThumbInstType::MoveCompareAddSubtractImmediate => {
-            let mut op: u32 = ((inst & 0x1800) >> 11) as u32;
-            let rd: u32 = ((inst & 0x700) >> 8) as u32;
-            let off8: u32 = (inst & 0xFF) as u32;
             /* Data and PSR transfer */
-            op = match op {
+            op0 = match op0 {
                 0   => 0b1101,
                 1   => 0b1010,
                 2   => 0b0100,
                 3   => 0b0010,
-                _   => panic!("Format 3 opcode {} does not exist", op)
+                _   => panic!("Format 3 opcode {} does not exist", op0)
             };
-            Some(0b11100010000100000000000000000000 | off8 | (rd << 12) | (rd << 16) | (op << 21))
+            Some(0b11100010000100000000000000000000 | off8 | (rd1 << 12) | (rd1 << 16) | (op0 << 21))
         },
         ThumbInstType::LoadStoreWithImmediateOffset => {
-            let b: u32 = ((inst & 0x1000) >> 12) as u32;
-            let l: u32 = ((inst & 0x800) >> 11) as u32;
-            let off5: u32 = ((inst & 0x7C0) >> 6) as u32;
-            let rb: u32 = ((inst & 0x38) >> 3) as u32;
-            let rd: u32 = (inst & 0x7) as u32;
-            Some(0b11100101100000000000000000000000 | off5 | (rd << 12) | (rb << 16) | (l << 20) | (b << 22))
+            Some(0b11100101100000000000000000000000 | off5 | (rd0 << 12) | (rs << 16) | (l << 20) | (b << 22))
         },
         ThumbInstType::Undefined => {
             Some(0b11100110000000000000000000010000)
