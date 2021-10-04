@@ -1,50 +1,102 @@
 use bitpat::bitpat;
 
-pub struct Core {
-    pub reg:    Registers,
-    pub areg:   u32,
-    pub ainc:   u32,
-    pub rbank:  [u32; 31],
-    pub mult:   u32,
-    pub wdr:    u32,
-    pub addr:   u32,
-    pub inc:    u32,
-    pub pcb:    u32,
-    pub alu:    u32,
-    pub a:      u32,
-    pub b:      u32,
-    pub data:   u32,
-    pub ale:    bool,
-    pub abe:    bool,
-    pub nenout: bool,
-    pub dbe:    bool,
-    pub nenin:  bool,
-    pub dbgrqi: bool,
-    pub eclk:   bool,
-    pub nexec:  bool,
-    pub isync:  bool,
-    pub bl:     u8,
-    pub ape:    bool,
-    pub mclk:   bool,
-    pub nwait:  bool,
-    pub nrw:    bool,
-    pub mas:    u8,
-    pub nirq:   bool,
-    pub nfiq:   bool,
-    pub nreset: bool,
-    pub abort:  bool,
-    pub ntrans: bool,
-    pub nmreq:  bool,
-    pub nopc:   bool,
-    pub seq:    bool,
-    pub lock:   bool,
-    pub ncpi:   bool,
-    pub cpa:    bool,
-    pub cpb:    bool,
-    pub nm:     u8,
-    pub tbe:    bool,
-    pub tbit:   bool,
-    pub highz:  bool,
+#[allow(dead_code)]
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub struct CoreContext {
+    pub mode: u32,
+    pub alubus: u32,
+    pub oldalubus: u32,
+    pub pcbus: u32,
+    pub oldpcbus: u32,
+    pub incbus: u32,
+    pub oldincbus: u32,
+    pub addrinc: u32,
+    pub oldaddrinc: u32,
+    pub a: u32,
+    pub olda: u32,
+    pub abus: u32,
+    pub oldabus: u32,
+    pub bbus: u32,
+    pub oldbbus: u32,
+    pub barrel: u32,
+    pub oldbarrel: u32,
+    pub barrelfunc: u8,
+    pub shiftamnt: u8,
+    pub d: u32,
+    pub oldd: u32,
+    pub addrreg: u32,
+    pub reg_sela: u32,
+    pub reg_selb: u32,
+    pub registers: [u32; 37],
+    pub alu_func: u8,
+    pub carry: u32,
+    pub cpsr: u32,
+    pub setcodes: bool,
+    pub tbit: bool,
+}
+
+/* Register organisation
+Address 0 - 14 (general purpose)
+Address 15 - 19 (fiq banked)
+Address 20 - 35 (r13,r14,spsr for each mode)
+Address 36 - r15
+Address 37 - CPSR
+
+need a function which maps 0..15 to the desired register for each mode
+*/
+
+
+impl CoreContext {
+    /* Input arguments: A sel, B sel, In sel */
+    pub fn reg_bank(&mut self) {
+        self.pcbus = self.registers[15];
+    }
+
+    /* Input arguments: function, cpsr */
+    pub fn alu(&mut self) {
+        let tmp = match self.alu_func {
+            0x0 => (self.abus & self.bbus, false),
+            0x1 => (self.abus ^ self.bbus, false),
+            0x2 => self.abus.overflowing_sub(self.bbus),
+            0x3 => self.bbus.overflowing_sub(self.abus),
+            0x4 => self.abus.overflowing_add(self.bbus),
+            0x5 => self.abus.overflowing_add(self.bbus+self.carry),
+            /* 0x6 => self.abus - self.bbus + self.carry - 1,
+            0x7 => self.bbus - self.abus + self.carry - 1, */
+            0x8 => (self.abus & self.bbus, false),
+            0x9 => (self.abus ^ self.bbus, false),
+            0xA => self.abus.overflowing_sub(self.bbus),
+            0xB => self.abus.overflowing_add(self.bbus),
+            0xC => (self.abus | self.bbus, false),
+            0xD => (self.bbus, false),
+            0xE => (self.abus & !self.bbus, false),
+            0xF => (!self.bbus, false),
+            _   => panic!("ALU function {} does not write to alubus", self.alu_func)
+        };
+        if self.alu_func < 0x8 && self.alu_func > 0xB {
+            self.alubus = tmp.0;
+        }
+    }
+
+    /* Barrel shifter */
+    pub fn shift(&mut self) {
+        self.barrel = match self.barrelfunc {  /* Need to implement these properly (carry, etc) */
+            0   => self.bbus << self.shiftamnt, //LSL
+            1   => self.bbus >> self.shiftamnt, //LSR
+            2   => self.bbus >> self.shiftamnt, //ASR
+            3   => self.bbus >> self.shiftamnt, //ROR
+            _   => panic!("Shift type does not exist")
+        };
+    }
+
+    /* Increment the address depending on the processor mode */
+    pub fn inc(&mut self) {
+        if self.tbit {
+            self.incbus = self.addrinc + 2;
+        } else {
+            self.incbus = self.addrinc + 4;
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -89,137 +141,6 @@ pub enum ThumbInstType {
     UnconditionalBranch,
     LongBranchWithLink,
     Undefined
-}
-
-pub struct Registers {
-    pub r:      [u32; 15],
-    pub r_fiq:  [u32; 5],
-    pub r13:    [u32; 6],
-    pub r14:    [u32; 6],
-    pub pc:     u32,
-    pub cpsr:   u32,
-    pub spsr:   [u32; 5],
-    pub sp:     [u32; 6],
-    pub lr:     [u32; 6],
-}
-
-impl Registers {
-    pub fn new() -> Self {
-        Registers {
-            r:      [0; 15],
-            r_fiq:  [0; 5],
-            r13:    [0; 6],
-            r14:    [0; 6],
-            pc:     0,
-            cpsr:   0,
-            spsr:   [0; 5],
-            sp:     [0; 6],
-            lr:     [0; 6],
-        }
-    }
-
-    #[allow(dead_code)]
-    pub fn read(&self, reg: u8, thumb: bool, mode: u8) -> u32 {
-        match reg {
-            0 ..= 7 => self.r[reg as usize],
-            8       => if thumb {self.sp[mode as usize]} else {if mode==1 {self.r_fiq[0]} else {self.r[8]}},
-            9       => if thumb {self.lr[mode as usize]} else {if mode==1 {self.r_fiq[1]} else {self.r[9]}},
-            10 ..= 12 => if mode == 1 {self.r_fiq[(reg-8) as usize]} else {self.r[reg as usize]},
-            13      => self.r13[mode as usize],
-            14      => self.r14[mode as usize],
-            _       => panic!("Register {} does not exist!", reg)
-        }
-    }
-
-}
-
-#[allow(dead_code)]
-impl Core {
-    pub fn new() -> Self {
-        Core {
-            reg:    Registers::new(),
-            areg:   0,
-            ainc:   0,
-            rbank:  [0; 31],
-            mult:   0,
-            wdr:    0,
-            addr:   0,
-            inc:    0,
-            pcb:    0,
-            alu:    0,
-            a:      0,
-            b:      0,
-            data:   0,
-            ale:    false,
-            abe:    false,
-            nenout: false,
-            dbe:    false,
-            nenin:  false,
-            dbgrqi: false,
-            eclk:   false,
-            nexec:  false,
-            isync:  false,
-            bl:     0,
-            ape:    false,
-            mclk:   false,
-            nwait:  false,
-            nrw:    false,
-            mas:    0,
-            nirq:   false,
-            nfiq:   false,
-            nreset: false,
-            abort:  false,
-            ntrans: false,
-            nmreq:  false,
-            nopc:   false,
-            seq:    false,
-            lock:   false,
-            ncpi:   false,
-            cpa:    false,
-            cpb:    false,
-            nm:     0,
-            tbe:    false,
-            tbit:   false,
-            highz:  false,
-        }
-    }
-
-    fn read_flag(&self, flag: u8) -> u32 {
-        match flag {
-            0 ..= 3 => (&self.reg.cpsr & (1<<(31-flag))) >> 31-flag,
-            4 ..= 6 => (&self.reg.cpsr & (1<<(11-flag))) >> 11-flag,
-            7       => &self.reg.cpsr & 0b11111,
-            8       => &self.reg.cpsr >> 28,
-            _       => panic!("Flag {} does not exist!", flag)
-        }
-    }
-
-    fn write_flag(&mut self, flag: u8, data: u32) {
-        match flag {
-            0 ..= 3 => self.reg.cpsr |= data << 31-flag,
-            4 ..= 6 => self.reg.cpsr |= data << 11-flag,
-            7       => self.reg.cpsr |= data,
-            _       => panic!("Flag {} does not exist!", flag)
-        }
-    }
-
-    pub fn arithmetic(&self, opcode: u32, op1: u32, op2: u32) -> u32 {
-        match opcode {
-            0 => op1 & op2,
-            1 => op1 ^ op2,
-            2 => op1 - op2,
-            3 => op2 - op1,
-            4 => op1 + op2,
-            5 => op1 + op2 + self.read_flag(1),
-            6 => op1 - op2 + self.read_flag(1) - 1,
-            7 => op2 - op1 + self.read_flag(1) - 1,
-            12 => op1 | op2,
-            13 => op2,
-            14 => op1 & !op2,
-            15 => !op2,
-            _ => panic!("Arithmetic opcode {} not implemented", opcode)
-        }
-    }
 }
 
 /* The following two decoding functions are not in order of instruction formats, but are ordered such that they work */
@@ -267,14 +188,15 @@ pub fn decode_thumb(inst: u16) -> ThumbInstType {
     {ThumbInstType::Undefined}
 }
 
-#[allow(dead_code)]
-pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> Option<u32> {
-    match insttype {
+/* This needs to be changed to be smaller (possibly declaring instruction fields right at the start to stop repetition) */
+#[allow(dead_code)] //Not being used atm
+pub fn translate_thumb(inst: u16, insttype: ThumbInstType) -> Option<u32> { /* output is some(x) if there is an equivalent arm inst, otherwise None */
+    match insttype {    //from the thumbinsttype enum
         ThumbInstType::SoftwareInterrupt => {
             Some((inst & 0x00FF) as u32 | 0xEF000000)
         },
         ThumbInstType::AddOffsetToStackPointer => {
-            let s: u32 = ((inst & 0x80)>>7) as u32;
+            let s: u32 = ((inst & 0x80) >> 7) as u32;
             let sword7 = (inst & 0x7F) as u32;
             Some(0b11100000000011011101000000000000 | sword7 | (1 << 23-s))
         },
