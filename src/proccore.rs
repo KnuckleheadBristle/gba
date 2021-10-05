@@ -25,6 +25,9 @@ pub struct CoreContext {
     pub d: u32,
     pub oldd: u32,
     pub addrreg: u32,
+    pub addrin: u8,
+    pub ale: bool,
+    pub abe: bool,
     pub reg_sela: u32,
     pub reg_selb: u32,
     pub registers: [u32; 37],
@@ -47,7 +50,6 @@ Address 37 - CPSR
 
 need a function which maps 0..15 to the desired register for each mode
 */
-
 
 impl CoreContext {
     #[allow(dead_code)]
@@ -75,6 +77,9 @@ impl CoreContext {
             d: 0,
             oldd: 0,
             addrreg: 0,
+            addrin: 0,
+            ale: false,
+            abe: false,
             reg_sela: 0,
             reg_selb: 0,
             registers: [0; 37],
@@ -169,6 +174,22 @@ impl CoreContext {
             self.incbus = self.addrinc + 2;
         } else {
             self.incbus = self.addrinc + 4;
+        }
+    }
+
+    #[allow(dead_code)]
+    pub fn addr_reg(&mut self) {
+        self.addrreg = match self.addrin {
+            0 => self.alubus,
+            1 => self.pcbus,
+            2 => self.incbus,
+            _ => panic!("Input to address register {} does not exist", self.addrin)
+        };
+
+        self.addrinc = self.addrreg;
+
+        if self.abe && self.ale {
+            self.a = self.addrreg;
         }
     }
 }

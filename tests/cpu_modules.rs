@@ -161,4 +161,23 @@ mod tests {
         assert_eq!(core.alubus, 0xFFFFFFFF);
         assert_eq!(core.cpsr, 0xB0000000);
     }
+
+    #[test]
+    fn address_reg() {
+        let mut core = proccore::CoreContext::new();
+        
+        core.pcbus = 0x00000100;
+        core.addrin = 1;
+        core.addr_reg();
+
+        assert_eq!(core.addrreg, 0x00000100);
+        assert_eq!(core.a, 0x0);
+
+        core.inc();
+        core.addrin = 2;
+        core.addr_reg();
+
+        assert_eq!(core.addrreg, 0x00000104);
+        assert_eq!(core.a, 0x0);
+    }
 }
