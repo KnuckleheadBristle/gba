@@ -89,6 +89,10 @@ impl CoreContext {
         }
     }
 
+    pub fn update_cpsr(&mut self) {
+        self.cpsr = (self.negative << 31) | (self.zero << 30) | (self.carry << 29) | (self.overflow << 28);
+    }
+
     /* Input arguments: A sel, B sel, In sel */
     #[allow(dead_code)]
     pub fn reg_bank(&mut self) {
@@ -105,8 +109,16 @@ impl CoreContext {
             0x3 => self.barrel.overflowing_sub(self.abus),
             0x4 => self.abus.overflowing_add(self.barrel),
             0x5 => self.abus.overflowing_add(self.barrel+self.carry),
-            /* 0x6 => self.abus - self.barrel + self.carry - 1,
-            0x7 => self.barrel - self.abus + self.carry - 1, */
+            0x6 => {
+                let a = self.abus.overflowing_sub(self.barrel);
+                let b = a.0.overflowing_add(self.carry.overflowing_sub(1).0);
+                (b.0, a.1|b.1)
+            },
+            0x7 => {
+                let a = self.barrel.overflowing_sub(self.abus);
+                let b = a.0.overflowing_add(self.carry.overflowing_sub(1).0);
+                (b.0, a.1|b.1)
+            },
             0x8 => (self.abus & self.barrel, false),
             0x9 => (self.abus ^ self.barrel, false),
             0xA => self.abus.overflowing_sub(self.barrel),
@@ -115,10 +127,10 @@ impl CoreContext {
             0xD => (self.barrel, false),
             0xE => (self.abus & !self.barrel, false),
             0xF => (!self.barrel, false),
-            _   => panic!("ALU function {} does not write to alubus", self.alu_func)
+            _   => panic!("ALU function {} does not exist", self.alu_func)
         };
 
-        if self.alu_func < 0xB {
+        if self.alu_func < 0x8 || self.alu_func > 0xB {
             self.alubus = tmp.0;
         }
 
@@ -126,12 +138,14 @@ impl CoreContext {
         self.zero = if tmp.0 == 0 {1} else {0};
         self.carry = if tmp.1 {1} else {0};
         self.overflow = if tmp.0 > 0x40000000 {1} else {0};
+        println!("Neg {} Zero {} Carry {} Over {}", self.negative, self.zero, self.carry, self.overflow);
+        self.update_cpsr();
     }
 
     /* Barrel shifter */
     #[allow(dead_code)]
     pub fn shift(&mut self) {
-        self.barrel = match self.barrelfunc {  /* Need to implement these properly (carry, etc) */
+        self.barrel = match self.barrelfunc {
             0   => self.bbus << self.shiftamnt, //LSL
             1   => self.bbus >> self.shiftamnt, //LSR
             2   => (self.bbus as i32 >> self.shiftamnt) as u32, //ASR
