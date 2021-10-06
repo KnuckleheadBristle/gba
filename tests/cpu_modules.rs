@@ -216,4 +216,37 @@ mod tests {
         assert_eq!(core.barrelbus, 0b01010010111000011100101100101101);
         assert_eq!(core.reg.cpsr.c, false);
     }
+
+    #[test]
+    fn data_processing() {
+        let mut core = arm7tdmi::Core::new();
+
+        /* 
+        this is a test for the cycles needed in a data processing instruction
+        This would most likely be handled in a similar way to thumb conversion
+        */
+
+        core.reg.gp[4] = 0x01001123;
+        core.reg.gp[5] = 0x10321067;
+
+        //ADD r2,r4,r5
+        let rd = 2;
+        let rn = 4;
+        let rm = 5;
+
+        core.asel = rn;
+        core.bsel = rm;
+        core.writesel = rd;
+        core.writefrom = 0;
+        core.shiftamnt = 0;
+        core.barrelfunc = 0;
+        core.aluop = 4;
+
+        core.reg_bank();        //update the a and b busses
+        core.barrel_shift();    //shift (although none is needed, we need to update through the data path)
+        core.alu();             //Our alu operation
+        core.reg_bank();        //register write-back
+
+        assert_eq!(core.reg.gp[2], 0x1132218A);
+    }
 }

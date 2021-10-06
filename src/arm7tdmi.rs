@@ -1,3 +1,5 @@
+use bitpat::bitpat;
+
 /* The status register */
 #[derive(Clone, Copy, Debug)]
 pub struct Status {
@@ -297,6 +299,16 @@ impl Core {
         if self.aluop < 8 || self.aluop > 0xB {
             self.alubus = tmp
         }
+    }
+
+    pub fn decode_shift(&mut self, shift: u32) {
+        let shifttype: u8 = ((shift & 0x6) >> 1) as u8;
+        self.barrelfunc = shifttype;
+        if bitpat!( _ _ _ _ _ _ _ 0 )(shift) {
+            self.shiftamnt = shift >> 3;
+        } else if bitpat!( _ _ _ _ 0 _ _ 1 )(shift) {
+            self.shiftamnt = self.reg.read((shift >> 4) as usize) & 0x1F;
+        } else { panic!("shift mode does not exist")}
     }
 
     pub fn barrel_shift(&mut self) {
