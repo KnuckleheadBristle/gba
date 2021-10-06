@@ -168,4 +168,52 @@ mod tests {
         assert_eq!(core.alubus, 0xECEDCECD);
         assert_eq!(u32::from(core.reg.cpsr), 0x80000000);
     }
+
+    #[test]
+    fn barrel_shifting() {
+        let mut core = arm7tdmi::Core::new();
+        core.bbus = 0b10100101110000111001011001011010;
+        /* LSL */
+        core.barrelfunc = 0;
+        
+        core.shiftamnt = 0; //#0
+        core.barrel_shift();
+
+        assert_eq!(core.barrelbus, 0b10100101110000111001011001011010);
+        assert_eq!(core.reg.cpsr.c, false);
+
+        core.shiftamnt = 0x13; //#19
+        core.barrel_shift();
+
+        assert_eq!(core.barrelbus, 0b10110010110100000000000000000000);
+        assert_eq!(core.reg.cpsr.c, false);
+
+        /* LSR */
+        core.barrelfunc = 1;
+        core.barrel_shift();
+
+        assert_eq!(core.barrelbus, 0b1010010111000);
+        assert_eq!(core.reg.cpsr.c, false);
+
+        /* ASR */
+        core.barrelfunc = 2;
+        core.barrel_shift();
+
+        assert_eq!(core.barrelbus, 0b11111111111111111111010010111000);
+        assert_eq!(core.reg.cpsr.c, false);
+
+        /* ROR */
+        core.barrelfunc = 3;
+        core.barrel_shift();
+
+        assert_eq!(core.barrelbus, 0b01110010110010110101010010111000);
+        assert_eq!(core.reg.cpsr.c, false);
+
+        /* RRX */
+        core.shiftamnt = 0;
+        core.barrel_shift();
+
+        assert_eq!(core.barrelbus, 0b01010010111000011100101100101101);
+        assert_eq!(core.reg.cpsr.c, false);
+    }
 }

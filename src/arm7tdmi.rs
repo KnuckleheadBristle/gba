@@ -301,8 +301,8 @@ impl Core {
 
     pub fn barrel_shift(&mut self) {
         self.barrelbus = match self.barrelfunc {
-            0   =>  self.bbus >> self.shiftamnt,
-            1   =>  self.bbus << self.shiftamnt,
+            0   =>  self.bbus << self.shiftamnt,
+            1   =>  self.bbus >> self.shiftamnt,
             2   =>  ((self.bbus as i32) >> self.shiftamnt) as u32,
             3   =>  {if self.shiftamnt == 0 {(self.bbus >> 1) | ((self.reg.cpsr.c as u32) << 31)} else {self.bbus.rotate_right(self.shiftamnt)}},
             _   =>  unreachable!()
