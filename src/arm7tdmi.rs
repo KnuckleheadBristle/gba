@@ -67,67 +67,129 @@ pub const PC: usize = 15;
 /* Registers */
 #[derive(Clone, Copy, Debug)]
 pub struct Reg {
-    pub gp: [u32; 16],
-    pub cpsr: Status,
-    
-    pub address: u32,
-    pub data: u32,
-    pub shift: u8,
+    pub gp:         [u32; 16],
+    pub fiq:        [u32; 7],
+    pub svc:        [u32; 2],
+    pub abt:        [u32; 2],
+    pub irq:        [u32; 2],
+    pub und:        [u32; 2],
 
-    pub pipeline: [u32; 3],
+    pub cpsr:       Status,
+    pub spsr_fiq:   Status,
+    pub spsr_svc:   Status,
+    pub spsr_abt:   Status,
+    pub spsr_und:   Status,
+    pub spsr_irq:   Status,
 
-    pub sp_fiq: u32,
-    pub lr_fiq: u32,
-    pub spsr_fiq: Status,
+    pub address:    u32,
+    pub data:       u32,
+    pub shift:      u8,
 
-    pub sp_svc: u32,
-    pub lr_svc: u32,
-    pub spsr_svc: Status,
-
-    pub sp_abt: u32,
-    pub lr_abt: u32,
-    pub spsr_abt: Status,
-
-    pub sp_irq: u32,
-    pub lr_irq: u32,
-    pub spsr_irq: Status,
-
-    pub sp_und: u32,
-    pub lr_und: u32,
-    pub spsr_und: Status,
+    pub pipeline:   [u32; 3],
 }
 
 impl Default for Reg {
     fn default() -> Reg {
         Reg {
-            gp: [0; 16],
-            cpsr: Default::default(),
-            
-            address: 0,
-            data: 0,
-            shift: 0,
+            gp:         [0; 16],
+            fiq:        [0; 7],
+            svc:        [0; 2],
+            abt:        [0; 2],
+            irq:        [0; 2],
+            und:        [0; 2],
 
-            pipeline: [0; 3],
+            cpsr:       Default::default(),
+            spsr_fiq:   Default::default(),
+            spsr_svc:   Default::default(),
+            spsr_abt:   Default::default(),
+            spsr_irq:   Default::default(),
+            spsr_und:   Default::default(),
 
-            sp_fiq: 0,
-            lr_fiq: 0,
-            spsr_fiq: Default::default(),
+            address:    0,
+            data:       0,
+            shift:      0,
 
-            sp_svc: 0,
-            lr_svc: 0,
-            spsr_svc: Default::default(),
+            pipeline:   [0; 3],
+        }
+    }
+}
 
-            sp_abt: 0,
-            lr_abt: 0,
-            spsr_abt: Default::default(),
+impl Reg {
+    pub fn write(&mut self, index: usize, data: u32) {
+        match self.cpsr.mode {
+            0   =>  {
+                self.gp[index] = data;
+            },
+            1   =>  {
+                match index {
+                    8 ..= 14    => self.fiq[index-8] = data,
+                    _           => self.gp[index] = data,
+                };
+            },
+            2   =>  {
+                match index {
+                    13 ..= 14   => self.svc[index-13] = data,
+                    _           => self.gp[index] = data,
+                };
+            },
+            3   =>  {
+                match index {
+                    13 ..= 14   => self.abt[index-13] = data,
+                    _           => self.gp[index] = data,
+                };
+            }
+            4   =>  {
+                match index {
+                    13 ..= 14   => self.irq[index-13] = data,
+                    _           => self.gp[index] = data,
+                };
+            }
+            5   =>  {
+                match index {
+                    13 ..= 14   => self.und[index-13] = data,
+                    _           => self.gp[index] = data,
+                };
+            }
+            _   =>  unreachable!()
+        }
+    }
 
-            sp_irq: 0,
-            lr_irq: 0,
-            spsr_irq: Default::default(),
-
-            sp_und: 0,
-            lr_und: 0,
-            spsr_und: Default::default(),
+    pub fn read(&mut self, index: usize) -> u32 {
+        match self.cpsr.mode {
+            0   =>  {
+                self.gp[index]
+            },
+            1   =>  {
+                match index {
+                    8 ..= 14    => self.fiq[index-8],
+                    _           => self.gp[index],
+                }
+            },
+            2   =>  {
+                match index {
+                    13 ..= 14   => self.svc[index-13],
+                    _           => self.gp[index],
+                }
+            },
+            3   =>  {
+                match index {
+                    13 ..= 14   => self.abt[index-13],
+                    _           => self.gp[index],
+                }
+            }
+            4   =>  {
+                match index {
+                    13 ..= 14   => self.irq[index-13],
+                    _           => self.gp[index],
+                }
+            }
+            5   =>  {
+                match index {
+                    13 ..= 14   => self.und[index-13],
+                    _           => self.gp[index],
+                }
+            }
+            _   =>  unreachable!()
         }
     }
 }
@@ -143,8 +205,14 @@ pub struct Core {
 
     pub addrbus: u32,
     pub incbus: u32,
+
+    pub asel: u32,
     pub abus: u32,
+    pub bsel: u32,
     pub bbus: u32,
+
+    pub writesel: u32,
+    pub writefrom: u8,
 
     pub barrelfunc: u8,
     pub shiftamnt: u32,
@@ -165,8 +233,14 @@ impl Core {
 
             addrbus: 0,
             incbus: 0,
+
+            asel: 0,
             abus: 0,
+            bsel: 0,
             bbus: 0,
+
+            writesel: 0,
+            writefrom: 0,
 
             barrelfunc: 0,
             shiftamnt: 0,
@@ -246,5 +320,15 @@ impl Core {
                 _   =>  unreachable!()
             } != 0;
         }
+    }
+
+    pub fn reg_bank(&mut self) {
+        self.abus = self.reg.read(self.asel as usize);
+        self.bbus = self.reg.read(self.bsel as usize);
+        self.reg.write(self.writesel as usize, match self.writefrom {
+            0   =>  self.alubus,
+            1   =>  self.incbus,
+            _   =>  unreachable!()
+        });
     }
 }
