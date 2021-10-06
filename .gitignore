@@ -1,5 +1,6 @@
 /target
 
 /docs/*
-
 !docs/instruction_cycles.md
+
+/src/arm7tdmi.rs
