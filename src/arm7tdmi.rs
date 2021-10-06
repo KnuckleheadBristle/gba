@@ -61,9 +61,6 @@ impl Default for Status {
     }
 }
 
-pub const SP: usize = 13;
-pub const LR: usize = 14;
-pub const PC: usize = 15;
 /* Registers */
 #[derive(Clone, Copy, Debug)]
 pub struct Reg {
