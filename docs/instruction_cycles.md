@@ -3,6 +3,7 @@
 There are a number of terms mentioned in this document, they are outlined below:
 
 Transaction types:
+
 | TRANS[1:0] | Transaction type | Description                                    |
 | ---------- | ---------------- | ---------------------------------------------- |
 | 00         | I cycle          | Internal (address-only) next cycle             |
@@ -11,11 +12,12 @@ Transaction types:
 | 11         | S cycle          | Memory access to next address is sequential    |
 
 Sizes:
-| Letter    | Meaning   | Description                              |
-| --------- | --------- | ---------------------------------------- |
-| w         | word      | 32-bit data access or ARM opcode fetch   |
-| h         | halfword  | 16-bit data access or THUMB opcode fetch |
-| b         | byte      | 8-bit data access                        |
+
+| Letter | Meaning  | Description                              |
+| ------ | -------- | ---------------------------------------- |
+| w      | word     | 32-bit data access or ARM opcode fetch   |
+| h      | halfword | 16-bit data access or THUMB opcode fetch |
+| b      | byte     | 8-bit data access                        |
 
 ## Branch and ARM branch with link
 
@@ -29,19 +31,20 @@ The first cycle:
 The second:
 
 - Perform a fetch from the branch destination
-  - Return address is stored in r14 if the link bit is set
-The third (final):
 
+  - Return address is stored in r14 if the link bit is set
+    The third (final):
 - Perform a fetch from the destination +i (to refil the instruction pipeline)
+
   - If instruction is branch with link, 4 is subtracted from r14 to ensure return subroutines work correctly
 
-| Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 |
-| ----- | --------- | ----- | ----- | --------- | ------------- | ----- |
-| 1     | pc+2i     | w/h   | 0     | (pc+2i)   | N cycle       | 0     |
-| 2     | pc'       | w'/h' | 0     | (pc')     | S cycle       | 0     |
-| 3     | pc'+i     | w'/h' | 0     | (pc'+i)   | S cycle       | 0     |
-|       | pc'+2i    | w'/h' |       |           |               |       |
-|       |           |       |       |           |               |       |
+| Cycle | Address | Size  | Write | Data    | TRANS[1:0] | Prot0 |
+| ----- | ------- | ----- | ----- | ------- | ---------- | ----- |
+| 1     | pc+2i   | w/h   | 0     | (pc+2i) | N cycle    | 0     |
+| 2     | pc'     | w'/h' | 0     | (pc')   | S cycle    | 0     |
+| 3     | pc'+i   | w'/h' | 0     | (pc'+i) | S cycle    | 0     |
+|       | pc'+2i  | w'/h' |       |         |            |       |
+|       |         |       |       |         |            |       |
 
 ## Thumb branch with link
 
@@ -54,9 +57,9 @@ The second instruction: Similar to the ARM BL instruction, takes three cycles
 Cycle 1:
 
 - Calculates the final branch destination while performing a prefetch from the current PC
-Cycle 2:
-
+  Cycle 2:
 - Performs a fetch from the branch destination
+
   - Stores return address in r14 (because link)
 
 Cycle 3:
@@ -64,13 +67,13 @@ Cycle 3:
 - Performs a fetch from destination +2, refills instruction pipeline
   - Subtract 2 from r14 to ensure subsequent subroutines work
 
-| Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 |
-| ----- | --------- | ----- | ----- | --------- | ------------- | ----- |
-| 1     | pc + 4    | h     | 0     | (pc + 4)  | S cycle       | 0     |
-| 2     | pc + 6    | h     | 0     | (pc + 6)  | N cycle       | 0     |
-| 3     | pc'       | h     | 0     | (pc')     | S cycle       | 0     |
-| 4     | pc' + 2   | h     | 0     | (pc' + 2) | S cycle       | 0     |
-|       | pc' + 4   |       |       |           |               |       |
+| Cycle | Address | Size | Write | Data      | TRANS[1:0] | Prot0 |
+| ----- | ------- | ---- | ----- | --------- | ---------- | ----- |
+| 1     | pc + 4  | h    | 0     | (pc + 4)  | S cycle    | 0     |
+| 2     | pc + 6  | h    | 0     | (pc + 6)  | N cycle    | 0     |
+| 3     | pc'     | h    | 0     | (pc')     | S cycle    | 0     |
+| 4     | pc' + 2 | h    | 0     | (pc' + 2) | S cycle    | 0     |
+|       | pc' + 4 |      |       |           |            |       |
 
 ## Branch and exchange
 
@@ -91,12 +94,12 @@ Cycle 3:
 - Perform a fetch from the desination plus 2 or 4 (depending on the selected state)
   - Refilling instruction pipeline
 
-| Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 | Tbit  |
-| ----- | --------- | ----- | ----- | --------- | ------------- | ----- | ----- |
-| 1     | pc + 2i   | w/h   | 0     | (pc + 2i) | N cycle       | 0     | t     |
-| 2     | pc'       | w'/h' | 0     | (pc')     | S cycle       | 0     | t'    |
-| 3     | pc'+i'    | w'/h' | 0     | (pc'+'i)  | S cycle       | 0     | t'    |
-|       | pc' + 2i' |       |       |           |               |       |       |
+| Cycle | Address   | Size  | Write | Data      | TRANS[1:0] | Prot0 | Tbit |
+| ----- | --------- | ----- | ----- | --------- | ---------- | ----- | ---- |
+| 1     | pc + 2i   | w/h   | 0     | (pc + 2i) | N cycle    | 0     | t    |
+| 2     | pc'       | w'/h' | 0     | (pc')     | S cycle    | 0     | t'   |
+| 3     | pc'+i'    | w'/h' | 0     | (pc'+'i)  | S cycle    | 0     | t'   |
+|       | pc' + 2i' |       |       |           |            |       |      |
 
 ## Data operations
 
@@ -117,22 +120,22 @@ As the PC can be one or more of the register operands, when the PC is the destin
 
 PSR is identical in timing characterisics as data operations except that PC is never used as a source or destination register.
 
-| Type                  | Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 |
-| ----                  | ----- | --------- | ----- | ----- | --------- | ------------- | ----- |
-| Normal                | 1     | pc+2i     | w/h   | 0     | (pc+2i)   | S cycle       | 0     |
-|                       |       | pc+3i     |       |       |           |               |       |
-| dest=pc               | 1     | pc+2i     | w/h   | 0     | (pc+2i)   | N cycle       | 0     |
-|                       | 2     | pc'       | w/h   | 0     | (pc')     | S cycle       | 0     |
-|                       | 3     | pc'+i     | w/h   | 0     | (pc'+i)   | S cycle       | 0     |
-|                       |       | pc'+2i    |       |       |           |               |       |
-| shift(Rs)             | 1     | pc+2i     | w/h   | 0     | (pc+2i)   | I cycle       | 0     |
-|                       | 2     | pc+3i     | w/h   | 0     | -         | S cycle       | 1     |
-|                       |       | pc+3i     |       |       |           |               |       |
-| shift(Rs), dest=pc    | 1     | pc+8      | w     | 0     | (pc+8)    | I cycle       | 0     |
-|                       | 2     | pc+12     | w     | 0     | -         | N cycle       | 1     |
-|                       | 3     | pc'       | w     | 0     | (pc')     | S cycle       | 0     |
-|                       | 4     | pc'+4     | w     | 0     | (pc'+4)   | S cycle       | 0     |
-|                       |       | pc'+8     |       |       |           |               |       |
+| Type               | Cycle | Address | Size | Write | Data    | TRANS[1:0] | Prot0 |
+| ------------------ | ----- | ------- | ---- | ----- | ------- | ---------- | ----- |
+| Normal             | 1     | pc+2i   | w/h  | 0     | (pc+2i) | S cycle    | 0     |
+|                    |       | pc+3i   |      |       |         |            |       |
+| dest=pc            | 1     | pc+2i   | w/h  | 0     | (pc+2i) | N cycle    | 0     |
+|                    | 2     | pc'     | w/h  | 0     | (pc')   | S cycle    | 0     |
+|                    | 3     | pc'+i   | w/h  | 0     | (pc'+i) | S cycle    | 0     |
+|                    |       | pc'+2i  |      |       |         |            |       |
+| shift(Rs)          | 1     | pc+2i   | w/h  | 0     | (pc+2i) | I cycle    | 0     |
+|                    | 2     | pc+3i   | w/h  | 0     | -       | S cycle    | 1     |
+|                    |       | pc+3i   |      |       |         |            |       |
+| shift(Rs), dest=pc | 1     | pc+8    | w    | 0     | (pc+8)  | I cycle    | 0     |
+|                    | 2     | pc+12   | w    | 0     | -       | N cycle    | 1     |
+|                    | 3     | pc'     | w    | 0     | (pc')   | S cycle    | 0     |
+|                    | 4     | pc'+4   | w    | 0     | (pc'+4) | S cycle    | 0     |
+|                    |       | pc'+8   |      |       |         |            |       |
 
 ## Multiply and Multiply Accumulate
 
@@ -156,18 +159,18 @@ Step 3:
 - Transfer the data to the destination register (external memory is not used)
   - This is normally merged with the next prefetch
 
-| Type      | Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 | Prot1 |
-| --------- | ----- | --------- | ----- | ----- | --------- | ------------- | ----- | ----- |
-| normal    | 1     | pc+2i     | w/h   | 0     | (pc+2i)   | N cycle       | 0     | s     |
-|           | 2     | pc'       | w/h   | 0     | (pc')     | I cycle       | 1     | u/s   |
-|           | 3     | pc+3i     | w/h/b | 0     | -         | S cycle       | 1     | s     |
-|           |       | pc+3i     |       |       |           |               |       |       |
-| dest=pc   | 1     | pc+8      | w     | 0     | (pc+8)    | N cycle       | 0     | s     |
-|           | 2     | da        | w/h/b | 0     | pc'       | I cycle       | 1     | u/s   |
-|           | 3     | pc+12     | w     | 0     | -         | N cycle       | 1     | s     |
-|           | 4     | pc'       | w     | 0     | (pc')     | S cycle       | 0     | s     |
-|           | 5     | pc'+4     | w     | 0     | (pc'+4)   | S cycle       | 0     | s     |
-|           |       | pc'+8     |       |       |           |               |       |       |
+| Type    | Cycle | Address | Size  | Write | Data    | TRANS[1:0] | Prot0 | Prot1 |
+| ------- | ----- | ------- | ----- | ----- | ------- | ---------- | ----- | ----- |
+| normal  | 1     | pc+2i   | w/h   | 0     | (pc+2i) | N cycle    | 0     | s     |
+|         | 2     | pc'     | w/h   | 0     | (pc')   | I cycle    | 1     | u/s   |
+|         | 3     | pc+3i   | w/h/b | 0     | -       | S cycle    | 1     | s     |
+|         |       | pc+3i   |       |       |         |            |       |       |
+| dest=pc | 1     | pc+8    | w     | 0     | (pc+8)  | N cycle    | 0     | s     |
+|         | 2     | da      | w/h/b | 0     | pc'     | I cycle    | 1     | u/s   |
+|         | 3     | pc+12   | w     | 0     | -       | N cycle    | 1     | s     |
+|         | 4     | pc'     | w     | 0     | (pc')   | S cycle    | 0     | s     |
+|         | 5     | pc'+4   | w     | 0     | (pc'+4) | S cycle    | 0     | s     |
+|         |       | pc'+8   |       |       |         |            |       |       |
 
 The base or destination (or both) may be the PC. If the PC is affected by the instruction, the prefetch sequence changes. If the data fetch aborts, the processor prevents modification of the destination register.
 
@@ -183,11 +186,11 @@ Cycle 2:
 
 - Perform the base modification and write data to memory (if required)
 
-| Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 | Prot1 |
-| ----- | --------- | ----- | ----- | --------- | ------------- | ----- | ----- |
-| 1     | pc+2i     | w/h   | 0     | (pc+2i)   | N cycle       | 0     | s     |
-| 2     | da        | b/h/w | 1     | Rd        | N cycle       | 1     | t     |
-|       | pc+3i     |       |       |           |               |       |       |
+| Cycle | Address | Size  | Write | Data    | TRANS[1:0] | Prot0 | Prot1 |
+| ----- | ------- | ----- | ----- | ------- | ---------- | ----- | ----- |
+| 1     | pc+2i   | w/h   | 0     | (pc+2i) | N cycle    | 0     | s     |
+| 2     | da      | b/h/w | 1     | Rd      | N cycle    | 1     | t     |
+|       | pc+3i   |       |       |         |            |       |       |
 
 t is either 0 when the T bit is specified in the instruction, or C at all other times.
 
@@ -218,30 +221,30 @@ The instruction continues to completion when an abort occurs, but all register w
 
 If the PC is in the register list to be loaded, the processor invalidates the pipeline, because the PC is always the last to load, an abort at any point prevents the PC from being written to.
 
-| Type                      | Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 |
-| ------------------------- | ----- | --------- | ----- | ----- | --------- | ------------- | ----- |
-| 1 register dest=pc        | 1     | pc+2i     | w/h   | 0     | (pc+2i)   | N cycle       | 0     |
-|                           | 2     | da        | w     | 0     | pc'       | I cycle       | 1     |
-|                           | 3     | pc+3i     | w/h   | 0     | -         | N cycle       | 1     |
-|                           | 4     | pc'       | w/h   | 0     | (pc')     | S cycle       | 0     |
-|                           | 5     | pc'+i     | w/h   | 0     | (pc'+i)   | S cycle       | 0     |
-|                           |       | pc'+2i    |       |       |           |               |       |
-| n registers (n>1)         | 1     | pc+2i     | w/h   | 0     | (pc+2i)   | N cycle       | 0     |
-|                           | 2     | da        | w     | 0     | da        | S cycle       | 1     |
-|                           | -     | da++      | w     | 0     | (da++)    | S cycle       | 1     |
-|                           | n     | da++      | w     | 0     | (da++)    | S cycle       | 1     |
-|                           | n+1   | da++      | w     | 0     | (da++)    | I cycle       | 1     |
-|                           | n+2   | pc+3i     | w     | 0     | -         | S cycle       | 1     |
-|                           |       | pc+3i     |       |       |           |               |       |
-| n registers (n>1) incl pc | 1     | pc+2i     | w/h   | 0     | (pc+2i)   | N cycle       | 0     |
-|                           | 2     | da        | w     | 0     | da        | S cycle       | 1     |
-|                           | -     | da++      | w     | 0     | (da++)    | S cycle       | 1     |
-|                           | n     | da++      | w     | 0     | (da++)    | S cycle       | 1     |
-|                           | n+1   | da++      | w     | 0     | pc'       | I cycle       | 1     |
-|                           | n+2   | pc+3i     | w/h   | 0     | -         | N cycle       | 1     |
-|                           | n+3   | pc'       | w/h   | 0     | (pc')     | S cycle       | 0     |
-|                           | n+4   | pc'+i     | w/h   | 0     | (pc'+1)   | S cycle       | 0     |
-|                           |       | pc'+2i    |       |       |           |               |       |
+| Type                      | Cycle | Address | Size | Write | Data    | TRANS[1:0] | Prot0 |
+| ------------------------- | ----- | ------- | ---- | ----- | ------- | ---------- | ----- |
+| 1 register dest=pc        | 1     | pc+2i   | w/h  | 0     | (pc+2i) | N cycle    | 0     |
+|                           | 2     | da      | w    | 0     | pc'     | I cycle    | 1     |
+|                           | 3     | pc+3i   | w/h  | 0     | -       | N cycle    | 1     |
+|                           | 4     | pc'     | w/h  | 0     | (pc')   | S cycle    | 0     |
+|                           | 5     | pc'+i   | w/h  | 0     | (pc'+i) | S cycle    | 0     |
+|                           |       | pc'+2i  |      |       |         |            |       |
+| n registers (n>1)         | 1     | pc+2i   | w/h  | 0     | (pc+2i) | N cycle    | 0     |
+|                           | 2     | da      | w    | 0     | da      | S cycle    | 1     |
+|                           | -     | da++    | w    | 0     | (da++)  | S cycle    | 1     |
+|                           | n     | da++    | w    | 0     | (da++)  | S cycle    | 1     |
+|                           | n+1   | da++    | w    | 0     | (da++)  | I cycle    | 1     |
+|                           | n+2   | pc+3i   | w    | 0     | -       | S cycle    | 1     |
+|                           |       | pc+3i   |      |       |         |            |       |
+| n registers (n>1) incl pc | 1     | pc+2i   | w/h  | 0     | (pc+2i) | N cycle    | 0     |
+|                           | 2     | da      | w    | 0     | da      | S cycle    | 1     |
+|                           | -     | da++    | w    | 0     | (da++)  | S cycle    | 1     |
+|                           | n     | da++    | w    | 0     | (da++)  | S cycle    | 1     |
+|                           | n+1   | da++    | w    | 0     | pc'     | I cycle    | 1     |
+|                           | n+2   | pc+3i   | w/h  | 0     | -       | N cycle    | 1     |
+|                           | n+3   | pc'     | w/h  | 0     | (pc')   | S cycle    | 0     |
+|                           | n+4   | pc'+i   | w/h  | 0     | (pc'+1) | S cycle    | 0     |
+|                           |       | pc'+2i  |      |       |         |            |       |
 
 ## Store multiple registers
 
@@ -256,17 +259,17 @@ Cycle 2:
 - Base modification is performed
   - Data is written to memory
 
-| Type                      | Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 |
-| ------------------------- | ----- | --------- | ----- | ----- | --------- | ------------- | ----- |
-| 1 register                | 1     | pc+2i     | w/h   | 0     | (pc+2i)   | N cycle       | 0     |
-|                           | 2     | da        | w     | 1     | R         | N cycle       | 1     |
-|                           |       | pc+3i     |       |       |           |               |       |
-| n registers (n>1)         | 1     | pc+8      | w/h   | 0     | (pc+2i)   | N cycle       | 0     |
-|                           | 2     | da        | w     | 1     | R         | S cycle       | 1     |
-|                           | -     | da++      | w     | 1     | R'        | S cycle       | 1     |
-|                           | n     | da++      | w     | 1     | R''       | S cycle       | 1     |
-|                           | n+1   | da++      | w     | 1     | R'''      | S cycle       | 1     |
-|                           |       | pc+12     |       |       |           |               |       |
+| Type              | Cycle | Address | Size | Write | Data    | TRANS[1:0] | Prot0 |
+| ----------------- | ----- | ------- | ---- | ----- | ------- | ---------- | ----- |
+| 1 register        | 1     | pc+2i   | w/h  | 0     | (pc+2i) | N cycle    | 0     |
+|                   | 2     | da      | w    | 1     | R       | N cycle    | 1     |
+|                   |       | pc+3i   |      |       |         |            |       |
+| n registers (n>1) | 1     | pc+8    | w/h  | 0     | (pc+2i) | N cycle    | 0     |
+|                   | 2     | da      | w    | 1     | R       | S cycle    | 1     |
+|                   | -     | da++    | w    | 1     | R'      | S cycle    | 1     |
+|                   | n     | da++    | w    | 1     | R''     | S cycle    | 1     |
+|                   | n+1   | da++    | w    | 1     | R'''    | S cycle    | 1     |
+|                   |       | pc+12   |      |       |         |            |       |
 
 ## Data swap
 
@@ -282,19 +285,19 @@ Cycle 2:
 
 Cycle 3:
 
-- The contens of the source register are written to the external memory
+- The contents of the source register are written to the external memory
 
 Cycle 4:
 
 - The data read during cycle 3 is written into the destination register
 
-| Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 | Lock  |
-| ----- | --------- | ----- | ----- | --------- | ------------- | ----- | ----- |
-| 1     | pc+8      | w     | 0     | (pc+8)    | N cycle       | 0     | 0     |
-| 2     | Rn        | w/b   | 0     | (Rn)      | N cycle       | 1     | 1     |
-| 3     | Rn        | w/b   | 1     | Rm        | I cycle       | 1     | 1     |
-| 4     | pc+12     | w     | 0     | -         | S cycle       | 1     | 0     |
-|       | pc+12     |       |       |           |               |       |       |
+| Cycle | Address | Size | Write | Data   | TRANS[1:0] | Prot0 | Lock |
+| ----- | ------- | ---- | ----- | ------ | ---------- | ----- | ---- |
+| 1     | pc+8    | w    | 0     | (pc+8) | N cycle    | 0     | 0    |
+| 2     | Rn      | w/b  | 0     | (Rn)   | N cycle    | 1     | 1    |
+| 3     | Rn      | w/b  | 1     | Rm     | I cycle    | 1     | 1    |
+| 4     | pc+12   | w    | 0     | -      | S cycle    | 1     | 0    |
+|       | pc+12   |      |       |        |            |       |      |
 
 ## Software interrupt and exception entry
 
@@ -314,30 +317,30 @@ Cycle 3:
 
 - Refilling of the instruction pipeline
 
-| Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 | Prot1 | Mode              | Tbit  |
-| ----- | --------- | ----- | ----- | --------- | ------------- | ----- | ----- | ----------------- | ----- |
-| 1     | pc+2i     | w/h   | 0     | (pc+2i)   | N cycle       | 0     | s     | old mode          | t     |
-| 2     | Xn        | w'    | 0     | (Xn)      | S cycle       | 0     | 1     | exception mode    | 0     |
-| 3     | Xn+4      | w'    | 0     | (Xn+4)    | S cycle       | 0     | 1     | exception mode    | 0     |
-|       | Xn+8      |       |       |           |               |       |       |                   |       |
+| Cycle | Address | Size | Write | Data    | TRANS[1:0] | Prot0 | Prot1 | Mode           | Tbit |
+| ----- | ------- | ---- | ----- | ------- | ---------- | ----- | ----- | -------------- | ---- |
+| 1     | pc+2i   | w/h  | 0     | (pc+2i) | N cycle    | 0     | s     | old mode       | t    |
+| 2     | Xn      | w'   | 0     | (Xn)    | S cycle    | 0     | 1     | exception mode | 0    |
+| 3     | Xn+4    | w'   | 0     | (Xn+4)  | S cycle    | 0     | 1     | exception mode | 0    |
+|       | Xn+8    |      |       |         |            |       |       |                |      |
 
 ## Undefined instructions and coprocessor absent
 
 This occurs when an undefined instruction is executed, or if a coprocessor is not available. This instruction is similar in execution to an exception entry.
 
-| Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 | CPnl  | CPA   | CPB   | Prot1 | Mode  | Tbit  |
-| ----- | --------- | ----- | ----- | --------- | ------------- | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
-| 1     | pc+2i     | w/h   | 0     | (pc+2i)   | I cycle       | 0     | 0     | 1     | 1     | s     | Old   | t     |
-| 2     | pc+2i     | w/h   | 0     | -         | N cycle       | 0     | 1     | 1     | 1     | s     | Old   | t     |
-| 3     | Xn        | w'    | 0     | (Xn)      | S cycle       | 0     | 1     | 1     | 1     | 1     | 00100 | 0     |
-| 4     | Xn+4      | w'    | 0     | (Xn+4)    | S cycle       | 0     | 1     | 1     | 1     | 1     | 00100 | 0     |
-|       | Xn+8      |       |       |           |               |       |       |       |       |       |       |       |
+| Cycle | Address | Size | Write | Data    | TRANS[1:0] | Prot0 | CPnl | CPA | CPB | Prot1 | Mode  | Tbit |
+| ----- | ------- | ---- | ----- | ------- | ---------- | ----- | ---- | --- | --- | ----- | ----- | ---- |
+| 1     | pc+2i   | w/h  | 0     | (pc+2i) | I cycle    | 0     | 0    | 1   | 1   | s     | Old   | t    |
+| 2     | pc+2i   | w/h  | 0     | -       | N cycle    | 0     | 1    | 1   | 1   | s     | Old   | t    |
+| 3     | Xn      | w'   | 0     | (Xn)    | S cycle    | 0     | 1    | 1   | 1   | 1     | 00100 | 0    |
+| 4     | Xn+4    | w'   | 0     | (Xn+4)  | S cycle    | 0     | 1    | 1   | 1   | 1     | 00100 | 0    |
+|       | Xn+8    |      |       |         |            |       |      |     |     |       |       |      |
 
 ## Unexecuted instructions
 
 This occurs when the condition code of an instruction is not met, and takes one cycle.
 
-| Cycle | Address   | Size  | Write | Data      | TRANS[1:0]    | Prot0 |
-| ----- | --------- | ----- | ----- | --------- | ------------- | ----- |
-| 1     | pc+2i     | w/h   | 0     | (pc+2i)   | S cycle       | 0     |
-|       | pc+3i     |       |       |           |               |       |
+| Cycle | Address | Size | Write | Data    | TRANS[1:0] | Prot0 |
+| ----- | ------- | ---- | ----- | ------- | ---------- | ----- |
+| 1     | pc+2i   | w/h  | 0     | (pc+2i) | S cycle    | 0     |
+|       | pc+3i   |      |       |         |            |       |

@@ -1,4 +1,5 @@
 use bitpat::bitpat;
+use std::fmt;
 
 #[allow(dead_code)]
 #[derive(Debug, PartialEq, Clone, Copy)]
@@ -18,6 +19,31 @@ pub enum ArmInstType {
     CoprocessorDataOperation,
     CoprocessorRegisterTransfer,
     SoftwareInterrupt
+}
+
+impl fmt::Display for ArmInstType {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        use self::ArmInstType::*;
+        let s = match *self {
+            DataProcessingOrPSRTransfer => "Data Processing",
+            Multiply                    => "Multiply",
+            MultiplyLong                => "Multiply Long",
+            SingleDataSwap              => "Single Data Swap",
+            BranchAndExchange           => "Branch and Exchange",
+            HalfwordDataTransferRegisterOffset => "Halfword data transfer with register offset",
+            HalfwordDataTransferImmediateOffset => "Halfword data transfer with immediate offset",
+            SingleDataTransfer          =>  "Single Data Transfer",
+            Undefined                   => "Undefined",
+            BlockDataTransfer           => "Block Data Transfer",
+            Branch                      => "Branch",
+            CoprocessorDataTransfer     => "Coprocessor Data Transfer",
+            CoprocessorDataOperation    => "Coprocessor Data Operation",
+            CoprocessorRegisterTransfer => "Coprocessor Register Transfer",
+            SoftwareInterrupt           => "Software Interrupt"
+        };
+
+        write!(f, "{}", s)
+    }
 }
 
 #[derive(Debug, PartialEq, Clone, Copy)]

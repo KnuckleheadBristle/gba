@@ -1,4 +1,5 @@
 use bitpat::bitpat;
+use std::fmt;
 
 /* The status register */
 #[derive(Clone, Copy, Debug)]
@@ -218,7 +219,52 @@ pub struct Core {
     pub barrelbus: u32,
 
     pub databus: u32,
+    pub datareg: u32,
     pub instbus: u32,
+
+    pub cycle: u8,
+}
+
+impl fmt::Display for Core {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        
+        write!(f, 
+            "
+            alubus:     {}\n
+            aluop:      {}\n
+            setcond:    {}\n
+            addrbus:    {}\n
+            incbus:     {}\n
+            asel:       {}\n
+            abus:       {}\n
+            bsel:       {}\n
+            bbus:       {}\n
+            writesel:   {}\n
+            writefrom:  {}\n
+            barrelfunc: {}\n
+            shiftamnt:  {}\n
+            barrelbus:  {}\n
+            databus:    {}\n
+            instbus:    {}
+            "
+        ,   self.alubus,
+            self.aluop,
+            self.setcond,
+            self.addrbus,
+            self.incbus,
+            self.asel,
+            self.abus,
+            self.bsel,
+            self.bbus,
+            self.writesel,
+            self.writefrom,
+            self.barrelfunc,
+            self.shiftamnt,
+            self.barrelbus,
+            self.databus,
+            self.instbus
+        )
+    }
 }
 
 impl Core {
@@ -246,8 +292,15 @@ impl Core {
             barrelbus: 0,
 
             databus: 0,
+            datareg: 0,
             instbus: 0,
+
+            cycle: 0,
         }
+    }
+
+    pub fn inc_cycle(&mut self) {
+        self.cycle += 1;
     }
 
     fn set_zn(&mut self, result: u32) {
@@ -301,6 +354,7 @@ impl Core {
         }
     }
 
+    #[allow(dead_code)]
     pub fn decode_shift(&mut self, shift: u32) {
         let shifttype: u8 = ((shift & 0x6) >> 1) as u8;
         self.barrelfunc = shifttype;
