@@ -1,5 +1,11 @@
+use crate::bus;
 use bitpat::bitpat;
 use std::fmt;
+
+/* 
+Things that need to be added to this:
+    Some sort of sign-extension module, which modifies the incoming data using the contents of the S and H bits in an applicable instruction word (possibly in the read data register)
+*/
 
 /* The status register */
 #[derive(Clone, Copy, Debug)]
@@ -11,7 +17,7 @@ pub struct Status {
 
     irq_disable: bool,
     fiq_disable: bool,
-    state: bool,
+    pub state: bool,
     mode: u8,
 }
 
@@ -35,6 +41,7 @@ impl From<Status> for u32 {
     fn from(sr: Status) -> u32 {
         let mut word: u32 = 0;
 
+        /* logical OR each of the condition bits into the condition word */
         word |= (sr.n as u32) << 31;
         word |= (sr.z as u32) << 30;
         word |= (sr.c as u32) << 29;
@@ -44,7 +51,7 @@ impl From<Status> for u32 {
         word |= (sr.fiq_disable as u32) << 6;
         word |= (sr.state as u32) << 4;
         word |= sr.mode as u32;
-        word
+        word // return the condition word
     }
 }
 
@@ -115,7 +122,7 @@ impl Default for Reg {
 }
 
 impl Reg {
-    pub fn write(&mut self, index: usize, data: u32) {
+    pub fn write(&mut self, index: usize, data: u32) { /* Write to a register */
         match self.cpsr.mode {
             0   =>  {
                 self.gp[index] = data;
@@ -154,7 +161,7 @@ impl Reg {
         }
     }
 
-    pub fn read(&mut self, index: usize) -> u32 {
+    pub fn read(&mut self, index: usize) -> u32 {   /* Read from a register */
         match self.cpsr.mode {
             0   =>  {
                 self.gp[index]
@@ -203,6 +210,8 @@ pub struct Core {
     pub aluop: u8,
     pub setcond: bool,
 
+    pub bus: bus::Bus,
+
     pub addrbus: u32,
     pub incbus: u32,
 
@@ -225,6 +234,7 @@ pub struct Core {
     pub cycle: u8,
 }
 
+/* Print-formatting so that I can print the contents of the structure */
 impl fmt::Display for Core {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         
@@ -245,7 +255,8 @@ impl fmt::Display for Core {
             shiftamnt:  {}\n
             barrelbus:  {}\n
             databus:    {}\n
-            instbus:    {}
+            instbus:    {}\n
+            cycle:      {}
             "
         ,   self.alubus,
             self.aluop,
@@ -262,7 +273,8 @@ impl fmt::Display for Core {
             self.shiftamnt,
             self.barrelbus,
             self.databus,
-            self.instbus
+            self.instbus,
+            self.cycle
         )
     }
 }
@@ -275,6 +287,8 @@ impl Core {
             alubus: 0,
             aluop: 0,
             setcond: false,
+
+            bus: bus::Bus::new(),
 
             addrbus: 0,
             incbus: 0,
@@ -299,6 +313,7 @@ impl Core {
         }
     }
 
+    #[allow(dead_code)]
     pub fn inc_cycle(&mut self) {
         self.cycle += 1;
     }
@@ -318,26 +333,56 @@ impl Core {
         self.reg.cpsr.c = op1.overflowing_sub(op2).1;
     }
 
-    pub fn alu(&mut self) {
-        let tmp = match self.aluop {
-            0   =>  self.abus & self.barrelbus,
-            1   =>  self.abus ^ self.barrelbus,
-            2   =>  self.abus.wrapping_sub(self.barrelbus),
-            3   =>  self.barrelbus.wrapping_sub(self.abus),
-            4   =>  self.abus.wrapping_add(self.barrelbus),
-            5   =>  self.abus.wrapping_add(self.barrelbus.wrapping_add(self.reg.cpsr.c as u32)),
-            6   =>  self.abus.wrapping_sub(self.barrelbus.wrapping_add(!self.reg.cpsr.c as u32)),
+    /* Instruction condition codes */
+    pub fn cond_codes(&mut self, code: u32) -> bool {
+        match code { //match condition code
+            0x0 =>  self.reg.cpsr.z == true,
+            0x1 =>  self.reg.cpsr.z == false,
+            0x2 =>  self.reg.cpsr.c == true,
+            0x3 =>  self.reg.cpsr.c == false,
+            0x4 =>  self.reg.cpsr.n == true,
+            0x5 =>  self.reg.cpsr.n == false,
+            0x6 =>  self.reg.cpsr.v == true,
+            0x7 =>  self.reg.cpsr.v == false,
+            0x8 =>  self.reg.cpsr.c == true && self.reg.cpsr.z == false,
+            0x9 =>  self.reg.cpsr.c == false && self.reg.cpsr.z == true,
+            0xA =>  self.reg.cpsr.n == self.reg.cpsr.v,
+            0xB =>  self.reg.cpsr.n != self.reg.cpsr.v,
+            0xC =>  self.reg.cpsr.z == false && (self.reg.cpsr.n == self.reg.cpsr.v),
+            0xD =>  self.reg.cpsr.z == true || (self.reg.cpsr.n != self.reg.cpsr.v),
+            0xE =>  true,
+            _   =>  panic!("Condition code: {} does not exist", code)
+        } //return true if condition is met
+    }
+
+    pub fn fetch(&mut self) {
+        /* Shift instructions down in the pipeline */
+        self.reg.pipeline[2] = self.reg.pipeline[1];
+        self.reg.pipeline[1] = self.reg.pipeline[0];
+        self.reg.pipeline[0] = self.databus;        //get new instruction from the data bus
+    }
+
+    pub fn alu(&mut self) { /* The alu fuctions */
+        let tmp = match self.aluop { /* match the alu operation */
+            0   =>  self.abus & self.barrelbus, //AND
+            1   =>  self.abus ^ self.barrelbus, //XOR
+            2   =>  self.abus.wrapping_sub(self.barrelbus), //SUB
+            3   =>  self.barrelbus.wrapping_sub(self.abus), //
+            4   =>  self.abus.wrapping_add(self.barrelbus), //ADD
+            5   =>  self.abus.wrapping_add(self.barrelbus.wrapping_add(self.reg.cpsr.c as u32)), //ADC
+            6   =>  self.abus.wrapping_sub(self.barrelbus.wrapping_add(!self.reg.cpsr.c as u32)), //SBC
             7   =>  self.barrelbus.wrapping_sub(self.abus.wrapping_add(!self.reg.cpsr.c as u32)),
-            8   =>  self.abus & self.barrelbus,
-            9   =>  self.abus ^ self.barrelbus,
+            8   =>  self.abus & self.barrelbus, //AND
+            9   =>  self.abus ^ self.barrelbus, //XOR
             10  =>  self.abus.wrapping_sub(self.barrelbus),
             11  =>  self.abus.wrapping_add(self.barrelbus),
-            12  =>  self.abus | self.barrelbus,
-            13  =>  self.barrelbus,
-            14  =>  self.abus & !self.barrelbus,
-            15  =>  !self.barrelbus,
+            12  =>  self.abus | self.barrelbus, //XOR
+            13  =>  self.barrelbus, //MOV
+            14  =>  self.abus & !self.barrelbus, //NAND
+            15  =>  !self.barrelbus, //NOT
             _   =>  unreachable!()
         };
+
         /* Condition codes */
         if self.setcond {
             match self.aluop {
@@ -348,12 +393,13 @@ impl Core {
                 _   =>  unreachable!()
             }
         }
-        /* 'Register' write-back */
+        /* Register write-back */
         if self.aluop < 8 || self.aluop > 0xB {
             self.alubus = tmp
         }
     }
 
+    /* decode shift opcode */
     #[allow(dead_code)]
     pub fn decode_shift(&mut self, shift: u32) {
         let shifttype: u8 = ((shift & 0x6) >> 1) as u8;
@@ -365,17 +411,18 @@ impl Core {
         } else { panic!("shift mode does not exist")}
     }
 
+    /* the barrel shifter */
     pub fn barrel_shift(&mut self) {
-        self.barrelbus = match self.barrelfunc {
-            0   =>  self.bbus << self.shiftamnt,
-            1   =>  self.bbus >> self.shiftamnt,
-            2   =>  ((self.bbus as i32) >> self.shiftamnt) as u32,
-            3   =>  {if self.shiftamnt == 0 {(self.bbus >> 1) | ((self.reg.cpsr.c as u32) << 31)} else {self.bbus.rotate_right(self.shiftamnt)}},
+        self.barrelbus = match self.barrelfunc { /* Barrel shifter function */
+            0   =>  self.bbus << self.shiftamnt, /* LSL */
+            1   =>  self.bbus >> self.shiftamnt, /* LSR */
+            2   =>  ((self.bbus as i32) >> self.shiftamnt) as u32, /* ASR */
+            3   =>  {if self.shiftamnt == 0 {(self.bbus >> 1) | ((self.reg.cpsr.c as u32) << 31)} else {self.bbus.rotate_right(self.shiftamnt)}}, /* ROR, RRX */
             _   =>  unreachable!()
         };
 
-        if self.setcond {
-            self.reg.cpsr.c = match self.barrelfunc {
+        if self.setcond { /* set carry flag */
+            self.reg.cpsr.c = match self.barrelfunc { /* match function */
                 0   =>  (self.bbus >> 32-self.shiftamnt) & 0b1,
                 1   =>  (self.bbus >> self.shiftamnt-1) & 0b1,
                 2   =>  ((self.bbus as i32) >> (self.shiftamnt - 1)) as u32 & 0b1,

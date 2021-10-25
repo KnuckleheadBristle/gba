@@ -1,6 +1,10 @@
 use bitpat::bitpat;
 use std::fmt;
 
+/* 
+Enums and pattern matching to decode instructions - plus conversion of thumb instructions into arm instructions where applicable
+*/
+
 #[allow(dead_code)]
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum ArmInstType {
@@ -25,21 +29,21 @@ impl fmt::Display for ArmInstType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         use self::ArmInstType::*;
         let s = match *self {
-            DataProcessingOrPSRTransfer => "Data Processing",
-            Multiply                    => "Multiply",
-            MultiplyLong                => "Multiply Long",
-            SingleDataSwap              => "Single Data Swap",
-            BranchAndExchange           => "Branch and Exchange",
-            HalfwordDataTransferRegisterOffset => "Halfword data transfer with register offset",
+            DataProcessingOrPSRTransfer         => "Data Processing",
+            Multiply                            => "Multiply",
+            MultiplyLong                        => "Multiply Long",
+            SingleDataSwap                      => "Single Data Swap",
+            BranchAndExchange                   => "Branch and Exchange",
+            HalfwordDataTransferRegisterOffset  => "Halfword data transfer with register offset",
             HalfwordDataTransferImmediateOffset => "Halfword data transfer with immediate offset",
-            SingleDataTransfer          =>  "Single Data Transfer",
-            Undefined                   => "Undefined",
-            BlockDataTransfer           => "Block Data Transfer",
-            Branch                      => "Branch",
-            CoprocessorDataTransfer     => "Coprocessor Data Transfer",
-            CoprocessorDataOperation    => "Coprocessor Data Operation",
-            CoprocessorRegisterTransfer => "Coprocessor Register Transfer",
-            SoftwareInterrupt           => "Software Interrupt"
+            SingleDataTransfer                  =>  "Single Data Transfer",
+            Undefined                           => "Undefined",
+            BlockDataTransfer                   => "Block Data Transfer",
+            Branch                              => "Branch",
+            CoprocessorDataTransfer             => "Coprocessor Data Transfer",
+            CoprocessorDataOperation            => "Coprocessor Data Operation",
+            CoprocessorRegisterTransfer         => "Coprocessor Register Transfer",
+            SoftwareInterrupt                   => "Software Interrupt"
         };
 
         write!(f, "{}", s)
@@ -70,7 +74,7 @@ pub enum ThumbInstType {
     Undefined
 }
 
-/* The following two decoding functions are not in order of instruction formats, but are ordered such that they work */
+/* The following two decoding functions are not in the order they appear in documentation, but are ordered such that pattern matching functions properly */
 #[allow(dead_code)]
 pub fn decode_arm(inst: u32) -> ArmInstType {
     if bitpat!( _ _ _ _ 0 0 0 1 0 0 1 0 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 1 _ _ _ _ )(inst) {ArmInstType::BranchAndExchange}                       else
@@ -91,6 +95,7 @@ pub fn decode_arm(inst: u32) -> ArmInstType {
     {ArmInstType::Undefined}
 }
 
+/* Same as above, these are not in the order they appear */
 #[allow(dead_code)]
 pub fn decode_thumb(inst: u16) -> ThumbInstType {
     if bitpat!( 1 1 0 1 1 1 1 1 _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::SoftwareInterrupt} else
@@ -115,6 +120,7 @@ pub fn decode_thumb(inst: u16) -> ThumbInstType {
     {ThumbInstType::Undefined}
 }
 
+/* Translate a thumb instruction into it's arm equivalent */
 #[allow(dead_code)]
 pub fn translate_thumb(inst: u16) -> Option<u32> { /* output is Some(x) if there is an equivalent arm inst, otherwise None */
     let insttype = decode_thumb(inst);                  //getting the type of the instruction
@@ -137,11 +143,13 @@ pub fn translate_thumb(inst: u16) -> Option<u32> { /* output is Some(x) if there
     let r: u32 = ((inst & 0x100) >> 8) as u32;
     let cond: u32 = ((inst & 0xF00) >> 8) as u32;
     let off11: u32 = (inst & 0x7FF) as u32;
+    /* The actual decoding and translation of each instruction */
     match insttype {    //from the thumbinsttype enum
         ThumbInstType::SoftwareInterrupt => {
             Some(off8 | 0xEF000000)
         },
         ThumbInstType::AddOffsetToStackPointer => {
+            /* Decoding will logical OR (after some extra computation if needed) each field to a 'base' instruction word */
             Some(0b11100000000011011101000000000000 | word7 | (1 << 23-h1))
         },
         ThumbInstType::PushPopRegisters => {

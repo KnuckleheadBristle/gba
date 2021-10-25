@@ -1,5 +1,7 @@
 #[path = "../src/arm7tdmi.rs"]
 mod arm7tdmi;
+#[path = "../src/bus.rs"]
+mod bus;
 
 #[cfg(test)]
 mod tests {

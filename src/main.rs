@@ -1,19 +1,14 @@
+/* Declare so we get linting */
 mod decode;
 mod arm7tdmi;
 mod exec;
+mod bus;
 
 pub use decode::*;
 pub use arm7tdmi::*;
 pub use exec::*;
+pub use bus::*;
 
 fn main() {
     println!("Hello, world!");
-
-    let mut core = arm7tdmi::Core::new();
-
-    let inst: u32 = 0b00000001011101001011110011000100;
-
-    exec::step_arm(&mut core, inst);
-
-    println!("Core context: \n {}", core);
 }
