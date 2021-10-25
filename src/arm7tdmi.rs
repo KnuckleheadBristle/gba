@@ -1,4 +1,3 @@
-use crate::bus;
 use bitpat::bitpat;
 use std::fmt;
 
@@ -210,8 +209,6 @@ pub struct Core {
     pub aluop: u8,
     pub setcond: bool,
 
-    pub bus: bus::Bus,
-
     pub addrbus: u32,
     pub incbus: u32,
 
@@ -287,8 +284,6 @@ impl Core {
             alubus: 0,
             aluop: 0,
             setcond: false,
-
-            bus: bus::Bus::new(),
 
             addrbus: 0,
             incbus: 0,

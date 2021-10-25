@@ -1,5 +1,6 @@
 use crate::arm7tdmi;
 use crate::decode;
+use crate::bus;
 
 use super::{ ArmInstType };
 
@@ -19,7 +20,7 @@ use super::{ ArmInstType };
 
 /* This function needs to be expanded to include instructions of the same basic type but different data types (long/short/signed/etc) */
 #[allow(unused_variables)]
-pub fn step_arm(core: &mut arm7tdmi::Core, inst: u32) {
+pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) {
     /* I should probably make a struct for this so then I don't have to do it every time */
     /* That would probably be less dumb lol */
     let insttype = decode::decode_arm(inst);
@@ -158,9 +159,9 @@ pub fn step_arm(core: &mut arm7tdmi::Core, inst: u32) {
                               core.reg.write(rn as usize, core.alubus);
                             }
                             if b==1 { //byte or word quantity
-                              core.bus.mem_write(core.addrbus as usize, core.reg.read(rd as usize) as u8); //byte
+                              bus.mem_write(core.addrbus as usize, core.reg.read(rd as usize) as u8); //byte
                             } else {
-                              core.bus.mem_write_32(core.addrbus as usize, core.reg.read(rd as usize));   //word
+                              bus.mem_write_32(core.addrbus as usize, core.reg.read(rd as usize));   //word
                             }
                             /* end of store */
                         } else { /* The load instruction */
@@ -168,9 +169,9 @@ pub fn step_arm(core: &mut arm7tdmi::Core, inst: u32) {
                               core.reg.write(rn as usize, core.alubus);
                             }
                             if b==1 {
-                              core.datareg = core.bus.mem_read(core.addrbus as usize) as u32; //byte (zero extended)
+                              core.datareg = bus.mem_read(core.addrbus as usize) as u32; //byte (zero extended)
                             } else {
-                              core.datareg = core.bus.mem_read_32(core.addrbus as usize); //word
+                              core.datareg = bus.mem_read_32(core.addrbus as usize); //word
                             }
                             /* End of load unless rn = pc */
                             if rn == 15 { //source/dest is pc
@@ -187,7 +188,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, inst: u32) {
                 }
             },
             ArmInstType::BlockDataTransfer => {
-    
+                /* This is a variable cycle instruction */
             },
             ArmInstType::SingleDataSwap => {
                 match core.cycle {
@@ -198,22 +199,22 @@ pub fn step_arm(core: &mut arm7tdmi::Core, inst: u32) {
                     1   =>  {
                         //Data fetched from external memory
                         core.addrbus = core.reg.read(rn as usize);
-                        /* read from memory: core.bus.mem_read() */
+                        /* read from memory: bus.mem_read() */
                         core.databus = if b == 1 {
-                            core.bus.mem_read(core.addrbus as usize) as u32
+                            bus.mem_read(core.addrbus as usize) as u32
                         } else {
-                            core.bus.mem_read_32(core.addrbus as usize)
+                            bus.mem_read_32(core.addrbus as usize)
                         };
                         core.datareg = core.databus;
                     },
                     2   =>  {
                         //Contents of source register is written to external memory
                         core.databus = core.reg.read(rm as usize);
-                        /* write data to memory: core.bus.mem_write() */
+                        /* write data to memory: bus.mem_write() */
                         if b == 1 {
-                            core.bus.mem_write(core.addrbus as usize, core.databus as u8);
+                            bus.mem_write(core.addrbus as usize, core.databus as u8);
                         } else {
-                            core.bus.mem_write_32(core.addrbus as usize, core.databus);
+                            bus.mem_write_32(core.addrbus as usize, core.databus);
                         }
                     },
                     3   =>  {
@@ -227,6 +228,11 @@ pub fn step_arm(core: &mut arm7tdmi::Core, inst: u32) {
                 match core.cycle {
                     0   =>  {
                         //Forced address is constructed, mode change may take place
+
+                        core.abus = core.reg.read(15);
+                        core.addrbus = 0x0;
+                        core.reg.write(14, core.abus);
+                        core.reg.spsr_svc = core.reg.cpsr;
                     },
                     1   =>  {
                         //Modification to return address to facilitate return
