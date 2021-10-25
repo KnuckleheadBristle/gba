@@ -136,33 +136,60 @@ pub fn step_arm(core: &mut arm7tdmi::Core, inst: u32) {
             ArmInstType::SingleDataTransfer => {
                 /* This guy has to handle byte and word value types */
                 match core.cycle {
-                    0   =>  {
+                    0 => {
+                        core.abus = core.reg.read(15);
+                        core.bbus = 
+                        if i == 1 {
+                            core.decode_shift(off&0xFF0);
+                            core.reg.read(rm as usize)
+                        } else {
+                            core.shiftamnt = 0;
+                            core.barrelfunc = 0;
+                            off
+                        };
 
-                        //Address calculation
-                        if rd == 0xF {
-    
+                        core.barrel_shift();
+                        core.aluop = 0b10 << (!u & 0b1); /* if u==0 add else sub */
+                        core.alu()
+                    },
+                    1 => {
+                        if l==0 { /* the store instruction */
+                            if a==1 || p==0 { //register write-back
+                              core.reg.write(rn as usize, core.alubus);
+                            }
+                            if b==1 { //byte or word quantity
+                              core.bus.mem_write(core.addrbus as usize, core.reg.read(rd as usize) as u8); //byte
+                            } else {
+                              core.bus.mem_write_32(core.addrbus as usize, core.reg.read(rd as usize));   //word
+                            }
+                            /* end of store */
+                        } else { /* The load instruction */
+                            if a==1 || p==0 { //register write-back
+                              core.reg.write(rn as usize, core.alubus);
+                            }
+                            if b==1 {
+                              core.datareg = core.bus.mem_read(core.addrbus as usize) as u32; //byte (zero extended)
+                            } else {
+                              core.datareg = core.bus.mem_read_32(core.addrbus as usize); //word
+                            }
+                            /* End of load unless rn = pc */
+                            if rn == 15 { //source/dest is pc
+                              core.reg.pipeline = [0,0,0];
+                            }
                         }
                     },
-                    1   =>  {
-    
+                    2 => {
+                        core.reg.write(rn as usize, core.datareg);
                     },
-                    2   =>  {
-    
-                    },
-                    3   =>  {
-    
-                    },
-                    4   =>  {
-    
-                    },
-                    _   =>  unimplemented!()
+                    3 => core.fetch(),
+                    4 => core.fetch(), //end of load pc
+                    _ => unimplemented!()
                 }
             },
             ArmInstType::BlockDataTransfer => {
     
             },
             ArmInstType::SingleDataSwap => {
-                /* This guy has to handle byte and word value types */
                 match core.cycle {
                     0   =>  {
                         //prefetch and address things

@@ -1,5 +1,3 @@
-use crate::arm7tdmi;
-
 /* Memory Map */
 /* 
   00000000-00003FFF   BIOS - System ROM         (16 KBytes)
