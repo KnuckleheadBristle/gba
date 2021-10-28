@@ -36,7 +36,7 @@ impl fmt::Display for ArmInstType {
             BranchAndExchange                   => "Branch and Exchange",
             HalfwordDataTransferRegisterOffset  => "Halfword data transfer with register offset",
             HalfwordDataTransferImmediateOffset => "Halfword data transfer with immediate offset",
-            SingleDataTransfer                  =>  "Single Data Transfer",
+            SingleDataTransfer                  => "Single Data Transfer",
             Undefined                           => "Undefined",
             BlockDataTransfer                   => "Block Data Transfer",
             Branch                              => "Branch",

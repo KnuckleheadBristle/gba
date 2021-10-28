@@ -88,12 +88,18 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) {
                     0   =>  {
                         // Branch destination and core state is extracted
                         // Prefetch performed from current PC
+                        core.fetch();
+                        core.abus = core.reg.read(rm as usize);
+                        core.reg.write(15, core.abus);
+                        core.reg.cpsr.state = (core.abus & 0b1) == 1; //update the processor mode
                     },
                     1   =>  {
                         // Fetch is performed from the branch destination address using new instruction width
+                        core.fetch();
                     },
                     2   =>  {
                         // Fetch from destination address plus instruction width (to refill pipeline)
+                        core.fetch();
                     }
                     _   =>  unimplemented!()
                 }
@@ -184,6 +190,65 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) {
                     },
                     3 => core.fetch(),
                     4 => core.fetch(), //end of load pc
+                    _ => unimplemented!()
+                }
+            },
+            ArmInstType::HalfwordDataTransferRegisterOffset | ArmInstType::HalfwordDataTransferImmediateOffset => {
+                match core.cycle {
+                    0 => {
+                        core.abus = core.reg.read(rn as usize);
+                        core.bbus = if insttype == ArmInstType::HalfwordDataTransferRegisterOffset {
+                            core.reg.read(rm as usize)
+                        } else {
+                            (rs >> 4) | rm
+                        };
+                        
+                        core.shiftamnt = 0;
+                        core.barrelfunc = 0;
+                        core.barrel_shift();
+                        core.aluop = 0b10 << (!u & 0b1);
+                    },
+                    1 => {
+                        if l==0 { /* Store instruction */
+                            if a==1 || p==0 { //base register write-back
+                                core.reg.write(rn as usize, core.alubus);
+                            }
+                            let source = match (s<<1)|h { //Data type
+                                1 => core.reg.read(rd as usize) as u16,
+                                2 => (core.reg.read(rd as usize) as i8) as u8 as u16,
+                                3 => (core.reg.read(rd as usize) as i16) as u16,
+                                _ => panic!("Store operation {} does not exist", (s<<1)|h)
+                            };
+                            if h==1 { //Write type
+                                bus.mem_write_16(core.addrbus as usize, source);
+                            } else {
+                                bus.mem_write(core.addrbus as usize, source as u8);
+                            }
+                            /* End of store */
+                        } else { /* Load instruction */
+                            if a==1 || p==0 {
+                                core.reg.write(rn as usize, core.alubus);
+                            }
+                            core.datareg = match (s<<1)|h {
+                                1 => bus.mem_read_16(core.addrbus as usize) as u32,
+                                2 => (bus.mem_read(core.addrbus as usize) as i8) as u32,
+                                3 => (bus.mem_read_16(core.addrbus as usize) as i16) as u32,
+                                _ => panic!("Load operation {} does not exist", ((s<<1)|h))
+                            };
+                            if rn == 15 {
+                                core.reg.pipeline = [0,0,0];
+                            }
+                        }
+                    },
+                    2 => {
+                        core.reg.write(rn as usize, core.datareg);
+                    },
+                    3 => {
+                        core.fetch();
+                    },
+                    4 => {
+                        core.fetch();
+                    }
                     _ => unimplemented!()
                 }
             },
