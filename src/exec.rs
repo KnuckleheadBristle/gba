@@ -18,9 +18,13 @@ use super::{ ArmInstType };
     }
 */
 
-/* This function needs to be expanded to include instructions of the same basic type but different data types (long/short/signed/etc) */
+/* Return types:
+    Some(true) - instruction is complete (move to next instruction)
+    Some(false) - Condition was not met (NOP time)
+    None - instruction not complete (move to next cycle)
+*/
 #[allow(unused_variables)]
-pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) {
+pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Option<bool> {
     /* I should probably make a struct for this so then I don't have to do it every time */
     /* That would probably be less dumb lol */
     let insttype = decode::decode_arm(inst);
@@ -58,6 +62,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) {
                         core.bbus = ((boff << 2) as i32) as u32; // sign extend offset
                         core.aluop = 4;
                         core.alu();
+                        None
                     },
                     1   =>  {
                         if p == 1 { // return address stored in lr if link bit set
@@ -66,7 +71,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) {
                         // Fetch is performed from branch destination
                         core.addrbus = core.alubus;
                         core.fetch();
-                        
+                        None
                     },
                     2   =>  {
                         // Fetch from destination +L, refilling instruction pipeline
@@ -79,6 +84,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) {
                             core.alu();
                             core.reg.write(14, core.alubus);
                         }
+                        Some(true)
                     },
                     _   =>  unimplemented!()
                 }
@@ -92,14 +98,17 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) {
                         core.abus = core.reg.read(rm as usize);
                         core.reg.write(15, core.abus);
                         core.reg.cpsr.state = (core.abus & 0b1) == 1; //update the processor mode
+                        None
                     },
                     1   =>  {
                         // Fetch is performed from the branch destination address using new instruction width
                         core.fetch();
+                        None
                     },
                     2   =>  {
                         // Fetch from destination address plus instruction width (to refill pipeline)
                         core.fetch();
+                        Some(true)
                     }
                     _   =>  unimplemented!()
                 }
@@ -107,35 +116,58 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) {
             ArmInstType::DataProcessingOrPSRTransfer => {
                 match core.cycle {
                     0   =>  {
-                        if core.shiftamnt > 0 && rd == 0xF { //Shift and destination is pc
-    
-                        } else if core.shiftamnt > 0 { //Shift
-                            
-                        } else if rd == 0xF { //Destination is pc
-    
-                        } else { //normal
-                            //end
+                        core.fetch();
+                        core.abus = core.reg.read(rn as usize);
+                        if i==0 {
+                            core.bbus = core.reg.read(rm as usize);
+                            core.decode_shift(imm);
+                        } else {
+                            core.bbus = imm;
+                            core.decode_shift_imm(imm);
+                        }
+                    
+                        if core.shiftamnt > 0 {
+                            core.barrel_shift();
+                        } else {
+                            core.barrel_shift();
+                            core.aluop = opcode as u8;
+                            core.alu();
+                            core.reg.write(rd as usize, core.alubus);
+                        }
+
+                        if rd != 0xF {
+                            /* normal end */
+                            Some(true)
+                        } else {
+                            None
                         }
                     },
                     1   =>  {
-                        if core.shiftamnt > 0 && rd == 0xF { //Shift and destination is pc
-    
-                        } else if core.shiftamnt > 0 { //Shift
-                            //end
-                        } else if rd == 0xF { //Destination is pc
-    
+                        if core.shiftamnt > 0 && rd == 0xF {
+                            core.reg.write(rd as usize, core.alubus);
+                            None
+                        } else if rd == 0xF {
+                            core.fetch();
+                            None
+                        } else {
+                            core.reg.write(rd as usize, core.alubus);
+                            Some(true)
                         }
                     },
                     2   =>  {
-                        if core.shiftamnt > 0 && rd == 0xF { //Shift and destination is pc
-    
-                        } else if rd == 0xF { //Destination is pc
-                            //end
+                        core.fetch();
+                        if rd == 0xF {
+                            /* End of dest=pc */
+                            Some(true)
+                        } else {
+                            None
                         }
                     },
                     3   =>  {
+                        core.fetch();
+                        Some(true)
                         //Shift and destination is pc
-                        //end
+                        //end of shift(Rs) and dest=pc
                     }
                     _   =>  unimplemented!()
                 }
@@ -157,7 +189,8 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) {
 
                         core.barrel_shift();
                         core.aluop = 0b10 << (!u & 0b1); /* if u==0 add else sub */
-                        core.alu()
+                        core.alu();
+                        None
                     },
                     1 => {
                         if l==0 { /* the store instruction */
@@ -169,6 +202,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) {
                             } else {
                               bus.mem_write_32(core.addrbus as usize, core.reg.read(rd as usize));   //word
                             }
+                            Some(true)
                             /* end of store */
                         } else { /* The load instruction */
                             if a==1 || p==0 { //register write-back
@@ -182,14 +216,18 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) {
                             /* End of load unless rn = pc */
                             if rn == 15 { //source/dest is pc
                               core.reg.pipeline = [0,0,0];
+                              None
+                            } else {
+                                Some(true)
                             }
                         }
                     },
                     2 => {
                         core.reg.write(rn as usize, core.datareg);
+                        None
                     },
-                    3 => core.fetch(),
-                    4 => core.fetch(), //end of load pc
+                    3 => {core.fetch(); None},
+                    4 => {core.fetch(); Some(true)}, //end of load pc
                     _ => unimplemented!()
                 }
             },
@@ -207,6 +245,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) {
                         core.barrelfunc = 0;
                         core.barrel_shift();
                         core.aluop = 0b10 << (!u & 0b1);
+                        None
                     },
                     1 => {
                         if l==0 { /* Store instruction */
@@ -224,6 +263,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) {
                             } else {
                                 bus.mem_write(core.addrbus as usize, source as u8);
                             }
+                            Some(true)
                             /* End of store */
                         } else { /* Load instruction */
                             if a==1 || p==0 {
@@ -237,29 +277,37 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) {
                             };
                             if rn == 15 {
                                 core.reg.pipeline = [0,0,0];
+                                None
+                            } else {
+                                Some(true)
                             }
                         }
                     },
                     2 => {
                         core.reg.write(rn as usize, core.datareg);
+                        None
                     },
                     3 => {
                         core.fetch();
+                        None
                     },
                     4 => {
                         core.fetch();
+                        None
                     }
                     _ => unimplemented!()
                 }
             },
             ArmInstType::BlockDataTransfer => {
                 /* This is a variable cycle instruction */
+                Some(true)
             },
             ArmInstType::SingleDataSwap => {
                 match core.cycle {
                     0   =>  {
                         //prefetch and address things
                         core.fetch();
+                        None
                     },
                     1   =>  {
                         //Data fetched from external memory
@@ -271,20 +319,22 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) {
                             bus.mem_read_32(core.addrbus as usize)
                         };
                         core.datareg = core.databus;
+                        None
                     },
                     2   =>  {
                         //Contents of source register is written to external memory
                         core.databus = core.reg.read(rm as usize);
-                        /* write data to memory: bus.mem_write() */
                         if b == 1 {
                             bus.mem_write(core.addrbus as usize, core.databus as u8);
                         } else {
                             bus.mem_write_32(core.addrbus as usize, core.databus);
                         }
+                        None
                     },
                     3   =>  {
                         //Cycle 2 data is written to destination register
                         core.reg.write(core.addrbus as usize, core.databus);
+                        Some(true)
                     },
                     _   =>  unimplemented!()
                 }
@@ -298,12 +348,15 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) {
                         core.addrbus = 0x0;
                         core.reg.write(14, core.abus);
                         core.reg.spsr_svc = core.reg.cpsr;
+                        None
                     },
                     1   =>  {
                         //Modification to return address to facilitate return
+                        None
                     },
                     2   =>  {
                         //Refill the pipeline
+                        Some(true)
                     },
                     _   =>  unimplemented!()
                 }
@@ -312,21 +365,26 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) {
                 match core.cycle {
                     0   =>  {
                         //Good old prefetch
+                        None
                     },
                     1   =>  {
                         //Idk (probably instruction trap offset calculation)
+                        None
                     },
                     2   =>  {
                         //Fetch from instruction trap
+                        None
                     },
                     3   =>  {
                         //Fetch again to fill pipeline
+                        Some(true)
                     },
                     _   =>  unimplemented!()
                 }
             }
             _ => panic!("{} Instructions are not implemented", insttype)
         }
+    } else {
+        Some(false)
     }
-    core.inc_cycle();
 }

@@ -395,7 +395,6 @@ impl Core {
     }
 
     /* decode shift opcode */
-    #[allow(dead_code)]
     pub fn decode_shift(&mut self, shift: u32) {
         let shifttype: u8 = ((shift & 0x6) >> 1) as u8;
         self.barrelfunc = shifttype;
@@ -404,6 +403,11 @@ impl Core {
         } else if bitpat!( _ _ _ _ 0 _ _ 1 )(shift) {
             self.shiftamnt = self.reg.read((shift >> 4) as usize) & 0x1F;
         } else { panic!("shift mode does not exist")}
+    }
+
+    pub fn decode_shift_imm(&mut self, shift: u32) {
+        self.barrelfunc = 3;
+        self.shiftamnt = shift.rotate_right(2*shift);
     }
 
     /* the barrel shifter */
