@@ -251,4 +251,38 @@ mod tests {
 
         assert_eq!(core.reg.gp[2], 0x1132218A);
     }
+
+    #[test]
+    fn shift_decode() {
+        let mut core = arm7tdmi::Core::new();
+
+        let mut shift = 0b01100000;
+
+        core.decode_shift(shift);
+
+        assert_eq!(core.shiftamnt, 0b01100);
+
+        assert_eq!(core.barrelfunc, 0b00);
+
+        core.reg.write(10, 0x000000AF);
+
+        shift = 0b10100101;
+
+        core.decode_shift(shift);
+
+        assert_eq!(core.shiftamnt, 0x000000AF&0x1F);
+        assert_eq!(core.barrelfunc, 0b10);
+    }
+
+    #[test]
+    fn shift_decode_immediate() {
+        let mut core = arm7tdmi::Core::new();
+
+        let shift = 0x900;
+
+        core.decode_shift_imm(shift);
+
+        assert_eq!(core.barrelfunc, 3);
+        assert_eq!(core.shiftamnt, 0x24000);
+    }
 }

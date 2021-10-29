@@ -228,6 +228,8 @@ pub struct Core {
     pub datareg: u32,
     pub instbus: u32,
 
+    pub transferblock: [u32; 17],
+
     pub cycle: u8,
 }
 
@@ -304,6 +306,7 @@ impl Core {
             datareg: 0,
             instbus: 0,
 
+            transferblock: [0; 17],
             cycle: 0,
         }
     }
@@ -329,6 +332,7 @@ impl Core {
     }
 
     /* Instruction condition codes */
+    #[allow(dead_code)]
     pub fn cond_codes(&mut self, code: u32) -> bool {
         match code { //match condition code
             0x0 =>  self.reg.cpsr.z == true,
@@ -350,6 +354,7 @@ impl Core {
         } //return true if condition is met
     }
 
+    #[allow(dead_code)]
     pub fn fetch(&mut self) {
         /* Shift instructions down in the pipeline */
         self.reg.pipeline[2] = self.reg.pipeline[1];
@@ -395,17 +400,20 @@ impl Core {
     }
 
     /* decode shift opcode */
+    #[allow(dead_code)]
     pub fn decode_shift(&mut self, shift: u32) {
         let shifttype: u8 = ((shift & 0x6) >> 1) as u8;
         self.barrelfunc = shifttype;
-        if bitpat!( _ _ _ _ _ _ _ 0 )(shift) {
-            self.shiftamnt = shift >> 3;
-        } else if bitpat!( _ _ _ _ 0 _ _ 1 )(shift) {
+        if bitpat!( _ _ _ _ 0 _ _ 1 )(shift) {
             self.shiftamnt = self.reg.read((shift >> 4) as usize) & 0x1F;
-        } else { panic!("shift mode does not exist")}
+        } else if bitpat!( _ _ _ _ _ _ _ 0 )(shift) {
+            self.shiftamnt = shift >> 3;
+        } else { panic!("shift mode does not exist") }
     }
 
-    pub fn decode_shift_imm(&mut self, shift: u32) {
+    #[allow(dead_code)]
+    pub fn decode_shift_imm(&mut self, mut shift: u32) {
+        shift = (shift >> 8) & 0xF;
         self.barrelfunc = 3;
         self.shiftamnt = shift.rotate_right(2*shift);
     }

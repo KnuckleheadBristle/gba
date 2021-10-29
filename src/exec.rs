@@ -287,20 +287,35 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         core.reg.write(rn as usize, core.datareg);
                         None
                     },
-                    3 => {
-                        core.fetch();
-                        None
-                    },
-                    4 => {
-                        core.fetch();
-                        None
-                    }
+                    3 => { core.fetch(); None },
+                    4 => { core.fetch(); None },
                     _ => unimplemented!()
                 }
             },
             ArmInstType::BlockDataTransfer => {
                 /* This is a variable cycle instruction */
-                Some(true)
+                /* We can probably use an internal unused bus as a temporary for the current register number */
+                match core.cycle {
+                    0 => {
+                        /* Calculate address of the first word to be transferred */
+                        None
+                    },
+                    1 => {
+                        /* Fetch teh first word, perform base modification */
+                        None
+                    },
+                    2 => {
+                        /* First word moved to appropriate register, while second word is fetched from memory */
+                        /* Repeated for subsequent fetches until last data word has been accessed */
+                        core.cycle -= 1; // to repeat this cycle
+                        None
+                    },
+                    3 => {
+                        /* Move the last word to the destination register */
+                        Some(true)
+                    }
+                    _ => unimplemented!()
+                }
             },
             ArmInstType::SingleDataSwap => {
                 match core.cycle {
