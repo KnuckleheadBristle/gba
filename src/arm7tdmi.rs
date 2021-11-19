@@ -121,6 +121,7 @@ impl Default for Reg {
 }
 
 impl Reg {
+    #[allow(dead_code)]
     pub fn write(&mut self, index: usize, data: u32) { /* Write to a register */
         match self.cpsr.mode {
             0   =>  {
@@ -229,6 +230,7 @@ pub struct Core {
     pub instbus: u32,
 
     pub transferblock: [u32; 17],
+    pub multicycle: u8,
 
     pub cycle: u8,
 }
@@ -307,6 +309,8 @@ impl Core {
             instbus: 0,
 
             transferblock: [0; 17],
+            multicycle: 0,
+            
             cycle: 0,
         }
     }
@@ -399,6 +403,11 @@ impl Core {
         }
     }
 
+    #[allow(dead_code)]
+    pub fn mul(&mut self) {
+        /* The multiply instruction */
+    }
+
     /* decode shift opcode */
     #[allow(dead_code)]
     pub fn decode_shift(&mut self, shift: u32) {
@@ -447,5 +456,16 @@ impl Core {
             1   =>  self.incbus,
             _   =>  unreachable!()
         });
+    }
+
+    #[allow(dead_code)]
+    pub fn calc_reg_transfer(&mut self, rlist: u32) {
+        self.multicycle = 0;
+        for x in 0..15 {
+            if (rlist>>x) & 0b1 == 0b1 {
+                self.transferblock[x] = x as u32;
+                self.multicycle += 1;
+            }
+        }
     }
 }

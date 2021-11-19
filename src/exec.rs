@@ -2,7 +2,7 @@ use crate::arm7tdmi;
 use crate::decode;
 use crate::bus;
 
-use super::{ ArmInstType };
+use super::{ decode::ArmInstType };
 
 /* 
     In a basic sense, because each instruction takes a variable amount of cycles, there is a cycle counter in the core struct which keeps track of the current step.
@@ -172,6 +172,72 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                     _   =>  unimplemented!()
                 }
             },
+            ArmInstType::Multiply => {
+                match core.cycle {
+                    0 => {
+                        core.fetch();
+                        /* The only cycle that isn't internal */
+                        /* Tbh this is probably just a fetch, but im gonna make it setup shit */
+                        None
+                    },
+                    1 => {
+                        None
+                    },
+                    2 => {
+                        /* This cycle is repeated depending on how many multiplies are needed */
+
+                        core.cycle -= 1;
+                        None
+                    }
+                    3 => {
+                        /* The m+1th cycle (the last for a generic multiply) */
+                        if a==1 { //accumulate
+                            None
+                            /* add rn to the calculated value */
+                        } else { //normal multiply
+                            Some(true)
+                        }
+                    },
+                    4 => {
+                        /* The m+2th cycle (the last for a multiply accumulate) */
+                        Some(true)
+                    }
+                    _ => unimplemented!()
+                }
+            },
+            ArmInstType::MultiplyLong => {
+                /* This is the exact same as above, but takes an extra step to shift out the extra bits */
+                match core.cycle {
+                    0 => {
+                        None
+                    },
+                    1 => {
+                        None
+                    },
+                    2 => {
+                        /* Same as above, this is the repeated cycle */
+                        core.cycle -= 1;
+                        None
+                    },
+                    3 => {
+                        None
+                    },
+                    4 => {
+                        None
+                    },
+                    5 => {
+                        if a==1 {
+                            None
+                        } else {
+                            Some(true)
+                        }
+                    },
+                    6 => {
+                        Some(true)
+                    }
+                    _ => unimplemented!()
+                }
+            }
             ArmInstType::SingleDataTransfer => {
                 /* This guy has to handle byte and word value types */
                 match core.cycle {
@@ -293,30 +359,60 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                 }
             },
             ArmInstType::BlockDataTransfer => {
-                /* This is a variable cycle instruction */
-                /* We can probably use an internal unused bus as a temporary for the current register number */
                 match core.cycle {
                     0 => {
-                        /* Calculate address of the first word to be transferred */
+                        core.fetch();
+
+                        core.abus = core.reg.read(rn as usize);
+
+                        core.calc_reg_transfer(imm);
+
+                        core.alubus = if u == 1 {
+                            core.abus + 4*(core.multicycle+1) as u32
+                        } else {
+                            core.abus-(4*(core.multicycle+1)) as u32
+                        };
+
                         None
                     },
                     1 => {
-                        /* Fetch teh first word, perform base modification */
+                        core.datareg = bus.mem_read_32(core.transferblock[core.multicycle as usize] as usize);
+
+                        core.multicycle -= 1;
+                        core.abus = core.reg.read(rn as usize);
+                        core.barrelbus = 0x4;
+
+                        core.alu();
+
+                        if s==1 { /* need to remember which is the write bit */
+                            core.reg.write(rn as usize, core.alubus);
+                        }
+
                         None
                     },
                     2 => {
-                        /* First word moved to appropriate register, while second word is fetched from memory */
-                        /* Repeated for subsequent fetches until last data word has been accessed */
-                        core.cycle -= 1; // to repeat this cycle
+                        if core.multicycle != 0 {
+                            bus.mem_write_32(core.alubus as usize, core.datareg);
+
+                            core.abus = core.alubus;
+                            core.alu();
+
+                            core.datareg = bus.mem_read_32(core.transferblock[core.multicycle as usize] as usize);
+
+                            core.multicycle -= 1;
+
+                            core.cycle -= 1;
+                        }
                         None
                     },
                     3 => {
-                        /* Move the last word to the destination register */
+                        bus.mem_write_32(core.alubus as usize, core.datareg);
+
                         Some(true)
                     }
                     _ => unimplemented!()
                 }
-            },
+            }
             ArmInstType::SingleDataSwap => {
                 match core.cycle {
                     0   =>  {
@@ -371,6 +467,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                     },
                     2   =>  {
                         //Refill the pipeline
+                        core.fetch();
                         Some(true)
                     },
                     _   =>  unimplemented!()
