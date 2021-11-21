@@ -28,7 +28,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
     /* I should probably make a struct for this so then I don't have to do it every time */
     /* That would probably be less dumb lol */
     let insttype = decode::decode_arm(inst);
-    let cond: u32 = (inst & 0xF0000000) >> 27;
+    let cond: u32 = (inst & 0xF0000000) >> 28;
     let i: u32  = (inst & 0x2000000) >> 25;
     let opcode: u32 = (inst & 0x1E00000) >> 21;
     let l: u32 = (inst & 0x100000) >> 20;
@@ -120,10 +120,10 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         core.abus = core.reg.read(rn as usize);
                         if i==0 {
                             core.bbus = core.reg.read(rm as usize);
-                            core.decode_shift(imm);
+                            core.decode_shift(shift);
                         } else {
                             core.bbus = imm;
-                            core.decode_shift_imm(imm);
+                            core.decode_shift_imm(shift);
                         }
                     
                         if core.shiftamnt > 0 {
@@ -135,7 +135,9 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                             core.reg.write(rd as usize, core.alubus);
                         }
 
-                        if rd != 0xF {
+                        if core.shiftamnt > 0 {
+                            None
+                        }else if rd != 0xF {
                             /* normal end */
                             Some(true)
                         } else {
@@ -143,7 +145,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         }
                     },
                     1   =>  {
-                        if core.shiftamnt > 0 && rd == 0xF {
+                        if (core.shiftamnt > 0) && (rd == 0xF) {
                             core.reg.write(rd as usize, core.alubus);
                             None
                         } else if rd == 0xF {
@@ -156,7 +158,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                     },
                     2   =>  {
                         core.fetch();
-                        if rd == 0xF {
+                        if (rd == 0xF) && (core.shiftamnt == 0) {
                             /* End of dest=pc */
                             Some(true)
                         } else {

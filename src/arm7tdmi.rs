@@ -414,9 +414,11 @@ impl Core {
         let shifttype: u8 = ((shift & 0x6) >> 1) as u8;
         self.barrelfunc = shifttype;
         if bitpat!( _ _ _ _ 0 _ _ 1 )(shift) {
+            println!("Shift register");
             self.shiftamnt = self.reg.read((shift >> 4) as usize) & 0x1F;
         } else if bitpat!( _ _ _ _ _ _ _ 0 )(shift) {
             self.shiftamnt = shift >> 3;
+            println!("Shift immediate");
         } else { panic!("shift mode does not exist") }
     }
 
