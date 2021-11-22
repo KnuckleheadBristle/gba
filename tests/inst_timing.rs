@@ -119,7 +119,25 @@ mod tests {
         let mut core = arm7tdmi::Core::new();
         let mut bus = bus::Bus::new();
 
-        let instruction = 0xEB14A94C;
+        /* Load register */
+        let instruction = 0xE5B222D5;
         assert_eq!(test_inst(&mut core, &mut bus, instruction), 3);
+
+        let instruction = 0xE5B2F2D5; //dest=pc
+        assert_eq!(test_inst(&mut core, &mut bus, instruction), 5);
+
+        /* Store register */
+        let instruction = 0xE5A222D5;
+        assert_eq!(test_inst(&mut core, &mut bus, instruction), 2);
+    }
+
+    #[test]
+    fn single_data_swap_cycle_timing() {
+        let mut core = arm7tdmi::Core::new();
+        let mut bus = bus::Bus::new();
+
+        /* Load register */
+        let instruction = 0xE1028092;
+        assert_eq!(test_inst(&mut core, &mut bus, instruction), 4);
     }
 }
