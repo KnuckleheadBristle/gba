@@ -229,7 +229,7 @@ pub struct Core {
     pub datareg: u32,
     pub instbus: u32,
 
-    pub transferblock: [u32; 17],
+    pub transferblock: [u32; 16],
     pub multicycle: u8,
 
     pub cycle: u8,
@@ -308,7 +308,7 @@ impl Core {
             datareg: 0,
             instbus: 0,
 
-            transferblock: [0; 17],
+            transferblock: [0; 16],
             multicycle: 0,
             
             cycle: 0,
@@ -463,9 +463,11 @@ impl Core {
     #[allow(dead_code)]
     pub fn calc_reg_transfer(&mut self, rlist: u32) {
         self.multicycle = 0;
-        for x in 0..15 {
+        println!("0b{:0>16b}", rlist);
+        for x in 0..16 {
             if (rlist>>x) & 0b1 == 0b1 {
-                self.transferblock[x] = x as u32;
+                println!("writing to list");
+                self.transferblock[self.multicycle as usize] = x as u32;
                 self.multicycle += 1;
             }
         }

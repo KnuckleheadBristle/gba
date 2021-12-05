@@ -368,7 +368,9 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                     0 => {
                         core.fetch();
                         core.abus = core.reg.read(rn as usize);
-                        core.calc_reg_transfer(imm);
+                        core.calc_reg_transfer(rlist);
+                        println!("{}", core.multicycle);
+                        println!("{:?}", core.transferblock);
                         core.alubus = if u == 1 {
                             core.abus + 4*(core.multicycle+1) as u32
                         } else {
@@ -377,7 +379,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         None
                     },
                     1 => {
-                        core.datareg = bus.mem_read_32(core.transferblock[core.multicycle as usize] as usize);
+                        core.datareg = bus.mem_read_32(core.transferblock[(core.multicycle-1) as usize] as usize);
                         core.multicycle -= 1;
                         core.abus = core.reg.read(rn as usize);
                         core.barrelbus = 0x4;
@@ -388,15 +390,17 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         None
                     },
                     2 => {
-                        if core.multicycle != 0 {
+                        if core.multicycle != 1 {
                             bus.mem_write_32(core.alubus as usize, core.datareg);
                             core.abus = core.alubus;
                             core.alu();
-                            core.datareg = bus.mem_read_32(core.transferblock[core.multicycle as usize] as usize);
+                            core.datareg = bus.mem_read_32(core.transferblock[(core.multicycle-1) as usize] as usize);
                             core.multicycle -= 1;
                             core.cycle -= 1;
+                            None
+                        } else {
+                            Some(true)
                         }
-                        None
                     },
                     3 => {
                         bus.mem_write_32(core.alubus as usize, core.datareg);

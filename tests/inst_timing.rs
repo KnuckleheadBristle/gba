@@ -136,8 +136,33 @@ mod tests {
         let mut core = arm7tdmi::Core::new();
         let mut bus = bus::Bus::new();
 
-        /* Load register */
         let instruction = 0xE1028092;
         assert_eq!(test_inst(&mut core, &mut bus, instruction), 4);
+    }
+
+    #[test]
+    fn block_data_transfer() {
+        let mut core = arm7tdmi::Core::new();
+        let mut bus = bus::Bus::new();
+
+        /* load */
+        let instruction = 0xe8900001; /* Single register */
+        assert_eq!(test_inst(&mut core, &mut bus, instruction), 3);
+
+        let instruction = 0xe8908000; /* Single register dest=pc */
+        assert_eq!(test_inst(&mut core, &mut bus, instruction), 5);
+
+        let instruction = 0xe8900fff; /* n registers (n>1) (n=12)*/
+        assert_eq!(test_inst(&mut core, &mut bus, instruction), 14);
+
+        let instruction = 0xe890fc00; /* n resgisters (n>1) including pc (n=6) */
+        assert_eq!(test_inst(&mut core, &mut bus, instruction), 10);
+
+        /* store */
+        let instruction = 0xe8800001; /* Single register */
+        assert_eq!(test_inst(&mut core, &mut bus, instruction), 2);
+
+        let instruction = 0xe88007ff; /* n registers (n>1) (n=12)*/
+        assert_eq!(test_inst(&mut core, &mut bus, instruction), 13);
     }
 }
