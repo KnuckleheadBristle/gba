@@ -87,7 +87,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         }
                         Some(true)
                     },
-                    _   =>  unimplemented!()
+                    _   =>  panic!("Branch instruction does not have more than 3 cycles; Found {}", core.cycle+1)
                 }
             },
             ArmInstType::BranchAndExchange => {
@@ -111,7 +111,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         core.fetch();
                         Some(true)
                     }
-                    _   =>  unimplemented!()
+                    _   =>  panic!("Branch and Exchange instruction does not have more than 3 cycles; Found {}", core.cycle+1)
                 }
             },
             ArmInstType::DataProcessingOrPSRTransfer => {
@@ -172,7 +172,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         //Shift and destination is pc
                         //end of shift(Rs) and dest=pc
                     }
-                    _   =>  unimplemented!()
+                    _   =>  panic!("Data processing instructions do not have more than 4 cycles; Found {}", core.cycle+1)
                 }
             },
             ArmInstType::Multiply => {
@@ -205,7 +205,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         /* The m+2th cycle (the last for a multiply accumulate) */
                         Some(true)
                     }
-                    _ => unimplemented!()
+                    _ => panic!("Multiply instruction does not have more than 5 cycles; Found {}", core.cycle+1)
                 }
             },
             ArmInstType::MultiplyLong => {
@@ -238,7 +238,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                     6 => {
                         Some(true)
                     }
-                    _ => unimplemented!()
+                    _ => panic!("Multiply Long instruction does not have more than 7 cycles; Found {}", core.cycle+1)
                 }
             }
             ArmInstType::SingleDataTransfer => {
@@ -299,7 +299,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                     },
                     3 => {core.fetch(); None},
                     4 => {core.fetch(); Some(true)}, //end of load pc
-                    _ => unimplemented!()
+                    _ => panic!("Data transfer instruction does not have more than 5 cycles; Found {}", core.cycle+1)
                 }
             },
             ArmInstType::HalfwordDataTransferRegisterOffset | ArmInstType::HalfwordDataTransferImmediateOffset => {
@@ -360,7 +360,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                     },
                     3 => { core.fetch(); None },
                     4 => { core.fetch(); None },
-                    _ => unimplemented!()
+                    _ => panic!("Halfword data transfer does not have more than 5 cycles; Found {}", core.cycle+1)
                 }
             },
             ArmInstType::BlockDataTransfer => {
@@ -406,7 +406,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         bus.mem_write_32(core.alubus as usize, core.datareg);
                         Some(true)
                     }
-                    _ => unimplemented!()
+                    _ => panic!("Block data transfer does not have more than 4 cycles; Found {}", core.cycle+1)
                 }
             }
             ArmInstType::SingleDataSwap => {
@@ -443,7 +443,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         core.reg.write(core.addrbus as usize, core.databus);
                         Some(true)
                     },
-                    _   =>  unimplemented!()
+                    _   =>  panic!("Data swap instruction does not have more than 4 cycles; Found {}", core.cycle+1)
                 }
             },
             ArmInstType::SoftwareInterrupt => {
@@ -466,7 +466,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         core.fetch();
                         Some(true)
                     },
-                    _   =>  unimplemented!()
+                    _   =>  panic!("Software interrupt instruction does not have more than 3 cycles; Found {}", core.cycle+1)
                 }
             },
             ArmInstType::Undefined => {
@@ -487,7 +487,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         //Fetch again to fill pipeline
                         Some(true)
                     },
-                    _   =>  unimplemented!()
+                    _   =>  panic!("Undefined instructions do not have more than 4 cycles; Found {}", core.cycle+1)
                 }
             }
             _ => panic!("{} Instructions are not implemented", insttype)

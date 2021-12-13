@@ -199,6 +199,18 @@ impl Reg {
             _   =>  unreachable!()
         }
     }
+
+    pub fn transfer_spsr(&mut self) {
+        self.cpsr = match self.cpsr.mode {
+            0 => self.cpsr,
+            1 => self.spsr_fiq,
+            2 => self.spsr_svc,
+            3 => self.spsr_abt,
+            4 => self.spsr_irq,
+            5 => self.spsr_und,
+            _ => panic!("Mode {} does not exist", self.cpsr.mode)
+        }
+    }
 }
 
 /* The processor core */
