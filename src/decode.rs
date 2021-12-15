@@ -1,11 +1,13 @@
 use bitpat::bitpat;
 use std::fmt;
 
-/* 
-Enums and pattern matching to decode instructions - plus conversion of thumb instructions into arm instructions where applicable
+/*
+This document provides the method for classifying instructions based on their type (pattern-matching) and the associated enums and functions associated with this process.
+
+In addition there is a function for the conversion of Thumb instructions into ARM instructions, to be used when the processor is in Thumb mode.
 */
 
-#[allow(dead_code)]
+/* The different types of ARM instructions */
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum ArmInstType {
     DataProcessingOrPSRTransfer,
@@ -25,6 +27,7 @@ pub enum ArmInstType {
     SoftwareInterrupt
 }
 
+/* How to display the different types of ARM instructions */
 impl fmt::Display for ArmInstType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         use self::ArmInstType::*;
@@ -50,6 +53,7 @@ impl fmt::Display for ArmInstType {
     }
 }
 
+/* The different types of Thumb instructions */
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum ThumbInstType {
     MoveShiftedRegister,
@@ -92,41 +96,41 @@ pub fn decode_arm(inst: u32) -> ArmInstType {
     if bitpat!( _ _ _ _ 1 1 0 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ArmInstType::CoprocessorDataTransfer}                 else
     if bitpat!( _ _ _ _ 0 1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ArmInstType::SingleDataTransfer}                      else
     if bitpat!( _ _ _ _ 0 0 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ArmInstType::DataProcessingOrPSRTransfer}             else
-    {ArmInstType::Undefined}
+    {ArmInstType::Undefined} // if nothing matches
 }
 
 /* Same as above, these are not in the order they appear */
 #[allow(dead_code)]
 pub fn decode_thumb(inst: u16) -> ThumbInstType {
-    if bitpat!( 1 1 0 1 1 1 1 1 _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::SoftwareInterrupt} else
-    if bitpat!( 1 0 1 1 0 0 0 0 _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::AddOffsetToStackPointer} else
-    if bitpat!( 1 0 1 1 _ 1 0 _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::PushPopRegisters} else
-    if bitpat!( 0 1 0 1 _ _ 0 _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::LoadStoreWithRegisterOffset} else
-    if bitpat!( 0 1 0 1 _ _ 1 _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::LoadStoreSignExtendedByteHalfword} else
-    if bitpat!( 0 1 0 0 0 0 _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::ALUOperation} else
-    if bitpat!( 0 1 0 0 0 1 _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::HiRegisterOperationsBranchExchange} else
-    if bitpat!( 0 0 0 1 1 _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::AddSubtract} else
-    if bitpat!( 1 1 1 0 0 _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::UnconditionalBranch} else
-    if bitpat!( 0 1 0 0 1 _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::PCRelativeLoad} else
-    if bitpat!( 1 0 0 0 _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::LoadStoreHalfword} else
-    if bitpat!( 1 0 0 1 _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::SPRelativeLoadStore} else
-    if bitpat!( 1 0 1 0 _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::LoadAddress} else
-    if bitpat!( 1 1 0 0 _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::MultipleLoadStore} else
-    if bitpat!( 1 1 0 1 _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::ConditionalBranch} else
-    if bitpat!( 1 1 1 1 _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::LongBranchWithLink} else
-    if bitpat!( 0 0 0 _ _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::MoveShiftedRegister} else
-    if bitpat!( 0 0 1 _ _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::MoveCompareAddSubtractImmediate} else
-    if bitpat!( 0 1 1 _ _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::LoadStoreWithImmediateOffset} else
-    {ThumbInstType::Undefined}
+    if bitpat!( 1 1 0 1 1 1 1 1 _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::SoftwareInterrupt}                      else
+    if bitpat!( 1 0 1 1 0 0 0 0 _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::AddOffsetToStackPointer}                else
+    if bitpat!( 1 0 1 1 _ 1 0 _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::PushPopRegisters}                       else
+    if bitpat!( 0 1 0 1 _ _ 0 _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::LoadStoreWithRegisterOffset}            else
+    if bitpat!( 0 1 0 1 _ _ 1 _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::LoadStoreSignExtendedByteHalfword}      else
+    if bitpat!( 0 1 0 0 0 0 _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::ALUOperation}                           else
+    if bitpat!( 0 1 0 0 0 1 _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::HiRegisterOperationsBranchExchange}     else
+    if bitpat!( 0 0 0 1 1 _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::AddSubtract}                            else
+    if bitpat!( 1 1 1 0 0 _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::UnconditionalBranch}                    else
+    if bitpat!( 0 1 0 0 1 _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::PCRelativeLoad}                         else
+    if bitpat!( 1 0 0 0 _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::LoadStoreHalfword}                      else
+    if bitpat!( 1 0 0 1 _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::SPRelativeLoadStore}                    else
+    if bitpat!( 1 0 1 0 _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::LoadAddress}                            else
+    if bitpat!( 1 1 0 0 _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::MultipleLoadStore}                      else
+    if bitpat!( 1 1 0 1 _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::ConditionalBranch}                      else
+    if bitpat!( 1 1 1 1 _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::LongBranchWithLink}                     else
+    if bitpat!( 0 0 0 _ _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::MoveShiftedRegister}                    else
+    if bitpat!( 0 0 1 _ _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::MoveCompareAddSubtractImmediate}        else
+    if bitpat!( 0 1 1 _ _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ThumbInstType::LoadStoreWithImmediateOffset}           else
+    {ThumbInstType::Undefined} // if nothing matches
 }
 
-/* Translate a thumb instruction into it's arm equivalent */
+/* Translate a Thumb instruction into it's ARM equivalent */
 #[allow(dead_code)]
 pub fn translate_thumb(inst: u16) -> Option<u32> { /* output is Some(x) if there is an equivalent arm inst, otherwise None */
     let insttype = decode_thumb(inst);                  //getting the type of the instruction
     let mut op0: u32 = ((inst & 0x1800) >> 11) as u32;  //declaring all of the unique fields in each instruction
-    let off5: u32 = ((inst & 0x7C0) >> 6) as u32;
-    let mut rs: u32 = ((inst & 0x38) >> 3) as u32;
+    let off5: u32 = ((inst & 0x7C0) >> 6) as u32;       //all of these are unsigned 32-bit to make things easier when merging fields
+    let mut rs: u32 = ((inst & 0x38) >> 3) as u32;      //some of these variables are writted to while decoding, so they need to be mutable
     let mut rd0: u32 = (inst & 0x7) as u32;
     let i: u32 = ((inst & 0x400) >> 10) as u32;
     let op1: u32 = ((inst & 0x200) >> 9) as u32;
@@ -143,8 +147,9 @@ pub fn translate_thumb(inst: u16) -> Option<u32> { /* output is Some(x) if there
     let r: u32 = ((inst & 0x100) >> 8) as u32;
     let cond: u32 = ((inst & 0xF00) >> 8) as u32;
     let off11: u32 = (inst & 0x7FF) as u32;
+
     /* The actual decoding and translation of each instruction */
-    match insttype {    //from the thumbinsttype enum
+    match insttype {    //from the ThumbInstType enum
         ThumbInstType::SoftwareInterrupt => {
             Some(off8 | 0xEF000000)
         },

@@ -54,6 +54,7 @@ impl From<Status> for u32 {
     }
 }
 
+/* The default values for when a new Status object is instantiated */
 impl Default for Status {
     fn default() -> Status {
         Status {
@@ -94,6 +95,7 @@ pub struct Reg {
     pub pipeline:   [u32; 3],
 }
 
+/* The same as Status, defining the default values. */
 impl Default for Reg {
     fn default() -> Reg {
         Reg {
@@ -120,6 +122,7 @@ impl Default for Reg {
     }
 }
 
+/* The different functions of the Reg object to facilitiate different operations */
 impl Reg {
     #[allow(dead_code)]
     pub fn write(&mut self, index: usize, data: u32) { /* Write to a register */
@@ -200,7 +203,7 @@ impl Reg {
         }
     }
 
-    pub fn transfer_spsr(&mut self) {
+    pub fn transfer_spsr(&mut self) { /* Transfer the status register */
         self.cpsr = match self.cpsr.mode {
             0 => self.cpsr,
             1 => self.spsr_fiq,
@@ -244,7 +247,7 @@ pub struct Core {
     pub transferblock: [u32; 16],
     pub multicycle: u8,
 
-    pub cycle: u8,
+    pub cycle: u8, //The current instruction cycle (is reset after each instruction)
 }
 
 /* Print-formatting so that I can print the contents of the structure */
@@ -292,11 +295,13 @@ impl fmt::Display for Core {
     }
 }
 
+/* The processor 'Core' itself */
 impl Core {
     pub fn new() -> Self {
         Core {
-            reg: Default::default(),
+            reg: Default::default(), //We need some registers
 
+            /* There are all internal busses used when executing instructions */
             alubus: 0,
             aluop: 0,
             setcond: false,
@@ -328,21 +333,21 @@ impl Core {
     }
 
     #[allow(dead_code)]
-    pub fn inc_cycle(&mut self) {
+    pub fn inc_cycle(&mut self) { //increment the instruction cycle
         self.cycle += 1;
     }
 
-    fn set_zn(&mut self, result: u32) {
+    fn set_zn(&mut self, result: u32) { // Set the zero and negative flags
         self.reg.cpsr.z = result == 0;
         self.reg.cpsr.n = (result as i32) < 0;
     }
 
-    fn set_vc_add(&mut self, op1: u32, op2: u32) {
+    fn set_vc_add(&mut self, op1: u32, op2: u32) { // Set the half and full carry flags for an add operation
         self.reg.cpsr.v = (op1 as i32).overflowing_add(op2 as i32).1;
         self.reg.cpsr.c = op1.overflowing_add(op2).1;
     }
 
-    fn set_vc_sub(&mut self, op1: u32, op2: u32) {
+    fn set_vc_sub(&mut self, op1: u32, op2: u32) { // As above but for a subtraction operation
         self.reg.cpsr.v = (op1 as i32).overflowing_sub(op2 as i32).1;
         self.reg.cpsr.c = op1.overflowing_sub(op2).1;
     }
@@ -351,27 +356,27 @@ impl Core {
     #[allow(dead_code)]
     pub fn cond_codes(&mut self, code: u32) -> bool {
         match code { //match condition code
-            0x0 =>  self.reg.cpsr.z == true,
-            0x1 =>  self.reg.cpsr.z == false,
-            0x2 =>  self.reg.cpsr.c == true,
-            0x3 =>  self.reg.cpsr.c == false,
-            0x4 =>  self.reg.cpsr.n == true,
-            0x5 =>  self.reg.cpsr.n == false,
-            0x6 =>  self.reg.cpsr.v == true,
-            0x7 =>  self.reg.cpsr.v == false,
-            0x8 =>  self.reg.cpsr.c == true && self.reg.cpsr.z == false,
-            0x9 =>  self.reg.cpsr.c == false && self.reg.cpsr.z == true,
-            0xA =>  self.reg.cpsr.n == self.reg.cpsr.v,
-            0xB =>  self.reg.cpsr.n != self.reg.cpsr.v,
-            0xC =>  self.reg.cpsr.z == false && (self.reg.cpsr.n == self.reg.cpsr.v),
-            0xD =>  self.reg.cpsr.z == true || (self.reg.cpsr.n != self.reg.cpsr.v),
-            0xE =>  true,
-            _   =>  panic!("Condition code: {} does not exist", code)
+            0x0 =>  self.reg.cpsr.z == true,                                            //If the zero flag is set
+            0x1 =>  self.reg.cpsr.z == false,                                           //If the zero flag is cleared
+            0x2 =>  self.reg.cpsr.c == true,                                            //If the carry flag is set
+            0x3 =>  self.reg.cpsr.c == false,                                           //If the carry flag is cleared
+            0x4 =>  self.reg.cpsr.n == true,                                            //If the negative flag is set
+            0x5 =>  self.reg.cpsr.n == false,                                           //If the negative flag is cleared
+            0x6 =>  self.reg.cpsr.v == true,                                            //If the half-carry flag is set
+            0x7 =>  self.reg.cpsr.v == false,                                           //If the half-carry flag is cleared
+            0x8 =>  self.reg.cpsr.c == true && self.reg.cpsr.z == false,                //If carry is set and zero is cleared
+            0x9 =>  self.reg.cpsr.c == false && self.reg.cpsr.z == true,                //If carry is cleared and zero is set
+            0xA =>  self.reg.cpsr.n == self.reg.cpsr.v,                                 //If negative equals half-carry
+            0xB =>  self.reg.cpsr.n != self.reg.cpsr.v,                                 //If negative does not equal half-carry
+            0xC =>  self.reg.cpsr.z == false && (self.reg.cpsr.n == self.reg.cpsr.v),   //If zero is cleared and negative equals half-carry
+            0xD =>  self.reg.cpsr.z == true || (self.reg.cpsr.n != self.reg.cpsr.v),    //If zero is set or negative does not equal half-carry
+            0xE =>  true,                                                               //Always
+            _   =>  panic!("Condition code: {} does not exist", code)                   //No more condition codes!
         } //return true if condition is met
     }
 
     #[allow(dead_code)]
-    pub fn fetch(&mut self) {
+    pub fn fetch(&mut self) {                                                           //Fetch the next instruction, updating the pipeline
         /* Shift instructions down in the pipeline */
         self.reg.pipeline[2] = self.reg.pipeline[1];
         self.reg.pipeline[1] = self.reg.pipeline[0];
@@ -380,37 +385,37 @@ impl Core {
 
     pub fn alu(&mut self) { /* The alu fuctions */
         let tmp = match self.aluop { /* match the alu operation */
-            0   =>  self.abus & self.barrelbus, //AND
-            1   =>  self.abus ^ self.barrelbus, //XOR
-            2   =>  self.abus.wrapping_sub(self.barrelbus), //SUB
-            3   =>  self.barrelbus.wrapping_sub(self.abus), //
-            4   =>  self.abus.wrapping_add(self.barrelbus), //ADD
-            5   =>  self.abus.wrapping_add(self.barrelbus.wrapping_add(self.reg.cpsr.c as u32)), //ADC
-            6   =>  self.abus.wrapping_sub(self.barrelbus.wrapping_add(!self.reg.cpsr.c as u32)), //SBC
-            7   =>  self.barrelbus.wrapping_sub(self.abus.wrapping_add(!self.reg.cpsr.c as u32)),
-            8   =>  self.abus & self.barrelbus, //AND
-            9   =>  self.abus ^ self.barrelbus, //XOR
-            10  =>  self.abus.wrapping_sub(self.barrelbus),
-            11  =>  self.abus.wrapping_add(self.barrelbus),
-            12  =>  self.abus | self.barrelbus, //XOR
-            13  =>  self.barrelbus, //MOV
-            14  =>  self.abus & !self.barrelbus, //NAND
-            15  =>  !self.barrelbus, //NOT
+            0   =>  self.abus & self.barrelbus,                                                     //AND
+            1   =>  self.abus ^ self.barrelbus,                                                     //EOR
+            2   =>  self.abus.wrapping_sub(self.barrelbus),                                         //SUB
+            3   =>  self.barrelbus.wrapping_sub(self.abus),                                         //RSB
+            4   =>  self.abus.wrapping_add(self.barrelbus),                                         //ADD
+            5   =>  self.abus.wrapping_add(self.barrelbus.wrapping_add(self.reg.cpsr.c as u32)),    //ADC
+            6   =>  self.abus.wrapping_sub(self.barrelbus.wrapping_add(!self.reg.cpsr.c as u32)),   //SBC
+            7   =>  self.barrelbus.wrapping_sub(self.abus.wrapping_add(!self.reg.cpsr.c as u32)),   //RSC
+            8   =>  self.abus & self.barrelbus,                                                     //TST
+            9   =>  self.abus ^ self.barrelbus,                                                     //TEQ
+            10  =>  self.abus.wrapping_sub(self.barrelbus),                                         //CMP
+            11  =>  self.abus.wrapping_add(self.barrelbus),                                         //CMN
+            12  =>  self.abus | self.barrelbus,                                                     //ORR
+            13  =>  self.barrelbus,                                                                 //MOV
+            14  =>  self.abus & !self.barrelbus,                                                    //BIC
+            15  =>  !self.barrelbus,                                                                //MVN
             _   =>  unreachable!()
         };
 
         /* Condition codes */
         if self.setcond {
             match self.aluop {
-                0 | 1 | 8 | 9 | 12 | 13 | 14 | 15 => self.set_zn(tmp),
-                4 | 5 | 11 => { self.set_zn(tmp); self.set_vc_add(self.abus, self.barrelbus); },
-                3 | 7 => { self.set_zn(tmp); self.set_vc_sub(self.barrelbus, self.abus); },
-                2 | 6 | 10 => {self.set_zn(tmp); self.set_vc_sub(self.abus, self.barrelbus); },
+                0 | 1 | 8 | 9 | 12 | 13 | 14 | 15 => self.set_zn(tmp),                              //AND, EOR, TST, TEQ, ORR, MOV, BIC, MVN
+                4 | 5 | 11 => { self.set_zn(tmp); self.set_vc_add(self.abus, self.barrelbus); },    //ADD, ADC
+                3 | 7 => { self.set_zn(tmp); self.set_vc_sub(self.barrelbus, self.abus); },         //SUB, RSC
+                2 | 6 | 10 => {self.set_zn(tmp); self.set_vc_sub(self.abus, self.barrelbus); },     //EOR, SBC, CMP
                 _   =>  unreachable!()
             }
         }
         /* Register write-back */
-        if self.aluop < 8 || self.aluop > 0xB {
+        if self.aluop < 8 || self.aluop > 0xB {                                                     //not TST, TEQ, CMP, CMN
             self.alubus = tmp
         }
     }
@@ -418,10 +423,17 @@ impl Core {
     #[allow(dead_code)]
     pub fn mul(&mut self) {
         /* The multiply instruction */
+
+        /*
+        This is not done because there is little to no information about how the multiply hardware actually works in the ARM7TDMI.
+        The only real information that is a available is that it is an 8x32 booth multiplier, and it takes some form of
+        data input from the a and b busses (of which both seem to be bidirectional)
+
+        Even the carry output of this function is deemed 'undefined'. If only ARM actually documented their secrets.
+        */
     }
 
     /* decode shift opcode */
-    #[allow(dead_code)]
     pub fn decode_shift(&mut self, shift: u32) {
         let shifttype: u8 = ((shift & 0x6) >> 1) as u8;
         self.barrelfunc = shifttype;
@@ -434,7 +446,7 @@ impl Core {
         } else { panic!("shift mode does not exist") }
     }
 
-    #[allow(dead_code)]
+    /* Decode immediate shift opcode */
     pub fn decode_shift_imm(&mut self, mut shift: u32) {
         shift = (shift >> 8) & 0xF;
         self.barrelfunc = 3;
@@ -444,10 +456,10 @@ impl Core {
     /* the barrel shifter */
     pub fn barrel_shift(&mut self) {
         self.barrelbus = match self.barrelfunc { /* Barrel shifter function */
-            0   =>  self.bbus << self.shiftamnt, /* LSL */
-            1   =>  self.bbus >> self.shiftamnt, /* LSR */
-            2   =>  ((self.bbus as i32) >> self.shiftamnt) as u32, /* ASR */
-            3   =>  {if self.shiftamnt == 0 {(self.bbus >> 1) | ((self.reg.cpsr.c as u32) << 31)} else {self.bbus.rotate_right(self.shiftamnt)}}, /* ROR, RRX */
+            0   =>  self.bbus << self.shiftamnt,                                                                                                    //LSL 
+            1   =>  self.bbus >> self.shiftamnt,                                                                                                    //LSR 
+            2   =>  ((self.bbus as i32) >> self.shiftamnt) as u32,                                                                                  //ASR 
+            3   =>  {if self.shiftamnt == 0 {(self.bbus >> 1) | ((self.reg.cpsr.c as u32) << 31)} else {self.bbus.rotate_right(self.shiftamnt)}},   //ROR, RRX 
             _   =>  unreachable!()
         };
 
@@ -462,6 +474,7 @@ impl Core {
         }
     }
 
+    /* Update the register bank */
     pub fn reg_bank(&mut self) {
         self.abus = self.reg.read(self.asel as usize);
         self.bbus = self.reg.read(self.bsel as usize);
@@ -472,13 +485,13 @@ impl Core {
         });
     }
 
+    /* Helper function for a block register transfer*/
     #[allow(dead_code)]
     pub fn calc_reg_transfer(&mut self, rlist: u32) {
         self.multicycle = 0;
-        println!("0b{:0>16b}", rlist);
+
         for x in 0..16 {
             if (rlist>>x) & 0b1 == 0b1 {
-                println!("writing to list");
                 self.transferblock[self.multicycle as usize] = x as u32;
                 self.multicycle += 1;
             }
