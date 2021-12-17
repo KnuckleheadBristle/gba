@@ -366,31 +366,26 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                 match core.cycle {
                     0 => {
                         core.fetch();
-                        core.abus = core.reg.read(rn as usize);
                         core.calc_reg_transfer(rlist);
-                        core.alubus = if u == 1 {
-                            core.abus + 4*(core.multicycle+1) as u32
-                        } else {
-                            core.abus-(4*(core.multicycle+1)) as u32
-                        };
+                        core.alubus = core.reg.read(rn as usize) - if u==0 {4*core.multicycle as u32} else {0};
+                        core.multicycle -= 1;
                         None
                     },
                     1 => {
-                        if l==1 {
-                            core.datareg = bus.mem_read_32(core.transferblock[(core.multicycle-1) as usize] as usize);
-                            core.abus = core.reg.read(rn as usize);
-                            core.barrelbus = 0x4;
-                            core.alu();
-                            if s==1 { /* need to remember which is the write bit */
-                                core.reg.write(rn as usize, core.alubus);
-                            }
+                        if p==1 {
+                            core.alubus += 4;
+                        }
+                        if l==1 { //load
+                            core.datareg = bus.mem_read_32(core.alubus as usize);
                             None
-                        } else {
-                            if core.multicycle != 1 {
-                                core.datareg = core.reg.read(rn as usize);
-                                bus.mem_write_32(core.datareg as usize, core.reg.read(core.transferblock[(core.multicycle-1) as usize] as usize));
+                        } else { //store
+                            if core.multicycle != 0 {
+                                bus.mem_write_32(core.alubus as usize, core.reg.read(core.transferblock[core.multicycle as usize] as usize));
                                 core.multicycle -= 1;
                                 core.cycle -= 1;
+                                if p==0 {
+                                    core.alubus += 4;
+                                }
                                 None
                             } else {
                                 Some(true)
@@ -398,15 +393,20 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         }
                     },
                     2 => {
-                        if core.multicycle != 1 {
-                            bus.mem_write_32(core.alubus as usize, core.datareg);
-                            core.abus = core.alubus;
-                            core.alu();
-                            core.datareg = bus.mem_read_32(core.transferblock[(core.multicycle-1) as usize] as usize);
+                        if core.multicycle != 0 {
+                            if p==1 {
+                                core.alubus += 4;
+                            }
+                            core.reg.write(core.transferblock[core.multicycle as usize] as usize,core.datareg);
+                            core.datareg = bus.mem_read_32(core.alubus as usize);
+                            core.addrbus = core.reg.read(rn as usize);
                             core.multicycle -= 1;
                             core.cycle -= 1;
+                            if p==0 {
+                                core.alubus += 4;
+                            }
                             None
-                        } else if core.transferblock[(core.multicycle-1) as usize] == 15 {
+                        } else if core.transferblock[core.multicycle as usize] == 15 {
                             core.fetch();
                             None
                         } else {

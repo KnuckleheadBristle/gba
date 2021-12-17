@@ -203,6 +203,7 @@ impl Reg {
         }
     }
 
+    #[allow(dead_code)]
     pub fn transfer_spsr(&mut self) { /* Transfer the status register */
         self.cpsr = match self.cpsr.mode {
             0 => self.cpsr,
