@@ -52,7 +52,6 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
 
     /* If the condition is not met, one cycle is added (one step of this function = one cycle) */
     if core.cond_codes(cond) {
-        println!("{}", insttype);
         match insttype {
             ArmInstType::Branch => {
                 match core.cycle {
@@ -369,8 +368,6 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         core.fetch();
                         core.abus = core.reg.read(rn as usize);
                         core.calc_reg_transfer(rlist);
-                        println!("{}", core.multicycle);
-                        println!("{:?}", core.transferblock);
                         core.alubus = if u == 1 {
                             core.abus + 4*(core.multicycle+1) as u32
                         } else {
@@ -379,15 +376,26 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         None
                     },
                     1 => {
-                        core.datareg = bus.mem_read_32(core.transferblock[(core.multicycle-1) as usize] as usize);
-                        core.multicycle -= 1;
-                        core.abus = core.reg.read(rn as usize);
-                        core.barrelbus = 0x4;
-                        core.alu();
-                        if s==1 { /* need to remember which is the write bit */
-                            core.reg.write(rn as usize, core.alubus);
+                        if l==1 {
+                            core.datareg = bus.mem_read_32(core.transferblock[(core.multicycle-1) as usize] as usize);
+                            core.abus = core.reg.read(rn as usize);
+                            core.barrelbus = 0x4;
+                            core.alu();
+                            if s==1 { /* need to remember which is the write bit */
+                                core.reg.write(rn as usize, core.alubus);
+                            }
+                            None
+                        } else {
+                            if core.multicycle != 1 {
+                                core.datareg = core.reg.read(rn as usize);
+                                bus.mem_write_32(core.datareg as usize, core.reg.read(core.transferblock[(core.multicycle-1) as usize] as usize));
+                                core.multicycle -= 1;
+                                core.cycle -= 1;
+                                None
+                            } else {
+                                Some(true)
+                            }
                         }
-                        None
                     },
                     2 => {
                         if core.multicycle != 1 {
@@ -398,12 +406,19 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                             core.multicycle -= 1;
                             core.cycle -= 1;
                             None
+                        } else if core.transferblock[(core.multicycle-1) as usize] == 15 {
+                            core.fetch();
+                            None
                         } else {
                             Some(true)
                         }
                     },
                     3 => {
-                        bus.mem_write_32(core.alubus as usize, core.datareg);
+                        core.fetch();
+                        None
+                    },
+                    4 => {
+                        core.fetch();
                         Some(true)
                     }
                     _ => panic!("Block data transfer does not have more than 4 cycles; Found {}", core.cycle+1)

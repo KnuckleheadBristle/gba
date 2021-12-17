@@ -140,13 +140,13 @@ mod tests {
         assert_eq!(test_inst(&mut core, &mut bus, instruction), 4);
     }
 
-    /* #[test]
-    fn block_data_transfer() {
+     #[test]
+    fn block_data_transfer_cycle_timing() {
         let mut core = arm7tdmi::Core::new();
         let mut bus = bus::Bus::new();
 
         /* load */
-        let instruction = 0xe8900001; /* Single register */
+        let instruction = 0xe8900002; /* Single register */
         assert_eq!(test_inst(&mut core, &mut bus, instruction), 3);
 
         let instruction = 0xe8908000; /* Single register dest=pc */
@@ -159,10 +159,10 @@ mod tests {
         assert_eq!(test_inst(&mut core, &mut bus, instruction), 10);
 
         /* store */
-        let instruction = 0xe8800001; /* Single register */
+        let instruction = 0xe8800002; /* Single register */
         assert_eq!(test_inst(&mut core, &mut bus, instruction), 2);
 
-        let instruction = 0xe88007ff; /* n registers (n>1) (n=12)*/
-        assert_eq!(test_inst(&mut core, &mut bus, instruction), 13);
-    } */
+        let instruction = 0xe88007ff; /* n registers (n>1) (n=11)*/
+        assert_eq!(test_inst(&mut core, &mut bus, instruction), 12);
+    } 
 }

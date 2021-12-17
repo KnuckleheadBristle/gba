@@ -489,10 +489,11 @@ impl Core {
     #[allow(dead_code)]
     pub fn calc_reg_transfer(&mut self, rlist: u32) {
         self.multicycle = 0;
+        self.transferblock = [0; 16];
 
         for x in 0..16 {
-            if (rlist>>x) & 0b1 == 0b1 {
-                self.transferblock[self.multicycle as usize] = x as u32;
+            if (rlist>>(15-x)) & 0b1 == 0b1 {
+                self.transferblock[self.multicycle as usize] = (15-x) as u32;
                 self.multicycle += 1;
             }
         }
