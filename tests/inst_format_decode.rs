@@ -24,7 +24,7 @@ mod tests {
 
     #[test]
     fn test_arm_dataproc() {
-        assert_eq!(decode::decode_arm(0b00000001011101001011110011000100), decode::ArmInstType::DataProcessingOrPSRTransfer);
+        assert_eq!(decode::decode_arm(0b00000001011101001011110011000100), decode::ArmInstType::DataProcessing);
     }
 
     #[test]
@@ -60,21 +60,6 @@ mod tests {
     #[test]
     fn test_arm_softint() {
         assert_eq!(decode::decode_arm(0b00001111010101010101010101011101), decode::ArmInstType::SoftwareInterrupt);
-    }
-
-    #[test]
-    fn test_arm_copdataop() {
-        assert_eq!(decode::decode_arm(0b00001110100101111001000110101010), decode::ArmInstType::CoprocessorDataOperation);
-    }
-
-    #[test]
-    fn test_arm_copdatatrans() {
-        assert_eq!(decode::decode_arm(0b00001101001001101101000110101101), decode::ArmInstType::CoprocessorDataTransfer);
-    }
-
-    #[test]
-    fn test_arm_copregtrans() {
-        assert_eq!(decode::decode_arm(0b00001110010001010110000110111011), decode::ArmInstType::CoprocessorRegisterTransfer);
     }
 
     #[test]

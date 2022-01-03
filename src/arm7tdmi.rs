@@ -217,6 +217,31 @@ impl Reg {
     }
 }
 
+impl fmt::Display for Reg {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result  {
+        write!(f,
+            "R0: {:08x}, R1: {:08x}, R2:  {:08x}, R3:  {:08x}, R4:  {:08x}, R5:  {:08x}, R6:  {:08x}, R7:  {:08x},\nR8: {:08x}, R9: {:08x}, R10: {:08x}, R11: {:08x}, R12: {:08x}, R13: {:08x}, R14: {:08x}, R15: {:08x}"
+            ,
+            self.gp[0],
+            self.gp[1],
+            self.gp[2],
+            self.gp[3],
+            self.gp[4],
+            self.gp[5],
+            self.gp[6],
+            self.gp[7],
+            self.gp[8],
+            self.gp[9],
+            self.gp[10],
+            self.gp[11],
+            self.gp[12],
+            self.gp[13],
+            self.gp[14],
+            self.gp[15],
+        )
+    }
+}
+
 /* The processor core */
 #[derive(Clone, Copy, Debug)]
 pub struct Core {
@@ -381,7 +406,7 @@ impl Core {
         /* Shift instructions down in the pipeline */
         self.reg.pipeline[2] = self.reg.pipeline[1];
         self.reg.pipeline[1] = self.reg.pipeline[0];
-        self.reg.pipeline[0] = self.databus;        //get new instruction from the data bus
+        self.reg.pipeline[0] = self.datareg;       //get new instruction from the data bus
     }
 
     pub fn alu(&mut self) { /* The alu fuctions */
@@ -439,11 +464,9 @@ impl Core {
         let shifttype: u8 = ((shift & 0x6) >> 1) as u8;
         self.barrelfunc = shifttype;
         if bitpat!( _ _ _ _ 0 _ _ 1 )(shift) {
-            println!("Shift register");
             self.shiftamnt = self.reg.read((shift >> 4) as usize) & 0x1F;
         } else if bitpat!( _ _ _ _ _ _ _ 0 )(shift) {
             self.shiftamnt = shift >> 3;
-            println!("Shift immediate");
         } else { panic!("shift mode does not exist") }
     }
 

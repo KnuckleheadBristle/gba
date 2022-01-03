@@ -10,7 +10,8 @@ In addition there is a function for the conversion of Thumb instructions into AR
 /* The different types of ARM instructions */
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum ArmInstType {
-    DataProcessingOrPSRTransfer,
+    DataProcessing,
+    PSRTransfer,
     Multiply,
     MultiplyLong,
     SingleDataSwap,
@@ -21,9 +22,6 @@ pub enum ArmInstType {
     Undefined,
     BlockDataTransfer,
     Branch,
-    CoprocessorDataTransfer,
-    CoprocessorDataOperation,
-    CoprocessorRegisterTransfer,
     SoftwareInterrupt
 }
 
@@ -32,7 +30,8 @@ impl fmt::Display for ArmInstType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         use self::ArmInstType::*;
         let s = match *self {
-            DataProcessingOrPSRTransfer         => "Data Processing",
+            DataProcessing                      => "Data Processing",
+            PSRTransfer                         => "PSR Transfer",
             Multiply                            => "Multiply",
             MultiplyLong                        => "Multiply Long",
             SingleDataSwap                      => "Single Data Swap",
@@ -43,9 +42,6 @@ impl fmt::Display for ArmInstType {
             Undefined                           => "Undefined",
             BlockDataTransfer                   => "Block Data Transfer",
             Branch                              => "Branch",
-            CoprocessorDataTransfer             => "Coprocessor Data Transfer",
-            CoprocessorDataOperation            => "Coprocessor Data Operation",
-            CoprocessorRegisterTransfer         => "Coprocessor Register Transfer",
             SoftwareInterrupt                   => "Software Interrupt"
         };
 
@@ -82,20 +78,20 @@ pub enum ThumbInstType {
 #[allow(dead_code)]
 pub fn decode_arm(inst: u32) -> ArmInstType {
     if bitpat!( _ _ _ _ 0 0 0 1 0 0 1 0 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 1 _ _ _ _ )(inst) {ArmInstType::BranchAndExchange}                       else
+    if bitpat!( _ _ _ _ 0 0 0 1 0 _ 0 0 1 1 1 1 _ _ _ _ 0 0 0 0 0 0 0 0 0 0 0 0 )(inst) {ArmInstType::PSRTransfer}                             else
+    if bitpat!( _ _ _ _ 0 0 0 1 0 _ 1 0 1 0 0 1 1 1 1 1 0 0 0 0 0 0 0 0 _ _ _ _ )(inst) {ArmInstType::PSRTransfer}                             else
+    if bitpat!( _ _ _ _ 0 0 _ 1 0 _ 1 0 1 0 0 0 1 1 1 1 _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ArmInstType::PSRTransfer}                             else
     if bitpat!( _ _ _ _ 0 0 0 1 0 _ 0 0 _ _ _ _ _ _ _ _ 0 0 0 0 1 0 0 1 _ _ _ _ )(inst) {ArmInstType::SingleDataSwap}                          else
     if bitpat!( _ _ _ _ 0 0 0 0 0 0 _ _ _ _ _ _ _ _ _ _ _ _ _ _ 1 0 0 1 _ _ _ _ )(inst) {ArmInstType::Multiply}                                else
     if bitpat!( _ _ _ _ 0 0 0 0 1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 1 0 0 1 _ _ _ _ )(inst) {ArmInstType::MultiplyLong}                            else
     if bitpat!( _ _ _ _ 0 0 0 _ _ 0 _ _ _ _ _ _ _ _ _ _ 0 0 0 0 1 _ _ 1 _ _ _ _ )(inst) {ArmInstType::HalfwordDataTransferRegisterOffset}      else
     if bitpat!( _ _ _ _ 0 0 0 _ _ 1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ 1 _ _ 1 _ _ _ _ )(inst) {ArmInstType::HalfwordDataTransferImmediateOffset}     else
     if bitpat!( _ _ _ _ 0 1 1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 1 _ _ _ _ )(inst) {ArmInstType::Undefined}                               else
-    if bitpat!( _ _ _ _ 1 1 1 0 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 0 _ _ _ _ )(inst) {ArmInstType::CoprocessorDataOperation}                else
-    if bitpat!( _ _ _ _ 1 1 1 0 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 1 _ _ _ _ )(inst) {ArmInstType::CoprocessorRegisterTransfer}             else
     if bitpat!( _ _ _ _ 1 1 1 1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ArmInstType::SoftwareInterrupt}                       else
     if bitpat!( _ _ _ _ 1 0 0 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ArmInstType::BlockDataTransfer}                       else
     if bitpat!( _ _ _ _ 1 0 1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ArmInstType::Branch}                                  else
-    if bitpat!( _ _ _ _ 1 1 0 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ArmInstType::CoprocessorDataTransfer}                 else
     if bitpat!( _ _ _ _ 0 1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ArmInstType::SingleDataTransfer}                      else
-    if bitpat!( _ _ _ _ 0 0 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ArmInstType::DataProcessingOrPSRTransfer}             else
+    if bitpat!( _ _ _ _ 0 0 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ )(inst) {ArmInstType::DataProcessing}                          else
     {ArmInstType::Undefined} // if nothing matches
 }
 
@@ -251,5 +247,151 @@ pub fn translate_thumb(inst: u16) -> Option<u32> { /* output is Some(x) if there
         ThumbInstType::Undefined => {
             Some(0b11100110000000000000000000010000)
         }
+    }
+}
+
+fn instcond(inst: u32) -> String {
+    let cond = inst >> 28;
+    let condition = match cond {
+        0x0 => "EQ",
+        0x1 => "NE",
+        0x2 => "CS",
+        0x3 => "CC",
+        0x4 => "MI",
+        0x5 => "PL",
+        0x6 => "VS",
+        0x7 => "VC",
+        0x8 => "HI",
+        0x9 => "LS",
+        0xA => "GE",
+        0xB => "LT",
+        0xC => "GT",
+        0xD => "LE",
+        0xE => "AL",
+        _   => panic!("Condition code 0xF does not exist")
+    };
+    condition.to_string()
+}
+
+fn dataop(inst: u32) -> String {
+    let opcode = match (inst >> 21) & 0xF {
+        0x0 => "AND",
+        0x1 => "EOR",
+        0x2 => "SUB",
+        0x3 => "RSB",
+        0x4 => "ADD",
+        0x5 => "ADC",
+        0x6 => "SBC",
+        0x7 => "RSC",
+        0x8 => "TST",
+        0x9 => "TEQ",
+        0xA => "CMP",
+        0xB => "CMN",
+        0xC => "ORR",
+        0xD => "MOV",
+        0xE => "BIC",
+        0xF => "MVN",
+        _   => panic!("Opcode {} does not exist", (inst >> 20) & 0xF)
+    };
+    opcode.to_string()
+}
+
+#[allow(dead_code)]
+pub fn disassemble_arm(inst: u32) -> String {
+    let insttype = decode_arm(inst);
+    let mut cond = instcond(inst);
+    cond = if cond == "AL" {"".to_string()} else {cond};
+    match insttype {
+        ArmInstType::BranchAndExchange => {
+            return ["BX".to_string(), cond].concat()
+        },
+        ArmInstType::Branch => {
+            if (inst >> 24) & 0b1 == 1 {
+                return ["BL".to_string(), cond].concat()
+            } else {
+                return ["B".to_string(), cond].concat()
+            }
+        },
+        ArmInstType::DataProcessing => {
+            let opcode = dataop(inst);
+            let s = if (inst >> 20) & 0b1 == 1 {"S"} else {""};
+            
+            if opcode == "CMP" || opcode == "CMN" || opcode == "TEQ" || opcode == "TST" {
+                return [opcode, cond].concat()
+            } else {
+                return [opcode, cond, s.to_string()].concat()
+            }
+        },
+        ArmInstType::PSRTransfer => {
+            let instruction = if (inst >> 18) & 0b11 == 0b11 {"MSR"} else {"MSR"};
+
+            return [instruction.to_string(), cond].concat()
+        },
+        ArmInstType::Multiply => {
+            let s = if (inst >> 20) & 0b1 == 1 {"S"} else {""};
+            let a = if (inst >> 21) & 0b1 == 1 {"MLA"} else {"MUL"};
+
+            return [a.to_string(), cond, s.to_string()].concat()
+        },
+        ArmInstType::MultiplyLong => {
+            let multype = ((inst >> 22) & 0b1, (inst >> 21) & 0b1);
+            let s = if (inst >> 20) & 0b1 == 1 {"S"} else {""};
+
+            let instruction = match multype {
+                (0, 0)  => {"UMULL"},
+                (0, 1)  => {"UMLAL"},
+                (1, 0)  => {"SMULL"},
+                (1, 1)  => {"SMLAL"},
+                _       => panic!("Multiply long instruction {:?} does not exist", multype)
+            };
+
+            return [instruction.to_string(), cond, s.to_string()].concat()
+        },
+        ArmInstType::SingleDataTransfer => {
+            let instruction = if (inst >> 20) & 0b1 == 1 {"LDR"} else {"STR"};
+            let t = if (inst >> 21) & 0b1 == 1 {"T"} else {""};
+            let b = if (inst >> 22) & 0b1 == 1 {"B"} else {""};
+
+            return [instruction.to_string(), cond, b.to_string(), t.to_string()].concat()
+        },
+        ArmInstType::HalfwordDataTransferRegisterOffset | ArmInstType::HalfwordDataTransferImmediateOffset => {
+            let instruction = if (inst >> 20) & 0b1 == 1 {"LDR"} else {"STR"};
+            let sh = ((inst >> 6) & 0b1, (inst >> 5) & 0b1);
+
+            let transfertype = match sh {
+                (0, 1)  => "H",
+                (1, 0)  => if instruction=="LDR" {"SB"} else {""},
+                (1, 1)  => if instruction=="LDR" {"SH"} else {""},
+                _       => unimplemented!()
+            };
+
+            return [instruction.to_string(), cond, transfertype.to_string()].concat()
+        }
+        ArmInstType::BlockDataTransfer => {
+            let instruction = if (inst >> 20) & 0b1 == 1 {"LDM"} else {"STM"};
+            let transfertype = ((inst >> 24) & 0b1, (inst >> 23) & 0b1);
+
+            let addr_mode = match transfertype {
+                (1, 1) => "IB",
+                (1, 0) => "IA",
+                (0, 1) => "DB",
+                (0, 0) => "DA",
+                _ => panic!("Addressing mode {:?} does not exist", transfertype)
+            };
+            
+            return [instruction.to_string(), cond, addr_mode.to_string()].concat()
+        },
+        ArmInstType::SingleDataSwap => {
+            let b = if (inst >> 22) & 0b1 == 1 {"B"} else {""};
+            return ["SWP".to_string(), cond, b.to_string()].concat()
+        },
+        ArmInstType::SoftwareInterrupt => {
+            return ["SWI".to_string(), cond].concat()
+        },
+
+        ArmInstType::Undefined => {
+            return "Undefined".to_string()
+        }
+        
     }
 }

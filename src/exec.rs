@@ -70,6 +70,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         }
                         // Fetch is performed from branch destination
                         core.addrbus = core.alubus;
+                        core.databus = bus.mem_read_32(core.addrbus as usize);
                         core.fetch();
                         None
                     },
@@ -113,7 +114,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                     _   =>  panic!("Branch and Exchange instruction does not have more than 3 cycles; Found {}", core.cycle+1)
                 }
             },
-            ArmInstType::DataProcessingOrPSRTransfer => {
+            ArmInstType::DataProcessing => {
                 match core.cycle {
                     0   =>  {
                         core.fetch();
@@ -128,13 +129,15 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                     
                         if core.shiftamnt > 0 {
                             core.barrel_shift();
+                            core.aluop = opcode as u8;
+                            core.alu();
                         } else {
                             core.barrel_shift();
                             core.aluop = opcode as u8;
                             core.alu();
                             core.reg.write(rd as usize, core.alubus);
                         }
-
+                        
                         if core.shiftamnt > 0 {
                             None
                         }else if rd != 0xF {
@@ -505,7 +508,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                     _   =>  panic!("Undefined instructions do not have more than 4 cycles; Found {}", core.cycle+1)
                 }
             }
-            _ => panic!("{} Instructions are not implemented", insttype)
+            _   =>  panic!("Instruction {} not implemented", insttype)
         }
     } else {
         Some(false)

@@ -6,3 +6,11 @@
 !docs/instruction_cycles.md
 
 /src/arm7tdmi.rs
+
+/arm-log.bin
+
+/log.txt
+
+/read_log.py
+
+/test_roms
