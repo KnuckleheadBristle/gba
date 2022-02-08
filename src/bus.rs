@@ -1,3 +1,9 @@
+use std::io;
+use std::io::Read;
+use std::io::BufReader;
+use std::fs::File;
+use std::vec::*;
+
 /* Memory Map */
 /* 
   00000000-00003FFF   BIOS - System ROM         (16 KBytes)
@@ -50,32 +56,32 @@ const GPK2_END: usize     = 0x0DFFFFFF;
 const GPKSRAM_START: usize= 0x0E000000;
 const GPKSRAM_END: usize  = 0x0E00FFFF;
 
-#[derive(Clone,Copy,Debug)]
+#[derive(Clone,Debug)]
 pub struct Bus {
-	bios: 	[u8; BIOS_END-MEM_START],
-	wram0:	[u8; WRAM0_END-WRAM0_START],
-	wram1:	[u8; WRAM1_END-WRAM1_START],
-	io:	    [u8; IO_END-IO_START],
-	obj:	[u8; OBJ_END-OBJ_START],
-	vram:	[u8; VRAM_END-VRAM_START],
-	oam:	[u8; OAM_END-OAM_START],
-	gpk:	[u8; GPK2_END-GPK0_START],
-	gsrm:	[u8; GPKSRAM_END-GPKSRAM_START],
+	bios: 	Vec<u8>,
+	wram0:	Vec<u8>,
+	wram1:	Vec<u8>,
+	io:	    Vec<u8>,
+	obj:	Vec<u8>,
+	vram:	Vec<u8>,
+	oam:	Vec<u8>,
+	gpk:	Vec<u8>,
+	//gsrm:	[u8; GPKSRAM_END-GPKSRAM_START],
 }
 
 #[allow(dead_code)]
 impl Bus {
     pub fn new() -> Self {
         Bus {
-            bios: 	[0; BIOS_END-MEM_START],
-            wram0:	[0; WRAM0_END-WRAM0_START],
-            wram1:	[0; WRAM1_END-WRAM1_START],
-            io:	    [0; IO_END-IO_START],
-            obj:	[0; OBJ_END-OBJ_START],
-            vram:	[0; VRAM_END-VRAM_START],
-            oam:	[0; OAM_END-OAM_START],
-            gpk:	[0; GPK2_END-GPK0_START],
-            gsrm:	[0; GPKSRAM_END-GPKSRAM_START],
+            bios: 	vec![0; BIOS_END-MEM_START],
+            wram0:	vec![0; WRAM0_END-WRAM0_START],
+            wram1:	vec![0; WRAM1_END-WRAM1_START],
+            io:	    vec![0; IO_END-IO_START],
+            obj:	vec![0; OBJ_END-OBJ_START],
+            vram:	vec![0; VRAM_END-VRAM_START],
+            oam:	vec![0; OAM_END-OAM_START],
+            gpk:	vec![0; GPK2_END-GPK0_START],
+            //gsrm:	[0; GPKSRAM_END-GPKSRAM_START],
         }
     }
 
@@ -106,7 +112,8 @@ impl Bus {
                 self.gpk[(addr - GPK0_START)]
             },
             GPKSRAM_START ..= GPKSRAM_END => {
-                self.gsrm[(addr - GPKSRAM_START)]
+                //self.gsrm[(addr - GPKSRAM_START)]
+                0
             },
             _   => panic!("Illegal memory read at {}", addr)
         }
@@ -124,22 +131,22 @@ impl Bus {
                 self.wram1[(addr - WRAM1_START)] = data;
             },
             IO_START ..= IO_END => {
-                self.io[(addr - IO_START)] = data;
+                //self.io[(addr - IO_START)] = data;
             },
             OBJ_START ..= OBJ_END => {
-                self.obj[(addr - OBJ_START)] = data;
+                //self.obj[(addr - OBJ_START)] = data;
             },
             VRAM_START ..= VRAM_END => {
-                self.vram[(addr - VRAM_START)] = data;
+                //self.vram[(addr - VRAM_START)] = data;
             },
             OAM_START ..= OAM_END => {
-                self.oam[(addr - OAM_START)] = data;
+                //self.oam[(addr - OAM_START)] = data;
             },
             GPK0_START ..= GPK2_END => {
                 self.gpk[(addr - GPK0_START)] = data;
             },
             GPKSRAM_START ..= GPKSRAM_END => {
-                self.gsrm[(addr - GPKSRAM_START)] = data;
+                //self.gsrm[(addr - GPKSRAM_START)] = data;
             },
             _   => panic!("Illegal memory write at {}", addr)
         }
@@ -176,4 +183,18 @@ impl Bus {
         self.mem_write(addr+2, hi);
         self.mem_write(addr+3, hi1);
     }
+
+    pub fn load_mem(&mut self) -> io::Result<()> {
+        let f = File::open("./gba_bios.bin")?;
+        let mut reader = BufReader::new(f);
+        let mut buffer = Vec::new();
+
+        reader.read_to_end(&mut buffer)?;
+
+        for i in 0..(buffer.len()-1) {
+            self.mem_write(i, buffer[i]);
+        }
+        Ok(())
+    }
 }
+

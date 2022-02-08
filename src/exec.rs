@@ -35,19 +35,19 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
     let rn: u32 = (inst & 0xF0000) >> 16;
     let rd: u32 = (inst & 0xF000) >> 12;
     let shift: u32 = (inst & 0xFF0) >> 4;
-    let rm: u32 = inst & 0xF;
+    let rm: u32 = inst & 0x0000000F;
     let rs: u32 = (inst & 0xF00) >> 8;
-    let imm: u32 = inst & 0xFF;
+    let imm: u32 = inst & 0x000000FF;
     let a: u32 = (inst & 0x200000) >> 21;
     let b: u32 = (inst & 0x400000) >> 22;
     let u: u32 = (inst & 0x800000) >> 23;
     let p: u32 = (inst & 0x1000000) >> 24;
     let s: u32 = (inst & 0x40) >> 6;
     let h: u32 = (inst & 0x20) >> 5;
-    let off: u32 = inst & 0xFFF;
-    let rlist: u32 = inst & 0xFFFF;
+    let off: u32 = inst & 0x00000FFF;
+    let rlist: u32 = inst & 0x0000FFFF;
     let cp: u32 = (inst & 0xD) >> 5;
-    let boff: u32 = inst & 0xFFFFFFF;
+    let boff: u32 = inst & 0x00FFFFFF;
     core.fetch(); //prefetch the next instruction
 
     /* If the condition is not met, one cycle is added (one step of this function = one cycle) */
@@ -59,7 +59,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         // Branch destination and core state is extracted
                         // Prefetch performed from current PC
                         core.abus = core.reg.read(15);
-                        core.bbus = ((boff << 2) as i32) as u32; // sign extend offset
+                        core.barrelbus = ((boff << 2) as i32) as u32; // sign extend offset
                         core.aluop = 4;
                         core.alu();
                         None
@@ -80,7 +80,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         // If link, subtract four from r14 to simplify return
                         if p == 1 {
                             core.abus = core.reg.read(14);
-                            core.bbus = 4;
+                            core.barrelbus = 4;
                             core.aluop = 2;
                             core.alu();
                             core.reg.write(14, core.alubus);
@@ -177,6 +177,44 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                     _   =>  panic!("Data processing instructions do not have more than 4 cycles; Found {}", core.cycle+1)
                 }
             },
+            ArmInstType::PSRTransfer => {
+                match core.cycle {
+                    0 => {
+                        core.fetch();
+                        core.abus = decode::decode_psr_transfer(inst);
+                        if i == 0 {
+                            core.bbus = core.reg.read(rm as usize);
+                        } else {
+                            core.bbus = imm;
+                            core.shiftamnt = rs;
+                            core.barrelfunc = 3;
+                        }
+                        None
+                    },
+                    1 => {
+                        if core.abus==0 {
+                            let psr: u32 = core.reg.read_psr(b);
+                            core.reg.write(rd as usize, psr);
+                        } else if core.abus==1 {
+                            let psr: u32 = core.reg.read(rm as usize);
+                            core.reg.write_psr(b, psr);
+                        } else {
+                            let word: u32 = if i==0 {   // the value is a register
+                                core.reg.read(rm as usize)
+                            } else {                    // the value is a shifted immediate value
+                                core.barrel_shift();
+                                core.barrelbus
+                            };
+                            core.reg.write_psr(b, word);
+                        }
+                        None
+                    },
+                    2 => {
+                        Some(true)
+                    }
+                    _   =>  panic!("PSR Transfer instruction do not have more than 3 cycles; Found {}", core.cycle+1)
+                }
+            }
             ArmInstType::Multiply => {
                 match core.cycle {
                     0 => {
@@ -190,16 +228,19 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                     },
                     2 => {
                         /* This cycle is repeated depending on how many multiplies are needed */
-
-                        core.cycle -= 1;
                         None
                     }
                     3 => {
                         /* The m+1th cycle (the last for a generic multiply) */
                         if a==1 { //accumulate
+                            let result: u32 = core.reg.read(rn as usize).wrapping_add(core.reg.read(rs as usize) * core.reg.read(rm as usize));
+                            core.reg.write(rd as usize, result);
                             None
                             /* add rn to the calculated value */
                         } else { //normal multiply
+                            let result: u32 = core.reg.read(rs as usize) * core.reg.read(rm as usize);
+
+                            core.reg.write(rd as usize, result);
                             Some(true)
                         }
                     },
@@ -221,7 +262,6 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                     },
                     2 => {
                         /* Same as above, this is the repeated cycle */
-                        core.cycle -= 1;
                         None
                     },
                     3 => {
@@ -232,6 +272,8 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                     },
                     5 => {
                         if a==1 {
+                            let accumulate: i64 = (core.reg.read(rn as usize)|core.reg.read(rd as usize)) as i64;
+                            let result: i64 = accumulate + (core.reg.read(rs as usize)*core.reg.read(rm as usize)) as i32 as i64;
                             None
                         } else {
                             Some(true)
@@ -259,8 +301,15 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         };
 
                         core.barrel_shift();
-                        core.aluop = 0b10 << (!u & 0b1); /* if u==0 add else sub */
+                        println!("abus: {}", core.abus);
+                        println!("bbus: {}", core.bbus);
+                        println!("barrelbus: {}", core.barrelbus);
+                        println!("sum: {}", core.abus + core.barrelbus);
+                        core.aluop = 0b10 << (u & 0b1); /* if u==0 add else sub */
                         core.alu();
+                        println!("aluop: {}", core.aluop);
+                        println!("alubus: {}", core.alubus);
+                        println!("addrbus: {:08x}", core.addrbus);
                         None
                     },
                     1 => {
@@ -271,7 +320,9 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                             if b==1 { //byte or word quantity
                               bus.mem_write(core.addrbus as usize, core.reg.read(rd as usize) as u8); //byte
                             } else {
-                              bus.mem_write_32(core.addrbus as usize, core.reg.read(rd as usize));   //word
+                                println!("addrbus: 0x{:08x}", core.addrbus as usize);
+                                println!("Destination reg: 0x{:08x}", core.reg.read(rd as usize));
+                                bus.mem_write_32(core.addrbus as usize, core.reg.read(rd as usize));   //word
                             }
                             Some(true)
                             /* end of store */
@@ -280,9 +331,14 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                               core.reg.write(rn as usize, core.alubus);
                             }
                             if b==1 {
-                              core.datareg = bus.mem_read(core.addrbus as usize) as u32; //byte (zero extended)
+                                core.datareg = bus.mem_read(core.addrbus as usize) as u32; //byte (zero extended)
+                                println!("datareg written to with a byte value: 0x{:08x}", core.datareg);
                             } else {
-                              core.datareg = bus.mem_read_32(core.addrbus as usize); //word
+                                println!("addrbus: 0x{:08x}", core.addrbus);
+                                core.datareg = bus.mem_read_32(core.addrbus as usize); //word
+                                println!("datareg written to with word value: 0x{:08x}", core.datareg);
+                                println!("{}", core.addrbus);
+                                core.reg.write(rn as usize, core.datareg);
                             }
                             /* End of load unless rn = pc */
                             if rd == 15 { //source/dest is pc
@@ -292,6 +348,8 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         }
                     },
                     2 => {
+                        println!("0x{:08x}", rn);
+                        println!("0x{:08x}", core.datareg);
                         core.reg.write(rn as usize, core.datareg);
                         if rd == 15 {
                             None
@@ -508,7 +566,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                     _   =>  panic!("Undefined instructions do not have more than 4 cycles; Found {}", core.cycle+1)
                 }
             }
-            _   =>  panic!("Instruction {} not implemented", insttype)
+            //_   =>  panic!("Instruction {} not implemented", insttype)
         }
     } else {
         Some(false)

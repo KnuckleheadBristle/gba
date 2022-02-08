@@ -63,7 +63,7 @@ mod bus {
         }
 
         pub fn init_mem(&mut self) -> io::Result<()> {
-            let f = File::open("test_roms/arm.gba")?;
+            let f = File::open("../../gba-tests/arm/arm.gba")?;
             let mut reader = BufReader::new(f);
             let mut buffer = Vec::new();
             
@@ -116,7 +116,7 @@ mod tests {
 
         let mut old_inst = 0;
 
-        while instructions > 0 {
+        while instructions < 300 {
             let instruction = bus.mem_read_32(core.reg.gp[15] as usize);
             test_inst(&mut core, &mut bus, instruction);
             instructions -= 1;
@@ -129,7 +129,7 @@ mod tests {
             old_inst = instruction;
         }
 
-        assert_eq!(core.reg.gp[15], 404);
+        assert_eq!(core.reg.gp[12], 0);
     }
 
 }

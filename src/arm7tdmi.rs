@@ -215,6 +215,39 @@ impl Reg {
             _ => panic!("Mode {} does not exist", self.cpsr.mode)
         }
     }
+
+    pub fn read_psr(&mut self, a: u32) -> u32 {
+        return if a==0 {
+            self.cpsr
+        } else {
+            match self.cpsr.mode {
+                0 => self.cpsr,
+                1 => self.spsr_fiq,
+                2 => self.spsr_svc,
+                3 => self.spsr_abt,
+                4 => self.spsr_irq,
+                5 => self.spsr_und,
+                _ => panic!("Mode {} does not exist", self.cpsr.mode)
+            }
+        }.into();
+    }
+
+    pub fn write_psr(&mut self, a: u32, data: u32) {
+        let data: Status = data.into();
+        if a==0 {
+            self.cpsr = data;
+        } else {
+            match self.cpsr.mode {
+                0 => self.cpsr = data,
+                1 => self.spsr_fiq = data,
+                2 => self.spsr_svc = data,
+                3 => self.spsr_abt = data,
+                4 => self.spsr_irq = data,
+                5 => self.spsr_und = data,
+                _ => panic!("Mode {} does not exist", self.cpsr.mode)
+            };
+        }
+    }
 }
 
 impl fmt::Display for Reg {
@@ -397,7 +430,7 @@ impl Core {
             0xC =>  self.reg.cpsr.z == false && (self.reg.cpsr.n == self.reg.cpsr.v),   //If zero is cleared and negative equals half-carry
             0xD =>  self.reg.cpsr.z == true || (self.reg.cpsr.n != self.reg.cpsr.v),    //If zero is set or negative does not equal half-carry
             0xE =>  true,                                                               //Always
-            _   =>  panic!("Condition code: {} does not exist", code)                   //No more condition codes!
+            _   =>  false                                                               //No more condition codes! (never)
         } //return true if condition is met
     }
 

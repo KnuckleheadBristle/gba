@@ -2,9 +2,9 @@ use bitpat::bitpat;
 use std::fmt;
 
 /*
-This document provides the method for classifying instructions based on their type (pattern-matching) and the associated enums and functions associated with this process.
+This document provides the method for classifying instructions based on their type (pattern-matching) and the various enums and functions associated with this process.
 
-In addition there is a function for the conversion of Thumb instructions into ARM instructions, to be used when the processor is in Thumb mode.
+In addition there are facilities for converting thumb instructions into their ARM counterpart, used for when the processor is in thumb mode.
 */
 
 /* The different types of ARM instructions */
@@ -120,13 +120,19 @@ pub fn decode_thumb(inst: u16) -> ThumbInstType {
     {ThumbInstType::Undefined} // if nothing matches
 }
 
+pub fn decode_psr_transfer(inst: u32) -> u32 {
+    if bitpat!( _ _ _ _ 0 0 0 1 0 _ 0 0 1 1 1 1 _ _ _ _ 0 0 0 0 0 0 0 0 0 0 0 0 )(inst) {0} else
+    if bitpat!( _ _ _ _ 0 0 0 1 0 _ 1 0 1 0 0 1 1 1 1 1 0 0 0 0 0 0 0 0 _ _ _ _ )(inst) {1} else
+    {2}
+}
+
 /* Translate a Thumb instruction into it's ARM equivalent */
 #[allow(dead_code)]
 pub fn translate_thumb(inst: u16) -> Option<u32> { /* output is Some(x) if there is an equivalent arm inst, otherwise None */
     let insttype = decode_thumb(inst);                  //getting the type of the instruction
     let mut op0: u32 = ((inst & 0x1800) >> 11) as u32;  //declaring all of the unique fields in each instruction
     let off5: u32 = ((inst & 0x7C0) >> 6) as u32;       //all of these are unsigned 32-bit to make things easier when merging fields
-    let mut rs: u32 = ((inst & 0x38) >> 3) as u32;      //some of these variables are writted to while decoding, so they need to be mutable
+    let mut rs: u32 = ((inst & 0x38) >> 3) as u32;      //some variables are written to while decoding, so they need to be mutable
     let mut rd0: u32 = (inst & 0x7) as u32;
     let i: u32 = ((inst & 0x400) >> 10) as u32;
     let op1: u32 = ((inst & 0x200) >> 9) as u32;
@@ -250,7 +256,9 @@ pub fn translate_thumb(inst: u16) -> Option<u32> { /* output is Some(x) if there
     }
 }
 
-fn instcond(inst: u32) -> String {
+/* Assorted disassembly functions */
+
+fn instcond(inst: u32) -> String { // Instruction condition
     let cond = inst >> 28;
     let condition = match cond {
         0x0 => "EQ",
@@ -268,7 +276,7 @@ fn instcond(inst: u32) -> String {
         0xC => "GT",
         0xD => "LE",
         0xE => "AL",
-        _   => panic!("Condition code 0xF does not exist")
+        _   => "UN" 
     };
     condition.to_string()
 }
@@ -296,7 +304,6 @@ fn dataop(inst: u32) -> String {
     opcode.to_string()
 }
 
-#[allow(dead_code)]
 pub fn disassemble_arm(inst: u32) -> String {
     let insttype = decode_arm(inst);
     let mut cond = instcond(inst);

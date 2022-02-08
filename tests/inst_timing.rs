@@ -110,7 +110,7 @@ mod tests {
         let mut core = arm7tdmi::Core::new();
         let mut bus = bus::Bus::new();
 
-        let instruction = 0xEB14A94C;
+        let instruction = 0xEB00004C;
         assert_eq!(test_inst(&mut core, &mut bus, instruction), 3);
     }
 
