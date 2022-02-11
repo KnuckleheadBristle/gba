@@ -185,7 +185,7 @@ impl Bus {
     }
 
     pub fn load_mem(&mut self) -> io::Result<()> {
-        let f = File::open("./gba_bios.bin")?;
+        let f = File::open("./gba_bios.gba")?;
         let mut reader = BufReader::new(f);
         let mut buffer = Vec::new();
 

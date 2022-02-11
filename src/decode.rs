@@ -120,6 +120,7 @@ pub fn decode_thumb(inst: u16) -> ThumbInstType {
     {ThumbInstType::Undefined} // if nothing matches
 }
 
+#[allow(dead_code)]
 pub fn decode_psr_transfer(inst: u32) -> u32 {
     if bitpat!( _ _ _ _ 0 0 0 1 0 _ 0 0 1 1 1 1 _ _ _ _ 0 0 0 0 0 0 0 0 0 0 0 0 )(inst) {0} else
     if bitpat!( _ _ _ _ 0 0 0 1 0 _ 1 0 1 0 0 1 1 1 1 1 0 0 0 0 0 0 0 0 _ _ _ _ )(inst) {1} else
@@ -356,10 +357,13 @@ pub fn disassemble_arm(inst: u32) -> String {
         },
         ArmInstType::SingleDataTransfer => {
             let instruction = if (inst >> 20) & 0b1 == 1 {"LDR"} else {"STR"};
+            let rn = (inst >> 16) & 0xf;
+            let rd = (inst >> 12) & 0xf;
+
             let t = if (inst >> 21) & 0b1 == 1 {"T"} else {""};
             let b = if (inst >> 22) & 0b1 == 1 {"B"} else {""};
 
-            return [instruction.to_string(), cond, b.to_string(), t.to_string()].concat()
+            return [instruction.to_string(), cond, b.to_string(), t.to_string(), " ".to_string(), rd.to_string(), " ".to_string(), rn.to_string()].concat()
         },
         ArmInstType::HalfwordDataTransferRegisterOffset | ArmInstType::HalfwordDataTransferImmediateOffset => {
             let instruction = if (inst >> 20) & 0b1 == 1 {"LDR"} else {"STR"};

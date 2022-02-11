@@ -232,6 +232,7 @@ impl Reg {
         }.into();
     }
 
+    #[allow(dead_code)]
     pub fn write_psr(&mut self, a: u32, data: u32) {
         let data: Status = data.into();
         if a==0 {

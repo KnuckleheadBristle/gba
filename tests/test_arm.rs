@@ -108,7 +108,6 @@ mod tests {
         println!("{:?}", bus.init_mem());
         
         core.reg.write(13, 0x007f0003);
-        core.reg.write(15, 0x00000008);
 
         let mut instructions = 200;
         

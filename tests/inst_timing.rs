@@ -120,14 +120,14 @@ mod tests {
         let mut bus = bus::Bus::new();
 
         /* Load register */
-        let instruction = 0xE5B222D5;
+        let instruction = 0xE5B22115;
         assert_eq!(test_inst(&mut core, &mut bus, instruction), 3);
 
-        let instruction = 0xE5B2F2D5; //dest=pc
+        let instruction = 0xE5B2F115; //dest=pc
         assert_eq!(test_inst(&mut core, &mut bus, instruction), 5);
 
         /* Store register */
-        let instruction = 0xE5A222D5;
+        let instruction = 0xE5A22115;
         assert_eq!(test_inst(&mut core, &mut bus, instruction), 2);
     }
 

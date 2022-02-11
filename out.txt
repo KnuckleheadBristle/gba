@@ -1,0 +1,4096 @@
+00000000  EA000018  b         0x68
+00000004  EA000004  b         0x1C
+00000008  EA00004C  b         0x140
+0000000C  EA000002  b         0x1C
+00000010  EA000001  b         0x1C
+00000014  EA000000  b         0x1C
+00000018  EA000042  b         0x128
+0000001C  E59FD1A0  ldr       sp,[pc,0x1A0]
+00000020  E92D5000  stmfd     sp!,{r12,lr}
+00000024  E14FC000  mrs       r12,spsr
+00000028  E10FE000  mrs       lr,cpsr
+0000002C  E92D5000  stmfd     sp!,{r12,lr}
+00000030  E3A0C302  mov       r12,0x8000000
+00000034  E5DCE09C  ldrb      lr,[r12,0x9C]
+00000038  E35E00A5  cmp       lr,0xA5
+0000003C  1A000004  bne       0x54
+00000040  05DCE0B4  ldrbeq    lr,[r12,0xB4]
+00000044  021EE080  andseq    lr,lr,0x80
+00000048  E28FE004  add       lr,=0x54
+0000004C  159FF220  ldrne     pc,[pc,0x220]
+00000050  059FF220  ldreq     pc,[pc,0x220]
+00000054  E59FD164  ldr       sp,[pc,0x164]
+00000058  E8BD5000  ldmfd     sp!,{r12,lr}
+0000005C  E169F00C  msr       spsr_fc,r12
+00000060  E8BD5000  ldmfd     sp!,{r12,lr}
+00000064  E25EF004  subs      pc,lr,0x4
+00000068  E35E0000  cmp       lr,0x0
+0000006C  03A0E004  moveq     lr,0x4
+00000070  E3A0C301  mov       r12,0x4000000
+00000074  E5DCC300  ldrb      r12,[r12,0x300]
+00000078  E33C0001  teq       r12,0x1
+0000007C  010FC000  mrseq     r12,cpsr
+00000080  038CC0C0  orreq     r12,r12,0xC0
+00000084  0129F00C  msreq     cpsr_fc,r12
+00000088  0AFFFFE3  beq       0x1C
+0000008C  E3A000DF  mov       r0,0xDF
+00000090  E129F000  msr       cpsr_fc,r0
+00000094  E3A04301  mov       r4,0x4000000
+00000098  E5C44208  strb      r4,[r4,0x208]
+0000009C  EB00000F  bl        0xE0
+000000A0  E28F0F96  add       r0,=0x300
+000000A4  E58D00FC  str       r0,[sp,0xFC]
+000000A8  E59F01CC  ldr       r0,[pc,0x1CC]
+000000AC  E28FE000  add       lr,=0xB4
+000000B0  E12FFF10  bx        r0
+000000B4  E3A04301  mov       r4,0x4000000
+000000B8  E5542006  ldrb      r2,[r4,-0x6]
+000000BC  EB000007  bl        0xE0
+000000C0  E3520000  cmp       r2,0x0
+000000C4  E9141FFF  ldmea     r4,{r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12}
+000000C8  13A0E402  movne     lr,0x2000000
+000000CC  03A0E302  moveq     lr,0x8000000
+000000D0  E3A0001F  mov       r0,0x1F
+000000D4  E129F000  msr       cpsr_fc,r0
+000000D8  E3A00000  mov       r0,0x0
+000000DC  E12FFF1E  bx        lr
+000000E0  E3A000D3  mov       r0,0xD3
+000000E4  E129F000  msr       cpsr_fc,r0
+000000E8  E59FD0D0  ldr       sp,[pc,0xD0]
+000000EC  E3A0E000  mov       lr,0x0
+000000F0  E169F00E  msr       spsr_fc,lr
+000000F4  E3A000D2  mov       r0,0xD2
+000000F8  E129F000  msr       cpsr_fc,r0
+000000FC  E59FD0B8  ldr       sp,[pc,0xB8]
+00000100  E3A0E000  mov       lr,0x0
+00000104  E169F00E  msr       spsr_fc,lr
+00000108  E3A0005F  mov       r0,0x5F
+0000010C  E129F000  msr       cpsr_fc,r0
+00000110  E59FD0A0  ldr       sp,[pc,0xA0]
+00000114  E28F0001  add       r0,=0x11D
+00000118  E12FFF10  bx        r0
+0000011C  49582000  ldmeami   r8,{sp}^
+00000120  1D095060  Undefined
+00000124  4770DBFC  Undefined
+00000128  E92D500F  stmfd     sp!,{r0,r1,r2,r3,r12,lr}
+0000012C  E3A00301  mov       r0,0x4000000
+00000130  E28FE000  add       lr,=0x138
+00000134  E510F004  ldr       pc,[r0,-0x4]
+00000138  E8BD500F  ldmfd     sp!,{r0,r1,r2,r3,r12,lr}
+0000013C  E25EF004  subs      pc,lr,0x4
+00000140  E92D5800  stmfd     sp!,{r11,r12,lr}
+00000144  E55EC002  ldrb      r12,[lr,-0x2]
+00000148  E28FB078  add       r11,=0x1C8
+0000014C  E79BC10C  ldr       r12,[r11,r12,lsl 0x2]
+00000150  E14FB000  mrs       r11,spsr
+00000154  E92D0800  stmfd     sp!,{r11}
+00000158  E20BB080  and       r11,r11,0x80
+0000015C  E38BB01F  orr       r11,r11,0x1F
+00000160  E129F00B  msr       cpsr_fc,r11
+00000164  E92D4004  stmfd     sp!,{r2,lr}
+00000168  E28FE000  add       lr,=0x170
+0000016C  E12FFF1C  bx        r12
+00000170  E8BD4004  ldmfd     sp!,{r2,lr}
+00000174  E3A0C0D3  mov       r12,0xD3
+00000178  E129F00C  msr       cpsr_fc,r12
+0000017C  E8BD0800  ldmfd     sp!,{r11}
+00000180  E169F00B  msr       spsr_fc,r11
+00000184  E8BD5800  ldmfd     sp!,{r11,r12,lr}
+00000188  E1B0F00E  movs      pc,lr
+0000018C  E3A0C301  mov       r12,0x4000000
+00000190  E3A02004  mov       r2,0x4
+00000194  E5CC2001  strb      r2,[r12,0x1]
+00000198  E3A02008  mov       r2,0x8
+0000019C  E5CC2000  strb      r2,[r12,0x0]
+000001A0  E3A02000  mov       r2,0x0
+000001A4  EA000000  b         0x1AC
+000001A8  E3A02080  mov       r2,0x80
+000001AC  E3A0C301  mov       r12,0x4000000
+000001B0  E5CC2301  strb      r2,[r12,0x301]
+000001B4  E12FFF1E  bx        lr
+000001B8  03007F00  mrseq     r7,cpsr
+000001BC  03007FA0  mrseq     r7,cpsr
+000001C0  03007FE0  mrseq     r7,cpsr
+000001C4  03007FF0  mrseq     r7,cpsr
+000001C8  000000B4  strheq    r0,[r0-],r4
+000001CC  000009C3  andeq     r0,r0,r3,asr 0x13
+000001D0  000001A0  andeq     r0,r0,r0,lsr 0x3
+000001D4  000001A8  andeq     r0,r0,r8,lsr 0x3
+000001D8  00000330  andeq     r0,r0,r0,lsr r3
+000001DC  00000328  andeq     r0,r0,r8,lsr 0x6
+000001E0  000003B4  strheq    r0,[r0-],r4
+000001E4  000003A8  andeq     r0,r0,r8,lsr 0x7
+000001E8  00000404  andeq     r0,r0,r4,lsl 0x8
+000001EC  00000474  andeq     r0,r0,r4,ror r4
+000001F0  000004FD  strsheq   r0,[r0-],sp
+000001F4  00000B4D  andeq     r0,r0,sp,asr 0x16
+000001F8  00000BC4  andeq     r0,r0,r4,asr 0x17
+000001FC  00000378  andeq     r0,r0,r8,ror r3
+00000200  00000C2C  andeq     r0,r0,r12,lsr 0x18
+00000204  00000CE0  andeq     r0,r0,r0,ror 0x19
+00000208  00000F60  andeq     r0,r0,r0,ror 0x1E
+0000020C  000010FC  strsheq   r1,[r0-],r12
+00000210  00001194  muleq     r0,r1,r1
+00000214  00001014  andeq     r1,r0,r4,lsl r0
+00000218  00001279  andeq     r1,r0,r9,ror r2
+0000021C  000012C1  andeq     r1,r0,r1,asr 0x5
+00000220  00001333  andeq     r1,r0,r3,lsr r3
+00000224  0000135D  andeq     r1,r0,sp,asr r3
+00000228  00001399  muleq     r0,r1,r3
+0000022C  00000801  andeq     r0,r0,r1,lsl 0x10
+00000230  00001665  andeq     r1,r0,r5,ror 0xC
+00000234  0000179D  muleq     r0,r1,r7
+00000238  00001DC5  andeq     r1,r0,r5,asr 0x1B
+0000023C  0000210D  andeq     r2,r0,sp,lsl 0x2
+00000240  00001825  andeq     r1,r0,r5,lsr 0x10
+00000244  000018D9  strsbeq   r1,[r0-],r9
+00000248  000013C5  andeq     r1,r0,r5,asr 0x7
+0000024C  00001435  andeq     r1,r0,r5,lsr r4
+00000250  000014C1  andeq     r1,r0,r1,asr 0x9
+00000254  000014FD  strsheq   r1,[r0-],sp
+00000258  00001515  andeq     r1,r0,r5,lsl r5
+0000025C  000028CF  andeq     r2,r0,pc,asr 0x11
+00000260  0000008C  andeq     r0,r0,r12,lsl 0x1
+00000264  000001AC  andeq     r0,r0,r12,lsr 0x3
+00000268  00001879  andeq     r1,r0,r9,ror r8
+0000026C  000018C9  andeq     r1,r0,r9,asr 0x11
+00000270  00002693  muleq     r0,r2,r6
+00000274  09FE2000  ldmedeq   lr!,{sp}^
+00000278  09FFC000  ldmedeq   pc!,{lr,pc}^
+0000027C  00001929  andeq     r1,r0,r9,lsr 0x12
+00000280  FFFFFE00  swi       Unknown
+00000284  06242404  streq     r2,[r4],-r4,lsl 0x8
+00000288  062D2505  streq     r2,[sp],-r5,lsl 0xA
+0000028C  06362606  ldreq     r2,[r6],-r6,lsl 0xC
+00000290  20C22100  sbccs     r2,r2,r0,lsl 0x2
+00000294  32801C22  addcc     r1,r0,0x2200
+00000298  72507090  subsvc    r7,r0,0x90
+0000029C  1C8020FF  Undefined
+000002A0  239022A0  orrscs    r2,r0,0xA
+000002A4  27F09600  ldrbcs    r9,[r0,r0,lsl 0xC]!
+000002A8  F0009701  andnv     r9,r0,r1,lsl 0xE
+000002AC  2083FA78  addcs     pc,r3,r8,ror r10
+000002B0  81A001C0  movhi     r0,r0,asr 0x3
+000002B4  62A0480F  adcvs     r4,r0,0xF0000
+000002B8  02C01400  sbceq     r1,r0,0x0
+000002BC  4B0E62E0  blmi      0x398E44
+000002C0  882B602B  stmedhi   r11!,{r0,r1,r3,r5,sp,lr}
+000002C4  0C624F0D  Undefined
+000002C8  80571912  subshi    r1,r7,r2,lsl r9
+000002CC  FA20F003  bnv       0x83C2E0
+000002D0  70602004  rsbvc     r2,r0,r4
+000002D4  1BDB7020  blne      0xFF6DC35C
+000002D8  DCF4802B  Undefined
+000002DC  900243C8  andls     r4,r2,r8,asr 0x7
+000002E0  A90234D4  stmfdge   r2,{r2,r4,r6,r7,r10,r12,sp}
+000002E4  60666021  rsbvs     r6,r6,r1
+000002E8  60A14901  adcvs     r4,r1,r1,lsl 0x12
+000002EC  FA14F003  bnv       0x53C300
+000002F0  85006000  strhi     r6,[r0,-0x0]
+000002F4  FFFFD800  swi       Unknown
+000002F8  7FFF7BDE  swi       Unknown
+000002FC  00000C63  andeq     r0,r0,r3,ror 0x18
+00000300  E3A03301  mov       r3,0x4000000
+00000304  E5932200  ldr       r2,[r3,0x200]
+00000308  E0022822  and       r2,r2,r2,lsr 0x10
+0000030C  E2121080  ands      r1,r2,0x80
+00000310  159F07A0  ldrne     r0,[pc,0x7A0]
+00000314  02021001  andeq     r1,r2,0x1
+00000318  059F079C  ldreq     r0,[pc,0x79C]
+0000031C  014320B8  strheq    r2,[r3,-0x8]
+00000320  E5C31202  strb      r1,[r3,0x202]
+00000324  E12FFF10  bx        r0
+00000328  E3A00001  mov       r0,0x1
+0000032C  E3A01001  mov       r1,0x1
+00000330  E92D4010  stmfd     sp!,{r4,lr}
+00000334  E3A03000  mov       r3,0x0
+00000338  E3A04001  mov       r4,0x1
+0000033C  E3500000  cmp       r0,0x0
+00000340  1B000004  blne      0x358
+00000344  E5CC3301  strb      r3,[r12,0x301]
+00000348  EB000002  bl        0x358
+0000034C  0AFFFFFC  beq       0x344
+00000350  E8BD4010  ldmfd     sp!,{r4,lr}
+00000354  E12FFF1E  bx        lr
+00000358  E3A0C301  mov       r12,0x4000000
+0000035C  E5CC3208  strb      r3,[r12,0x208]
+00000360  E15C20B8  ldrh      r2,[r12,-0x8]
+00000364  E0110002  ands      r0,r1,r2
+00000368  10222000  eorne     r2,r2,r0
+0000036C  114C20B8  strhne    r2,[r12,-0x8]
+00000370  E5CC4208  strb      r4,[r12,0x208]
+00000374  E12FFF1E  bx        lr
+00000378  E3A00000  mov       r0,0x0
+0000037C  E3A03000  mov       r3,0x0
+00000380  E3A0C0DF  mov       r12,0xDF
+00000384  E8B30004  ldmfd     r3!,{r2}
+00000388  E129F00C  msr       cpsr_fc,r12
+0000038C  E0800002  add       r0,r0,r2
+00000390  E1B01723  movs      r1,r3,lsr 0xE
+00000394  0AFFFFF9  beq       0x380
+00000398  E12FFF1E  bx        lr
+0000039C  DC002800  Undefined
+000003A0  47704240  ldrbmi    r4,[r0,-r0,asr 0x4]!
+000003A4  4718A303  ldrmi     r10,[r8,-r3,lsl 0x6]
+000003A8  E1A03000  mov       r3,r0
+000003AC  E1A00001  mov       r0,r1
+000003B0  E1A01003  mov       r1,r3
+000003B4  E2113102  ands      r3,r1,0x80000000
+000003B8  42611000  rsbmi     r1,r1,0x0
+000003BC  E033C040  eors      r12,r3,r0
+000003C0  22600000  rsbcs     r0,r0,0x0
+000003C4  E1B02001  movs      r2,r1
+000003C8  E15200A0  cmp       r2,r0,lsr 0x1
+000003CC  91A02082  movls     r2,r2,lsl 0x1
+000003D0  3AFFFFFC  bcc       0x3C8
+000003D4  E1500002  cmp       r0,r2
+000003D8  E0A33003  adc       r3,r3,r3
+000003DC  20400002  subcs     r0,r0,r2
+000003E0  E1320001  teq       r2,r1
+000003E4  11A020A2  movne     r2,r2,lsr 0x1
+000003E8  1AFFFFF9  bne       0x3D4
+000003EC  E1A01000  mov       r1,r0
+000003F0  E1A00003  mov       r0,r3
+000003F4  E1B0C08C  movs      r12,r12,lsl 0x1
+000003F8  22600000  rsbcs     r0,r0,0x0
+000003FC  42611000  rsbmi     r1,r1,0x0
+00000400  E12FFF1E  bx        lr
+00000404  E92D0010  stmfd     sp!,{r4}
+00000408  E1A0C000  mov       r12,r0
+0000040C  E3A01001  mov       r1,0x1
+00000410  E1500001  cmp       r0,r1
+00000414  81A000A0  movhi     r0,r0,lsr 0x1
+00000418  81A01081  movhi     r1,r1,lsl 0x1
+0000041C  8AFFFFFB  bhi       0x410
+00000420  E1A0000C  mov       r0,r12
+00000424  E1A04001  mov       r4,r1
+00000428  E3A03000  mov       r3,0x0
+0000042C  E1A02001  mov       r2,r1
+00000430  E15200A0  cmp       r2,r0,lsr 0x1
+00000434  91A02082  movls     r2,r2,lsl 0x1
+00000438  3AFFFFFC  bcc       0x430
+0000043C  E1500002  cmp       r0,r2
+00000440  E0A33003  adc       r3,r3,r3
+00000444  20400002  subcs     r0,r0,r2
+00000448  E1320001  teq       r2,r1
+0000044C  11A020A2  movne     r2,r2,lsr 0x1
+00000450  1AFFFFF9  bne       0x43C
+00000454  E0811003  add       r1,r1,r3
+00000458  E1B010A1  movs      r1,r1,lsr 0x1
+0000045C  E1510004  cmp       r1,r4
+00000460  3AFFFFEE  bcc       0x420
+00000464  E1A00004  mov       r0,r4
+00000468  E8BD0010  ldmfd     sp!,{r4}
+0000046C  E12FFF1E  bx        lr
+00000470  4718A300  ldrmi     r10,[r8,-r0,lsl 0x6]
+00000474  E0010090  mul       r1,r0,r0
+00000478  E1A01741  mov       r1,r1,asr 0xE
+0000047C  E2611000  rsb       r1,r1,0x0
+00000480  E3A030A9  mov       r3,0xA9
+00000484  E0030391  mul       r3,r0,r3
+00000488  E1A03743  mov       r3,r3,asr 0xE
+0000048C  E2833E39  add       r3,r3,0x390
+00000490  E0030391  mul       r3,r0,r3
+00000494  E1A03743  mov       r3,r3,asr 0xE
+00000498  E2833C09  add       r3,r3,0x900
+0000049C  E283301C  add       r3,r3,0x1C
+000004A0  E0030391  mul       r3,r0,r3
+000004A4  E1A03743  mov       r3,r3,asr 0xE
+000004A8  E2833C0F  add       r3,r3,0xF00
+000004AC  E28330B6  add       r3,r3,0xB6
+000004B0  E0030391  mul       r3,r0,r3
+000004B4  E1A03743  mov       r3,r3,asr 0xE
+000004B8  E2833C16  add       r3,r3,0x1600
+000004BC  E28330AA  add       r3,r3,0xAA
+000004C0  E0030391  mul       r3,r0,r3
+000004C4  E1A03743  mov       r3,r3,asr 0xE
+000004C8  E2833A02  add       r3,r3,0x2000
+000004CC  E2833081  add       r3,r3,0x81
+000004D0  E0030391  mul       r3,r0,r3
+000004D4  E1A03743  mov       r3,r3,asr 0xE
+000004D8  E2833C36  add       r3,r3,0x3600
+000004DC  E2833051  add       r3,r3,0x51
+000004E0  E0030391  mul       r3,r0,r3
+000004E4  E1A03743  mov       r3,r3,asr 0xE
+000004E8  E2833CA2  add       r3,r3,0xA200
+000004EC  E28330F9  add       r3,r3,0xF9
+000004F0  E0000093  mul       r0,r0,r0
+000004F4  E1A00840  mov       r0,r0,asr 0x10
+000004F8  E12FFF1E  bx        lr
+000004FC  2900B5F0  stmfdcs   r0,{r4,r5,r6,r7,r8,r10,r12,sp,pc}
+00000500  2800D106  stmedcs   r0,{r1,r2,r8,r12,lr,pc}
+00000504  2000DB01  andcs     sp,r0,r1,lsl 0x16
+00000508  2080E049  addcs     lr,r0,r9
+0000050C  E0460200  sub       r0,r6,r0,lsl 0x4
+00000510  D1072800  mrsle     r2,cpsr
+00000514  DB022900  blle      0x8A91C
+00000518  02002040  andeq     r2,r0,0x40
+0000051C  20C0E03F  sbccs     lr,r0,pc,lsr r0
+00000520  E03C0200  eors      r0,r12,r0,lsl 0x4
+00000524  03921C02  orrseq    r1,r2,0x200
+00000528  039B1C0B  orrseq    r1,r11,0xB00
+0000052C  424D4244  submi     r4,sp,0x40000004
+00000530  02362640  eorseq    r2,r6,0x4000000
+00000534  29000077  stmfdcs   r0,{r0,r1,r2,r4,r5,r6}
+00000538  2800DB1B  stmedcs   r0,{r0,r1,r3,r4,r8,r9,r11,r12,lr,pc}
+0000053C  4288DB0F  addmi     sp,r8,0x3C00
+00000540  1C01DB06  Undefined
+00000544  F7FF1C18  Undefined
+00000548  F7FFFF2D  ldrbnv    pc,[pc,sp,lsr 0x1E]!
+0000054C  E026FF91  mla       r6,pc,pc,r1
+00000550  F7FF1C10  Undefined
+00000554  F7FFFF27  ldrbnv    pc,[pc,r7,lsr 0x1E]!
+00000558  1A30FF8B  bne       0xC4038C
+0000055C  428CE01F  addmi     lr,r12,0x1F
+00000560  1C01DBF6  Undefined
+00000564  F7FF1C18  Undefined
+00000568  F7FFFF1D  Undefined
+0000056C  1838FF81  ldmfane   r8!,{r0,r7,r8,r9,r10,r11,r12,sp,lr,pc}
+00000570  2800E015  stmedcs   r0,{r0,r2,r4,sp,lr,pc}
+00000574  42ACDC09  adcmi     sp,r12,0x900
+00000578  1C10DCF3  Undefined
+0000057C  FF12F7FF  swi       LZ77UnCompVram
+00000580  FF76F7FF  swi       Unknown
+00000584  1A3019F6  bne       0xC06D64
+00000588  42A8E009  adcmi     lr,r8,0x9
+0000058C  1C01DBF5  Undefined
+00000590  F7FF1C18  Undefined
+00000594  F7FFFF07  ldrbnv    pc,[pc,r7,lsl 0x1E]!
+00000598  19FFFF6B  ldmedne   pc!,{r0,r1,r3,r5,r6,r8,r9,r10,r11,r12,sp,lr,pc}^
+0000059C  BCF01838  Undefined
+000005A0  4718BC08  ldrmi     r11,[r8,-r8,lsl 0x18]
+000005A4  2608B578  Undefined
+000005A8  259E0636  ldrcs     r0,[lr,0x636]
+000005AC  1E6819AD  Undefined
+000005B0  F000211B  andnv     r2,r0,r11,lsl r1
+000005B4  240CF87B  strcs     pc,[r12],-0x87B
+000005B8  782B4344  stmedvc   r11!,{r2,r6,r8,r9,lr}
+000005BC  0F9B079B  swi       Unknown
+000005C0  435A2230  cmpmi     r10,0x3
+000005C4  A50918A4  strge     r1,[r9,-0x8A4]
+000005C8  2400192D  strcs     r1,[r0],-0x92D
+000005CC  F0001C20  andnv     r1,r0,r0,lsr 0x18
+000005D0  2C03F87E  Undefined
+000005D4  2C09DB06  Undefined
+000005D8  8829DA04  stmedhi   r9!,{r2,r9,r11,r12,lr,pc}
+000005DC  43310049  teqmi     r1,0x49
+000005E0  1CAD8808  Undefined
+000005E4  2C0B1C64  Undefined
+000005E8  BD78D1F0  Undefined
+000005EC  7426479B  strvc     r4,[r6],-0x79B
+000005F0  6D4F11BC  Undefined
+000005F4  32F111BD  rscscc    r1,r1,0x4000002F
+000005F8  2CE77FD9  Undefined
+000005FC  11BD5DA5  movsne    r5,r5,lsr 0x1B
+00000600  5DA44610  Undefined
+00000604  61734E90  Undefined
+00000608  4E912A84  Undefined
+0000060C  75FE106A  ldrbvc    r1,[lr,0x6A]!
+00000610  783929C8  ldmfavc   r9!,{r3,r6,r7,r8,r11,sp}
+00000614  5D1B420E  Undefined
+00000618  12A87838  adcne     r7,r8,0x380000
+0000061C  67B93F7D  Undefined
+00000620  54EF26F3  strbpl    r2,[pc],0x6F3
+00000624  26F27C23  ldrbcs    r7,[r2],r3,lsr 0x18
+00000628  41376BC6  teqmi     r7,r6,asr 0x17
+0000062C  730D15AB  mrsvc     r1,cpsr
+00000630  3B4F6BC7  blcc      0x13DB554
+00000634  3DDA5F24  Undefined
+00000638  1749253F  Undefined
+0000063C  70E63DDB  strsbvc   r3,[r6],0xDB
+00000640  30F7746C  rscscc    r7,r7,r12,ror 0x8
+00000644  6738531F  Undefined
+00000648  1A51531E  bne       0x14552C8
+0000064C  5B7D1971  blpl      0x1F46C18
+00000650  19704ED6  ldmeane   r0!,{r1,r2,r4,r6,r7,r9,r10,r11,lr}^
+00000654  75CB3F27  strbvc    r3,[r11,0xF27]
+00000658  128C3D62  addne     r3,r12,0x1880
+0000065C  2FAD74B8  swi       Unknown
+00000660  64FD74B9  ldrbvs    r7,[sp],0x4B9
+00000664  4F3A6C9A  swi       Unknown
+00000668  73EF276D  mvnvc     r2,0x1B40000
+0000066C  4F3B38B1  swi       Unknown
+00000670  7EA3571E  Undefined
+00000674  35876249  strcc     r6,[r7,0x249]
+00000678  35861B7C  strcc     r1,[r6,0xB7C]
+0000067C  67E47AFB  Undefined
+00000680  67E55C92  Undefined
+00000684  438C2BCA  orrmi     r2,r12,0x32800
+00000688  587F2E6F  ldmfapl   pc!,{r0,r1,r2,r3,r5,r6,r9,r10,r11,sp}^
+0000068C  2E6E14B7  Undefined
+00000690  6FA24CB9  swi       Unknown
+00000694  719E38F0  ldrshvc   r3,[lr,r0]
+00000698  1F3C475A  swi       Unknown
+0000069C  475B6AD8  Undefined
+000006A0  32645199  rsbcc     r5,r4,0x40000026
+000006A4  49EF7B41  stmfami   pc!,{r0,r6,r8,r9,r11,r12,sp,lr}^
+000006A8  1CD75198  Undefined
+000006AC  2403B530  strcs     r11,[r3],-0x530
+000006B0  78022300  stmedvc   r2,{r8,r9,sp}
+000006B4  250441E3  strcs     r4,[r4,-0x1E3]
+000006B8  02124053  andseq    r4,r2,0x53
+000006BC  DCFB1E6D  Undefined
+000006C0  1E491C40  Undefined
+000006C4  1C18DCF5  Undefined
+000006C8  0F8006C0  swi       Unknown
+000006CC  B510BD30  ldrlt     r11,[r0,-0xD30]
+000006D0  43442414  mrsmi     r2,spsr
+000006D4  061B2308  ldreq     r2,[r11],-r8,lsl 0x6
+000006D8  19001D18  stmfdne   r0,{r3,r4,r8,r10,r11,r12}
+000006DC  190949F8  stmfdne   r9,{r3,r4,r5,r6,r7,r8,r11,lr}
+000006E0  F000220A  andnv     r2,r0,r10,lsl 0x4
+000006E4  BD10FA33  Undefined
+000006E8  49F6B570  ldmedmi   r6!,{r4,r5,r6,r8,r10,r12,sp,pc}^
+000006EC  24FF2600  ldrbcs    r2,[pc],0x600
+000006F0  D1002E98  swple     r2,r8,[r0]
+000006F4  2E9A247B  Undefined
+000006F8  24FCD100  ldrbcs    sp,[r12],0x100
+000006FC  DA062E9C  ble       0x18C174
+00000700  5D8B5D82  Undefined
+00000704  1C764022  Undefined
+00000708  D0F0429A  smlalsle  r4,r0,r2,r10
+0000070C  2419E009  ldrcs     lr,[r9],-0x9
+00000710  18A45D82  stmeane   r4!,{r1,r7,r8,r10,r11,r12,lr}
+00000714  2EBA1C76  Undefined
+00000718  0620DBFA  Undefined
+0000071C  2000D101  andcs     sp,r0,r1,lsl 0x2
+00000720  2001E000  andcs     lr,r1,r0
+00000724  4BE8BD70  blmi      0xFFA2FCEC
+00000728  207E2208  rsbscs    r2,lr,r8,lsl 0x4
+0000072C  50984240  addspl    r4,r8,r0,asr 0x4
+00000730  2A783210  bcs       0x1E0CF78
+00000734  4770DBFB  Undefined
+00000738  1EC3B540  Undefined
+0000073C  4356009E  cmpmi     r6,0x9E
+00000740  1A9B2340  bne       0xFE6C9448
+00000744  1EC0435E  Undefined
+00000748  43432318  mrsmi     r2,spsr
+0000074C  1AF6021B  bne       0xFFD80FC0
+00000750  2A2F600E  bcs       0xBD8790
+00000754  261ADC07  ldrcs     sp,[r10],-r7,lsl 0x18
+00000758  3A484356  bcc       0x12114B8
+0000075C  23684356  msrcs     spsr_f,0x58000001
+00000760  18F6021B  ldmfdne   r6!,{r0,r1,r3,r4,r9}^
+00000764  BD40604E  Undefined
+00000768  1C0FB5F0  Undefined
+0000076C  3680C870  Undefined
+00000770  20801C31  addcs     r1,r0,r1,lsr r12
+00000774  F7FF0400  ldrbnv    r0,[pc,r0,lsl 0x8]!
+00000778  0073FE15  rsbseq    pc,r3,r5,lsl lr
+0000077C  81FB81BB  ldrhhi    r8,[r11,0x1B]!
+00000780  01C9217F  biceq     r2,r9,pc,ror r1
+00000784  60796039  rsbsvs    r6,r9,r9,lsr r0
+00000788  43411221  mrsmi     r1,spsr
+0000078C  31781409  cmncc     r8,r9,lsl 0x8
+00000790  12298139  eorne     r8,r9,0x4000000E
+00000794  14094341  strne     r4,[r9],-0x341
+00000798  81793150  cmnhi     r9,r0,asr r1
+0000079C  B5F0BDF0  ldrblt    r11,[r0,0xDF0]!
+000007A0  9D069C05  Undefined
+000007A4  26002700  strcs     r2,[r0],-r0,lsl 0xE
+000007A8  184053A0  stmedne   r0,{r5,r7,r8,r9,r12,lr}^
+000007AC  42961CB6  addsmi    r1,r6,0xB600
+000007B0  1964DBFA  stmfdne   r4!,{r1,r3,r4,r5,r6,r7,r8,r9,r11,r12,lr,pc}^
+000007B4  429F1C7F  addsmi    r1,=0x86BC
+000007B8  BDF0DBF5  Undefined
+000007BC  2702B5F0  Undefined
+000007C0  00434CC2  subeq     r4,r3,r2,asr 0x19
+000007C4  19DB181B  ldmedne   r11,{r0,r1,r3,r4,r11,r12}^
+000007C8  191B009B  ldmeane   r11,{r0,r1,r3,r4,r7}
+000007CC  691E685D  ldmeavs   lr,{r0,r2,r3,r4,r6,r11,sp,lr}
+000007D0  1A5B2320  bne       0x16C9458
+000007D4  434E436B  mrsmi     r4,spsr
+000007D8  095C199B  ldmeaeq   r12,{r0,r1,r3,r4,r7,r8,r11,r12}^
+000007DC  0533261F  ldreq     r2,[r3,-0x61F]!
+000007E0  0A9D4023  beq       0xFE750874
+000007E4  402302B3  strhmi    r0,[r3-],r3
+000007E8  432B095B  msrmi     cpsr_fxc,0x16C000
+000007EC  431C4034  tstmi     r12,0x34
+000007F0  005E19D3  ldrsbeq   r1,[lr-],0x93
+000007F4  18F34BB6  ldmfdne   r3!,{r1,r2,r4,r5,r7,r8,r9,r11,lr}^
+000007F8  1E7F801C  Undefined
+000007FC  BDF0DAE0  Undefined
+00000800  02092102  andeq     r2,r9,0x80000000
+00000804  4BB3468C  blmi      0xFECD223C
+00000808  4BB2881A  blmi      0xFECA2878
+0000080C  0D890591  Undefined
+00000810  D0032800  andle     r2,r3,r0,lsl 0x10
+00000814  DA094561  ble       0x251DA0
+00000818  E0021C92  mul       r2,r1,r12
+0000081C  DD052900  Undefined
+00000820  801A1E92  mulshi    r10,r1,lr
+00000824  1E522208  Undefined
+00000828  E7E9D5FD  Undefined
+0000082C  49AA4770  stmfami   r10!,{r4,r5,r6,r8,r9,r10,lr}
+00000830  01122237  tsteq     r2,r7,lsr r2
+00000834  E00F48A9  and       r4,pc,r9,lsr 0x11
+00000838  222449A7  eorcs     r4,r4,0x29C000
+0000083C  E00B48A8  and       r4,r11,r8,lsr 0x11
+00000840  06092107  streq     r2,[r9],-r7,lsl 0x2
+00000844  48A72250  stmeami   r7!,{r4,r6,r9,sp}
+00000848  49A7E006  stmfami   r7!,{r1,r2,sp,lr,pc}
+0000084C  D0012800  andle     r2,r1,r0,lsl 0x10
+00000850  18090240  stmedne   r9,{r6,r9}
+00000854  48A52208  stmeami   r5!,{r3,r9,sp}
+00000858  1852B530  ldmfane   r2,{r4,r5,r8,r10,r12,sp,pc}^
+0000085C  42984B9B  addsmi    r4,r8,0x26C00
+00000860  2304DB07  mrscs     sp,cpsr
+00000864  4298031B  addsmi    r0,r8,0x6C000000
+00000868  C808DA03  stmedgt   r8,{r0,r1,r9,r11,r12,lr,pc}
+0000086C  4291C108  addsmi    r12,r1,0x2
+00000870  BD30DBF4  Undefined
+00000874  B085B5F0  strshlt   r11,[r5],r0
+00000878  C9A0499D  stmfagt   r0!,{r0,r2,r3,r4,r7,r8,r11,lr}
+0000087C  C0A0A802  adcgt     r10,r0,r2,lsl 0x10
+00000880  4B9D489C  blmi      0xFE752AF8
+00000884  09DB781B  ldmedeq   r11,{r0,r1,r3,r4,r11,r12,sp,lr}^
+00000888  489CD100  ldmfdmi   r12,{r8,r12,lr,pc}
+0000088C  220A4992  andcs     r4,r10,0x248000
+00000890  F95CF000  ldmeanv   r12,{r12,sp,lr,pc}^
+00000894  FE86F7FF  Undefined
+00000898  1C0B4989  Undefined
+0000089C  781833AE  ldmfavc   r8,{r1,r2,r3,r5,r7,r8,r9,r12,sp}
+000008A0  D0052896  mulle     r5,r2,r8
+000008A4  17D34A96  Undefined
+000008A8  A8049304  stmedge   r4,{r2,r8,r9,r12,pc}
+000008AC  F94EF000  stmfdnv   lr,{r12,sp,lr,pc}^
+000008B0  FFBDF7FF  swi       Unknown
+000008B4  49934888  ldmedmi   r3,{r3,r7,r11,lr}
+000008B8  FBAAF000  blnv      0xFEABC8C0
+000008BC  49864891  stmfami   r6,{r0,r4,r7,r11,lr}
+000008C0  FC1AF000  Undefined
+000008C4  00B82700  adcseq    r2,r8,r0,lsl 0xE
+000008C8  4A839003  bmi       0xFE0E48DC
+000008CC  18800238  stmeane   r0,{r3,r4,r5,r9}
+000008D0  02B94B8D  adcseq    r4,r9,0x23400
+000008D4  AA0218C9  bge       0x86C00
+000008D8  FB40F000  blnv      0x103C8E0
+000008DC  2F081C7F  swi       Sqrt
+000008E0  270EDBF1  Undefined
+000008E4  4B882403  blmi      0xFE2098F8
+000008E8  19000078  stmfdne   r0,{r3,r4,r5,r6}
+000008EC  18C00200  stmeane   r0,{r9}^
+000008F0  5BDA4B86  blpl      0xFF693710
+000008F4  01214B86  msreq     cpsr_c,r6
+000008F8  01891889  orreq     r1,r9,r9,lsl 0x11
+000008FC  228018C9  addcs     r1,r0,0xC90000
+00000900  F924F000  stmfdnv   r4!,{r12,sp,lr,pc}
+00000904  DAEE1E64  ble       0xFFB8829C
+00000908  DAEB1EBF  ble       0xFFAC840C
+0000090C  F000486C  andnv     r4,r0,r12,ror 0x10
+00000910  F000F81C  andnv     pc,r0,r12,lsl r8
+00000914  F000F82F  andnv     pc,r0,pc,lsr 0x10
+00000918  2220F834  eorcs     pc,r0,0x340000
+0000091C  497D9201  ldmeami   sp!,{r0,r9,r12,pc}^
+00000920  23049100  mrscs     r9,cpsr
+00000924  497C2204  ldmeami   r12!,{r2,r9,sp}^
+00000928  F7FF487C  Undefined
+0000092C  2105FF38  mrscs     pc,cpsr
+00000930  43C80609  bicmi     r0,r8,0x900000
+00000934  20008008  andcs     r8,r0,r8
+00000938  FF87F7FF  swi       Unknown
+0000093C  F7FF2001  ldrbnv    r2,[pc,r1]!
+00000940  F7FFFF84  ldrbnv    pc,[pc,r4,lsl 0x1F]!
+00000944  B005FF7D  andlt     pc,r5,sp,ror pc
+00000948  B5F1BDF0  ldrblt    r11,[r1,0xDF0]!
+0000094C  70204C74  eorvc     r4,r0,r4,ror r12
+00000950  FF72F7FF  swi       Unknown
+00000954  49739800  ldmeami   r3!,{r11,r12,pc}^
+00000958  F000224E  andnv     r2,r0,lr,asr 0x4
+0000095C  485EF8F7  ldmfami   lr,{r0,r1,r2,r4,r5,r6,r7,r11,r12,sp,lr,pc}^
+00000960  F0004968  andnv     r4,r0,r8,ror 0x12
+00000964  4867FB55  stmedmi   r7!,{r0,r2,r4,r6,r8,r9,r11,r12,sp,lr,pc}^
+00000968  60024A6F  andvs     r4,r2,pc,ror 0x14
+0000096C  F000495A  andnv     r4,r0,r10,asr r9
+00000970  BDF1FD13  Undefined
+00000974  4858B5F1  ldmfami   r8,{r0,r4,r5,r6,r7,r8,r10,r12,sp,pc}^
+00000978  4A6C4962  bmi       0x1B12F08
+0000097C  FAEEF000  bnv       0xFFBBC984
+00000980  B5F1BDF1  ldrblt    r11,[r1,0xDF1]!
+00000984  4C6A4E5F  Undefined
+00000988  25342702  ldrcs     r2,[r4,-0x702]!
+0000098C  C40FCE0F  strgt     r12,[pc],-0xE0F
+00000990  DCFB1E6D  Undefined
+00000994  1E7F34C0  Undefined
+00000998  2703DCF7  Undefined
+0000099C  486502BB  stmedmi   r5!,{r0,r1,r3,r4,r5,r7,r9}^
+000009A0  496518C0  stmfdmi   r5!,{r6,r7,r11,r12}^
+000009A4  220118C9  andcs     r1,r1,0xC90000
+000009A8  F0000212  andnv     r0,r0,r2,lsl r2
+000009AC  1E7FF909  Undefined
+000009B0  4668DCF4  Undefined
+000009B4  49486007  stmfdmi   r8,{r0,r1,r2,sp,lr}^
+000009B8  02122208  andseq    r2,r2,0x80000000
+000009BC  F879F000  ldmfanv   r9!,{r12,sp,lr,pc}^
+000009C0  B5F0BDF1  ldrblt    r11,[r0,0xDF1]!
+000009C4  1C07B081  Undefined
+000009C8  24044D5C  strcs     r4,[r4],-0xD5C
+000009CC  23000624  mrscs     r0,cpsr
+000009D0  21809300  orrcs     r9,r0,r0,lsl 0x6
+000009D4  26808021  strcs     r8,[r0],r1
+000009D8  D01D423E  andsle    r4,sp,lr,lsr r2
+000009DC  19090C61  stmfdne   r9,{r0,r5,r6,r10,r11}
+000009E0  F0002208  andnv     r2,r0,r8,lsl 0x4
+000009E4  3920F863  stmfdcc   r0!,{r0,r1,r5,r6,r11,r12,sp,lr,pc}
+000009E8  804843D0  strsbhi   r4,[r8-],0x30
+000009EC  19090C21  stmfdne   r9,{r0,r5,r10,r11}
+000009F0  1D217408  Undefined
+000009F4  F0002208  andnv     r2,r0,r8,lsl 0x4
+000009F8  1F09F859  swi       ArcTan
+000009FC  F0002210  andnv     r2,r0,r0,lsl r2
+00000A00  21B0F855  movscs    pc,r5,asr r8
+00000A04  22181909  andscs    r1,r8,0x24000
+00000A08  F850F000  ldmfanv   r0,{r12,sp,lr,pc}^
+00000A0C  0CA0620A  Undefined
+00000A10  86208420  strhi     r8,[r0],-r0,lsr 0x8
+00000A14  86E084E0  strbhi    r8,[r0],r0,ror 0x9
+00000A18  49492620  stmfdmi   r9,{r5,r9,r10,sp}^
+00000A1C  F0002208  andnv     r2,r0,r8,lsl 0x4
+00000A20  0AE2F845  beq       0xFF8BEB3C
+00000A24  3110808A  tstcc     r0,r10,lsl 0x1
+00000A28  700A2207  andvc     r2,r10,r7,lsl 0x4
+00000A2C  F83EF000  ldmfanv   lr!,{r12,sp,lr,pc}
+00000A30  423E2640  eorsmi    r2,lr,0x4000000
+00000A34  2180D019  orrcs     sp,r0,r9,lsl r0
+00000A38  48421909  stmedmi   r2,{r0,r3,r8,r11,r12}^
+00000A3C  71097108  mrsvc     r7,cpsr
+00000A40  89086008  stmfdhi   r8,{r3,sp,lr}
+00000A44  0D800580  Undefined
+00000A48  39108108  ldmeacc   r0,{r3,r8,pc}
+00000A4C  31207009  msrcc     cpsr_,r9
+00000A50  F0002208  andnv     r2,r0,r8,lsl 0x4
+00000A54  3940F82B  stmfdcc   r0,{r0,r1,r3,r5,r11,r12,sp,lr,pc}^
+00000A58  3120700A  msrcc     cpsr_,r10
+00000A5C  F0002208  andnv     r2,r0,r8,lsl 0x4
+00000A60  2200F825  andcs     pc,r0,0x250000
+00000A64  19092180  stmfdne   r9,{r7,r8,sp}
+00000A68  2601710A  strcs     r7,[r1],-r10,lsl 0x2
+00000A6C  0AA20861  beq       0xFE882BF8
+00000A70  F81CF000  ldmfanv   r12,{r12,sp,lr,pc}
+00000A74  21062608  mrscs     r2,cpsr
+00000A78  0B0A0609  bleq      0x2822A4
+00000A7C  F816F000  ldmfanv   r6,{r12,sp,lr,pc}
+00000A80  21072610  mrscs     r2,cpsr
+00000A84  0CA20609  Undefined
+00000A88  F810F000  ldmfanv   r0,{r12,sp,lr,pc}
+00000A8C  21052604  mrscs     r2,cpsr
+00000A90  0CA20609  Undefined
+00000A94  F80AF000  stmednv   r10,{r12,sp,lr,pc}
+00000A98  21032602  mrscs     r2,cpsr
+00000A9C  4A2A0609  bmi       0xA822C8
+00000AA0  F804F000  stmednv   r4,{r12,sp,lr,pc}
+00000AA4  BCF0B001  Undefined
+00000AA8  4718BC08  ldrmi     r11,[r8,-r8,lsl 0x18]
+00000AAC  D100423E  mrsle     r4,cpsr
+00000AB0  46684770  Undefined
+00000AB4  E083432A  add       r4,r3,r10,lsr 0x6
+00000AB8  00002D71  andeq     r2,r0,r1,ror sp
+00000ABC  0000210D  andeq     r2,r0,sp,lsl 0x2
+00000AC0  03000088  mrseq     r0,cpsr
+00000AC4  00003290  muleq     r0,r3,r2
+00000AC8  03003580  mrseq     r3,cpsr
+00000ACC  00003200  andeq     r3,r0,r0,lsl 0x4
+00000AD0  05000200  streq     r0,[r0,-0x200]
+00000AD4  04000088  streq     r0,[r0],-0x88
+00000AD8  03000564  mrseq     r0,cpsr
+00000ADC  0000332C  andeq     r3,r0,r12,lsr 0x6
+00000AE0  0000326C  andeq     r3,r0,r12,ror 0x4
+00000AE4  0000369C  muleq     r0,r3,r6
+00000AE8  05000038  streq     r0,[r0,-0x38]
+00000AEC  00003264  andeq     r3,r0,r4,ror 0x4
+00000AF0  000030C0  andeq     r3,r0,r0,asr 0x1
+00000AF4  0BFE1FE0  bleq      0xFFF88A7C
+00000AF8  080000B4  stmedeq   r0,{r2,r4,r5,r7}
+00000AFC  0BFFFFE0  bleq      0xA84
+00000B00  85000027  strhi     r0,[r0,-0x27]
+00000B04  03001564  mrseq     r1,cpsr
+00000B08  06000040  streq     r0,[r0],-r0
+00000B0C  000030B0  strheq    r3,[r0-],r0
+00000B10  06010000  streq     r0,[r1],-r0
+00000B14  0600B880  streq     r11,[r0],-r0,lsl 0x11
+00000B18  00000202  andeq     r0,r0,r2,lsl 0x4
+00000B1C  00007271  andeq     r7,r0,r1,ror r2
+00000B20  03007FF7  mrseq     r7,cpsr
+00000B24  03000588  mrseq     r0,cpsr
+00000B28  0000D082  andeq     sp,r0,r2,lsl 0x1
+00000B2C  000030C8  andeq     r3,r0,r8,asr 0x1
+00000B30  060024C0  streq     r2,[r0],-r0,asr 0x9
+00000B34  06002040  streq     r2,[r0],-r0
+00000B38  06016800  streq     r6,[r1],-r0,lsl 0x10
+00000B3C  85000000  strhi     r0,[r0,-0x0]
+00000B40  04000110  streq     r0,[r0],-0x110
+00000B44  880E0000  stmedhi   lr,{}
+00000B48  00001F80  andeq     r1,r0,r0,lsl 0x1F
+00000B4C  02D4B530  sbcseq    r11,r4,0xC000000
+00000B50  F0000A64  andnv     r0,r0,r4,ror 0x14
+00000B54  D01EF823  andsle    pc,lr,r3,lsr 0x10
+00000B58  0ED32500  Undefined
+00000B5C  190DD30C  stmfdne   sp,{r2,r3,r8,r9,r12,lr,pc}
+00000B60  D3040E53  mrsle     r0,cpsr
+00000B64  42A9C808  adcmi     r12,r9,0x80000
+00000B68  C108DA15  mrsgt     sp,cpsr
+00000B6C  42A9E7FB  adcmi     lr,r9,0x3EC0000
+00000B70  C808DA11  stmedgt   r8,{r0,r4,r9,r11,r12,lr,pc}
+00000B74  E7FAC108  ldrb      r12,[r10,r8,lsl 0x2]!
+00000B78  0E530864  Undefined
+00000B7C  8803D305  stmedhi   r3,{r0,r2,r8,r9,r12,lr,pc}
+00000B80  DA0842A5  ble       0x21161C
+00000B84  1CAD534B  Undefined
+00000B88  42A5E7FA  adcmi     lr,r5,0x3E80000
+00000B8C  5B43DA03  blpl      0x10F73A0
+00000B90  1CAD534B  Undefined
+00000B94  BC30E7F9  Undefined
+00000B98  4718BC08  ldrmi     r11,[r8,-r8,lsl 0x18]
+00000B9C  46A4A301  strmi     r10,[r4],r1,lsl 0x6
+00000BA0  00004718  andeq     r4,r0,r8,lsl r7
+00000BA4  E35C0000  cmp       r12,0x0
+00000BA8  0A000003  beq       0xBBC
+00000BAC  E3CCC4FE  bic       r12,r12,0xFE000000
+00000BB0  E080C00C  add       r12,r0,r12
+00000BB4  E310040E  tst       r0,0xE000000
+00000BB8  131C040E  tstne     r12,0xE000000
+00000BBC  E12FFF1E  bx        lr
+00000BC0  4718467B  Undefined
+00000BC4  E92D47F0  stmfd     sp!,{r4,r5,r6,r7,r8,r9,r10,lr}
+00000BC8  E1A0A582  mov       r10,r2,lsl 0xB
+00000BCC  E1B0C4AA  movs      r12,r10,lsr 0x9
+00000BD0  EBFFFFF3  bl        0xBA4
+00000BD4  0A000012  beq       0xC24
+00000BD8  E081A4AA  add       r10,r1,r10,lsr 0x9
+00000BDC  E1B02CA2  movs      r2,r2,lsr 0x19
+00000BE0  3A00000B  bcc       0xC14
+00000BE4  E5902000  ldr       r2,[r0,0x0]
+00000BE8  E1A03002  mov       r3,r2
+00000BEC  E1A04002  mov       r4,r2
+00000BF0  E1A05002  mov       r5,r2
+00000BF4  E1A06002  mov       r6,r2
+00000BF8  E1A07002  mov       r7,r2
+00000BFC  E1A08002  mov       r8,r2
+00000C00  E1A09002  mov       r9,r2
+00000C04  E151000A  cmp       r1,r10
+00000C08  B8A103FC  stmealt   r1!,{r2,r3,r4,r5,r6,r7,r8,r9}
+00000C0C  BAFFFFFC  blt       0xC04
+00000C10  EA000003  b         0xC24
+00000C14  E151000A  cmp       r1,r10
+00000C18  B8B003FC  ldmfdlt   r0!,{r2,r3,r4,r5,r6,r7,r8,r9}
+00000C1C  B8A103FC  stmealt   r1!,{r2,r3,r4,r5,r6,r7,r8,r9}
+00000C20  BAFFFFFB  blt       0xC14
+00000C24  E8BD47F0  ldmfd     sp!,{r4,r5,r6,r7,r8,r9,r10,lr}
+00000C28  E12FFF1E  bx        lr
+00000C2C  E92D0FF0  stmfd     sp!,{r4,r5,r6,r7,r8,r9,r10,r11}
+00000C30  E2522001  subs      r2,r2,0x1
+00000C34  BA000027  blt       0xCD8
+00000C38  E1D031B0  ldrh      r3,[r0,0x10]
+00000C3C  E1A03423  mov       r3,r3,lsr 0x8
+00000C40  E28FCF45  add       r12,=0xD5C
+00000C44  E2838040  add       r8,r3,0x40
+00000C48  E20880FF  and       r8,r8,0xFF
+00000C4C  E1A08088  mov       r8,r8,lsl 0x1
+00000C50  E198B0FC  ldrsh     r11,[r8,r12]
+00000C54  E1A08083  mov       r8,r3,lsl 0x1
+00000C58  E198C0FC  ldrsh     r12,[r8,r12]
+00000C5C  E1D090FC  ldrsh     r9,[r0,0xC]
+00000C60  E1D0A0FE  ldrsh     r10,[r0,0xE]
+00000C64  E008099B  mul       r8,r0,r9
+00000C68  E1A03748  mov       r3,r8,asr 0xE
+00000C6C  E008099C  mul       r8,r0,r9
+00000C70  E1A04748  mov       r4,r8,asr 0xE
+00000C74  E0080A9C  mul       r8,r0,r10
+00000C78  E1A05748  mov       r5,r8,asr 0xE
+00000C7C  E0080A9B  mul       r8,r0,r10
+00000C80  E1A06748  mov       r6,r8,asr 0xE
+00000C84  E8901600  ldmfd     r0,{r9,r10,r12}
+00000C88  E1A0B80C  mov       r11,r12,lsl 0x10
+00000C8C  E1A0B84B  mov       r11,r11,asr 0x10
+00000C90  E1A0C84C  mov       r12,r12,asr 0x10
+00000C94  E26B8000  rsb       r8,r11,0x0
+00000C98  E0299893  mla       r9,r9,r8,r3
+00000C9C  E0289C94  mla       r8,r9,r12,r4
+00000CA0  E5818008  str       r8,[r1,0x8]
+00000CA4  E26B8000  rsb       r8,r11,0x0
+00000CA8  E02AA895  mla       r10,r10,r8,r5
+00000CAC  E26C8000  rsb       r8,r12,0x0
+00000CB0  E028A896  mla       r8,r10,r8,r6
+00000CB4  E581800C  str       r8,[r1,0xC]
+00000CB8  E1C130B0  strh      r3,[r1,0x0]
+00000CBC  E2644000  rsb       r4,r4,0x0
+00000CC0  E1C140B2  strh      r4,[r1,0x2]
+00000CC4  E1C150B4  strh      r5,[r1,0x4]
+00000CC8  E1C160B6  strh      r6,[r1,0x6]
+00000CCC  E2800014  add       r0,r0,0x14
+00000CD0  E2811010  add       r1,r1,0x10
+00000CD4  EAFFFFD5  b         0xC30
+00000CD8  E8BD0FF0  ldmfd     sp!,{r4,r5,r6,r7,r8,r9,r10,r11}
+00000CDC  E12FFF1E  bx        lr
+00000CE0  E92D0F00  stmfd     sp!,{r8,r9,r10,r11}
+00000CE4  E2522001  subs      r2,r2,0x1
+00000CE8  BA000019  blt       0xD54
+00000CEC  E1D090B4  ldrh      r9,[r0,0x4]
+00000CF0  E1A09429  mov       r9,r9,lsr 0x8
+00000CF4  E28FC060  add       r12,=0xD5C
+00000CF8  E2898040  add       r8,r9,0x40
+00000CFC  E20880FF  and       r8,r8,0xFF
+00000D00  E1A08088  mov       r8,r8,lsl 0x1
+00000D04  E198B0FC  ldrsh     r11,[r8,r12]
+00000D08  E1A08089  mov       r8,r9,lsl 0x1
+00000D0C  E198C0FC  ldrsh     r12,[r8,r12]
+00000D10  E1D090F0  ldrsh     r9,[r0,0x0]
+00000D14  E1D0A0F2  ldrsh     r10,[r0,0x2]
+00000D18  E008099B  mul       r8,r0,r9
+00000D1C  E1A08748  mov       r8,r8,asr 0xE
+00000D20  E08180B3  strh      r8,[r1],r3
+00000D24  E008099C  mul       r8,r0,r9
+00000D28  E1A08748  mov       r8,r8,asr 0xE
+00000D2C  E2688000  rsb       r8,r8,0x0
+00000D30  E08180B3  strh      r8,[r1],r3
+00000D34  E0080A9C  mul       r8,r0,r10
+00000D38  E1A08748  mov       r8,r8,asr 0xE
+00000D3C  E08180B3  strh      r8,[r1],r3
+00000D40  E0080A9B  mul       r8,r0,r10
+00000D44  E1A08748  mov       r8,r8,asr 0xE
+00000D48  E08180B3  strh      r8,[r1],r3
+00000D4C  E2800008  add       r0,r0,0x8
+00000D50  EAFFFFE3  b         0xCE4
+00000D54  E8BD0F00  ldmfd     sp!,{r8,r9,r10,r11}
+00000D58  E12FFF1E  bx        lr
+00000D5C  01920000  orrseq    r0,r2,r0
+00000D60  04B50323  ldreq     r0,[r5],0x323
+00000D64  07D50645  ldrbeq    r0,[r5,r5,asr 0xC]
+00000D68  0AF10964  beq       0xFFC43300
+00000D6C  0E050C7C  Undefined
+00000D70  11110F8C  tstne     r1,r12,lsl 0x1F
+00000D74  14131294  ldrne     r1,[r3],-0x294
+00000D78  1708158F  strne     r1,[r8,-pc,lsl 0xB]
+00000D7C  19EF187D  stmfane   pc!,{r0,r2,r3,r4,r5,r6,r11,r12}^
+00000D80  1CC61B5D  Undefined
+00000D84  1F8B1E2B  swi       Unknown
+00000D88  223D20E7  eorscs    r2,sp,0xE7
+00000D8C  24DA238E  ldrbcs    r2,[r10],0x38E
+00000D90  275F261F  Undefined
+00000D94  29CD2899  stmfacs   sp,{r0,r3,r4,r7,r11,sp}^
+00000D98  2C212AFA  Undefined
+00000D9C  2E5A2D41  Undefined
+00000DA0  30762F6B  rsbscc    r2,r6,r11,ror 0x1E
+00000DA4  32743179  rsbscc    r3,r4,0x4000001E
+00000DA8  34533367  ldrbcc    r3,[r3],-0x367
+00000DAC  36123536  Undefined
+00000DB0  37AF36E5  strcc     r3,[pc,r5,ror 0xD]!
+00000DB4  392A3871  stmfdcc   r10!,{r0,r4,r5,r6,r11,r12,sp}
+00000DB8  3A8239DA  bcc       0xFE08F528
+00000DBC  3BB63B20  blcc      0xFED8FA44
+00000DC0  3CC53C42  Undefined
+00000DC4  3DAE3D3E  Undefined
+00000DC8  3E713E14  Undefined
+00000DCC  3F0E3EC5  swi       BgAffineSet
+00000DD0  3F843F4E  swi       Unknown
+00000DD4  3FD33FB1  swi       Unknown
+00000DD8  3FFB3FEC  swi       Unknown
+00000DDC  3FFB4000  swi       Unknown
+00000DE0  3FD33FEC  swi       Unknown
+00000DE4  3F843FB1  swi       Unknown
+00000DE8  3F0E3F4E  swi       BgAffineSet
+00000DEC  3E713EC5  Undefined
+00000DF0  3DAE3E14  Undefined
+00000DF4  3CC53D3E  Undefined
+00000DF8  3BB63C42  blcc      0xFED8FF08
+00000DFC  3A823B20  bcc       0xFE08FA84
+00000E00  392A39DA  stmfdcc   r10!,{r1,r3,r4,r6,r7,r8,r11,r12,sp}
+00000E04  37AF3871  Undefined
+00000E08  361236E5  ldrcc     r3,[r2],-r5,ror 0xD
+00000E0C  34533536  ldrbcc    r3,[r3],-0x536
+00000E10  32743367  rsbscc    r3,r4,0x9C000001
+00000E14  30763179  rsbscc    r3,r6,r9,ror r1
+00000E18  2E5A2F6B  Undefined
+00000E1C  2C212D41  Undefined
+00000E20  29CD2AFA  stmfacs   sp,{r1,r3,r4,r5,r6,r7,r9,r11,sp}^
+00000E24  275F2899  Undefined
+00000E28  24DA261F  ldrbcs    r2,[r10],0x61F
+00000E2C  223D238E  eorscs    r2,sp,0x38000002
+00000E30  1F8B20E7  swi       Unknown
+00000E34  1CC61E2B  Undefined
+00000E38  19EF1B5D  stmfane   pc!,{r0,r2,r3,r4,r6,r8,r9,r11,r12}^
+00000E3C  1708187D  Undefined
+00000E40  1413158F  ldrne     r1,[r3],-0x58F
+00000E44  11111294  Undefined
+00000E48  0E050F8C  Undefined
+00000E4C  0AF10C7C  beq       0xFFC44044
+00000E50  07D50964  ldrbeq    r0,[r5,r4,ror 0x12]
+00000E54  04B50645  ldreq     r0,[r5],0x645
+00000E58  01920323  orrseq    r0,r2,r3,lsr 0x6
+00000E5C  FE6E0000  Undefined
+00000E60  FB4BFCDD  blnv      0x13001DC
+00000E64  F82BF9BB  stmednv   r11!,{r0,r1,r3,r4,r5,r7,r8,r11,r12,sp,lr,pc}
+00000E68  F50FF69C  strnv     pc,[pc,-0x69C]
+00000E6C  F1FBF384  mvnsnv    pc,r4,lsl 0x7
+00000E70  EEEFF074  Undefined
+00000E74  EBEDED6C  bl        0xFFB7C42C
+00000E78  E8F8EA71  ldmfd     r8!,{r0,r4,r5,r6,r9,r11,sp,lr,pc}^
+00000E7C  E611E783  ldr       lr,[r1],-r3,lsl 0xF
+00000E80  E33AE4A3  teq       r10,0xA3000000
+00000E84  E075E1D5  ldrsb     lr,[r5-],0x15
+00000E88  DDC3DF19  Undefined
+00000E8C  DB26DC72  blle      0x9B805C
+00000E90  D8A1D9E1  stmeale   r1!,{r0,r5,r6,r7,r8,r11,r12,lr,pc}
+00000E94  D633D767  ldrle     sp,[r3],-r7,ror 0xE
+00000E98  D3DFD506  bicsle    sp,pc,0x1800000
+00000E9C  D1A6D2BF  strhle    sp,[r6,pc]!
+00000EA0  CF8AD095  swi       Unknown
+00000EA4  CD8CCE87  Undefined
+00000EA8  CBADCC99  blgt      0xFEB74114
+00000EAC  C9EECACA  stmfagt   lr!,{r1,r3,r6,r7,r9,r11,lr,pc}^
+00000EB0  C851C91B  ldmfagt   r1,{r0,r1,r3,r4,r8,r11,lr,pc}^
+00000EB4  C6D6C78F  ldrbgt    r12,[r6],pc,lsl 0xF
+00000EB8  C57EC626  ldrbgt    r12,[lr,-0x626]!
+00000EBC  C44AC4E0  strbgt    r12,[r10],-0x4E0
+00000EC0  C33BC3BE  teqgt     r11,0xF8000002
+00000EC4  C252C2C2  subsgt    r12,r2,0x2000000C
+00000EC8  C18FC1EC  orrgt     r12,pc,r12,ror 0x3
+00000ECC  C0F2C13B  rscsgt    r12,r2,r11,lsr r1
+00000ED0  C07CC0B2  ldrhgt    r12,[r12-],0x2
+00000ED4  C02DC04F  eorgt     r12,sp,pc
+00000ED8  C005C014  andgt     r12,r5,r4,lsl r0
+00000EDC  C005C000  andgt     r12,r5,r0
+00000EE0  C02DC014  eorgt     r12,sp,r4,lsl r0
+00000EE4  C07CC04F  rsbsgt    r12,r12,pc
+00000EE8  C0F2C0B2  ldrhgt    r12,[r2],0x2
+00000EEC  C18FC13B  orrgt     r12,pc,r11,lsr r1
+00000EF0  C252C1EC  subsgt    r12,r2,0x3B
+00000EF4  C33BC2C2  teqgt     r11,0x2000000C
+00000EF8  C44AC3BE  strbgt    r12,[r10],-0x3BE
+00000EFC  C57EC4E0  ldrbgt    r12,[lr,-0x4E0]!
+00000F00  C6D6C626  ldrbgt    r12,[r6],r6,lsr 0xC
+00000F04  C851C78F  ldmfagt   r1,{r0,r1,r2,r3,r7,r8,r9,r10,lr,pc}^
+00000F08  C9EEC91B  stmfagt   lr!,{r0,r1,r3,r4,r8,r11,lr,pc}^
+00000F0C  CBADCACA  blgt      0xFEB73A3C
+00000F10  CD8CCC99  Undefined
+00000F14  CF8ACE87  swi       Unknown
+00000F18  D1A6D095  Undefined
+00000F1C  D3DFD2BF  bicsle    sp,pc,0xF000000B
+00000F20  D633D506  ldrle     sp,[r3],-r6,lsl 0xA
+00000F24  D8A1D767  stmeale   r1!,{r0,r1,r2,r5,r6,r8,r9,r10,r12,lr,pc}
+00000F28  DB26D9E1  blle      0x9B76B4
+00000F2C  DDC3DC72  Undefined
+00000F30  E075DF19  rsbs      sp,r5,r9,lsl pc
+00000F34  E33AE1D5  teq       r10,0x40000035
+00000F38  E611E4A3  ldr       lr,[r1],-r3,lsr 0x9
+00000F3C  E8F8E783  ldmfd     r8!,{r0,r1,r7,r8,r9,r10,sp,lr,pc}^
+00000F40  EBEDEA71  bl        0xFFB7B90C
+00000F44  EEEFED6C  Undefined
+00000F48  F1FBF074  mvnsnv    pc,r4,ror r0
+00000F4C  F50FF384  strnv     pc,[pc,-0x384]
+00000F50  F82BF69C  stmednv   r11!,{r2,r3,r4,r7,r9,r10,r12,sp,lr,pc}
+00000F54  FB4BF9BB  blnv      0x12FF648
+00000F58  FE6EFCDD  Undefined
+00000F5C  4718467B  Undefined
+00000F60  E92D4FF0  stmfd     sp!,{r4,r5,r6,r7,r8,r9,r10,r11,lr}
+00000F64  E24DD008  sub       sp,sp,0x8
+00000F68  E1D270B0  ldrh      r7,[r2,0x0]
+00000F6C  E1B0C007  movs      r12,r7
+00000F70  EBFFFF0B  bl        0xBA4
+00000F74  0A000022  beq       0x1004
+00000F78  E5D26002  ldrb      r6,[r2,0x2]
+00000F7C  E266A008  rsb       r10,r6,0x8
+00000F80  E3A0E000  mov       lr,0x0
+00000F84  E592B004  ldr       r11,[r2,0x4]
+00000F88  E1A08FAB  mov       r8,r11,lsr 0x1F
+00000F8C  E592B004  ldr       r11,[r2,0x4]
+00000F90  E1A0B08B  mov       r11,r11,lsl 0x1
+00000F94  E1A0B0AB  mov       r11,r11,lsr 0x1
+00000F98  E58DB004  str       r11,[sp,0x4]
+00000F9C  E5D22003  ldrb      r2,[r2,0x3]
+00000FA0  E3A03000  mov       r3,0x0
+00000FA4  E2577001  subs      r7,r7,0x1
+00000FA8  BA000015  blt       0x1004
+00000FAC  E3A0B0FF  mov       r11,0xFF
+00000FB0  E1A05A5B  mov       r5,r11,asr r10
+00000FB4  E4D09001  ldrb      r9,[r0],0x1
+00000FB8  E3A04000  mov       r4,0x0
+00000FBC  E3540008  cmp       r4,0x8
+00000FC0  AAFFFFF7  bge       0xFA4
+00000FC4  E009B005  and       r11,r9,r5
+00000FC8  E1B0C43B  movs      r12,r11,lsr r4
+00000FCC  03580000  cmpeq     r8,0x0
+00000FD0  0A000001  beq       0xFDC
+00000FD4  E59DB004  ldr       r11,[sp,0x4]
+00000FD8  E08CC00B  add       r12,r12,r11
+00000FDC  E18EE31C  orr       lr,lr,r12,lsl r3
+00000FE0  E0833002  add       r3,r3,r2
+00000FE4  E3530020  cmp       r3,0x20
+00000FE8  BA000002  blt       0xFF8
+00000FEC  E481E004  str       lr,[r1],0x4
+00000FF0  E3A0E000  mov       lr,0x0
+00000FF4  E3A03000  mov       r3,0x0
+00000FF8  E1A05615  mov       r5,r5,lsl r6
+00000FFC  E0844006  add       r4,r4,r6
+00001000  EAFFFFED  b         0xFBC
+00001004  E28DD008  add       sp,sp,0x8
+00001008  E8BD4FF0  ldmfd     sp!,{r4,r5,r6,r7,r8,r9,r10,r11,lr}
+0000100C  E12FFF1E  bx        lr
+00001010  4718467B  Undefined
+00001014  E92D4FF0  stmfd     sp!,{r4,r5,r6,r7,r8,r9,r10,r11,lr}
+00001018  E24DD008  sub       sp,sp,0x8
+0000101C  E3B0C402  movs      r12,0x2000000
+00001020  EBFFFEDF  bl        0xBA4
+00001024  0A000030  beq       0x10EC
+00001028  E2802004  add       r2,r0,0x4
+0000102C  E2827001  add       r7,r2,0x1
+00001030  E5D0A000  ldrb      r10,[r0,0x0]
+00001034  E20A400F  and       r4,r10,0xF
+00001038  E3A03000  mov       r3,0x0
+0000103C  E3A0E000  mov       lr,0x0
+00001040  E204A007  and       r10,r4,0x7
+00001044  E28AB004  add       r11,r10,0x4
+00001048  E58DB004  str       r11,[sp,0x4]
+0000104C  E590A000  ldr       r10,[r0,0x0]
+00001050  E1A0C42A  mov       r12,r10,lsr 0x8
+00001054  E5D2A000  ldrb      r10,[r2,0x0]
+00001058  E28AA001  add       r10,r10,0x1
+0000105C  E082008A  add       r0,r2,r10,lsl 0x1
+00001060  E1A02007  mov       r2,r7
+00001064  E35C0000  cmp       r12,0x0
+00001068  DA00001F  ble       0x10EC
+0000106C  E3A08020  mov       r8,0x20
+00001070  E4905004  ldr       r5,[r0],0x4
+00001074  E2588001  subs      r8,r8,0x1
+00001078  BAFFFFF9  blt       0x1064
+0000107C  E3A0A001  mov       r10,0x1
+00001080  E00A9FA5  and       r9,r10,r5,lsr 0x1F
+00001084  E5D26000  ldrb      r6,[r2,0x0]
+00001088  E1A06916  mov       r6,r6,lsl r9
+0000108C  E1A0A0A2  mov       r10,r2,lsr 0x1
+00001090  E1A0A08A  mov       r10,r10,lsl 0x1
+00001094  E5D2B000  ldrb      r11,[r2,0x0]
+00001098  E20BB03F  and       r11,r11,0x3F
+0000109C  E28BB001  add       r11,r11,0x1
+000010A0  E08AA08B  add       r10,r10,r11,lsl 0x1
+000010A4  E08A2009  add       r2,r10,r9
+000010A8  E3160080  tst       r6,0x80
+000010AC  0A00000A  beq       0x10DC
+000010B0  E1A03433  mov       r3,r3,lsr r4
+000010B4  E5D2A000  ldrb      r10,[r2,0x0]
+000010B8  E264B020  rsb       r11,r4,0x20
+000010BC  E1833B1A  orr       r3,r3,r10,lsl r11
+000010C0  E1A02007  mov       r2,r7
+000010C4  E28EE001  add       lr,lr,0x1
+000010C8  E59DB004  ldr       r11,[sp,0x4]
+000010CC  E15E000B  cmp       lr,r11
+000010D0  04813004  streq     r3,[r1],0x4
+000010D4  024CC004  subeq     r12,r12,0x4
+000010D8  03A0E000  moveq     lr,0x0
+000010DC  E35C0000  cmp       r12,0x0
+000010E0  C1A05085  movgt     r5,r5,lsl 0x1
+000010E4  CAFFFFE2  bgt       0x1074
+000010E8  EAFFFFDD  b         0x1064
+000010EC  E28DD008  add       sp,sp,0x8
+000010F0  E8BD4FF0  ldmfd     sp!,{r4,r5,r6,r7,r8,r9,r10,r11,lr}
+000010F4  E12FFF1E  bx        lr
+000010F8  4718467B  Undefined
+000010FC  E92D4070  stmfd     sp!,{r4,r5,r6,lr}
+00001100  E4905004  ldr       r5,[r0],0x4
+00001104  E1A02425  mov       r2,r5,lsr 0x8
+00001108  E1B0C002  movs      r12,r2
+0000110C  EBFFFEA4  bl        0xBA4
+00001110  0A00001D  beq       0x118C
+00001114  E3520000  cmp       r2,0x0
+00001118  DA00001B  ble       0x118C
+0000111C  E4D0E001  ldrb      lr,[r0],0x1
+00001120  E3A04008  mov       r4,0x8
+00001124  E2544001  subs      r4,r4,0x1
+00001128  BAFFFFF9  blt       0x1114
+0000112C  E31E0080  tst       lr,0x80
+00001130  1A000003  bne       0x1144
+00001134  E4D06001  ldrb      r6,[r0],0x1
+00001138  E4C16001  strb      r6,[r1],0x1
+0000113C  E2422001  sub       r2,r2,0x1
+00001140  EA00000D  b         0x117C
+00001144  E5D05000  ldrb      r5,[r0,0x0]
+00001148  E3A06003  mov       r6,0x3
+0000114C  E0863245  add       r3,r6,r5,asr 0x4
+00001150  E4D06001  ldrb      r6,[r0],0x1
+00001154  E206500F  and       r5,r6,0xF
+00001158  E1A0C405  mov       r12,r5,lsl 0x8
+0000115C  E4D06001  ldrb      r6,[r0],0x1
+00001160  E186500C  orr       r5,r6,r12
+00001164  E285C001  add       r12,r5,0x1
+00001168  E0422003  sub       r2,r2,r3
+0000116C  E751500C  ldrb      r5,[r1,-r12]
+00001170  E4C15001  strb      r5,[r1],0x1
+00001174  E2533001  subs      r3,r3,0x1
+00001178  CAFFFFFB  bgt       0x116C
+0000117C  E3520000  cmp       r2,0x0
+00001180  C1A0E08E  movgt     lr,lr,lsl 0x1
+00001184  CAFFFFE6  bgt       0x1124
+00001188  EAFFFFE1  b         0x1114
+0000118C  E8BD4070  ldmfd     sp!,{r4,r5,r6,lr}
+00001190  E12FFF1E  bx        lr
+00001194  E92D47F0  stmfd     sp!,{r4,r5,r6,r7,r8,r9,r10,lr}
+00001198  E3A03000  mov       r3,0x0
+0000119C  E4908004  ldr       r8,[r0],0x4
+000011A0  E1A0A428  mov       r10,r8,lsr 0x8
+000011A4  E3A02000  mov       r2,0x0
+000011A8  E1B0C00A  movs      r12,r10
+000011AC  EBFFFE7C  bl        0xBA4
+000011B0  0A00002E  beq       0x1270
+000011B4  E35A0000  cmp       r10,0x0
+000011B8  DA00002C  ble       0x1270
+000011BC  E4D06001  ldrb      r6,[r0],0x1
+000011C0  E3A07008  mov       r7,0x8
+000011C4  E2577001  subs      r7,r7,0x1
+000011C8  BAFFFFF9  blt       0x11B4
+000011CC  E3160080  tst       r6,0x80
+000011D0  1A000006  bne       0x11F0
+000011D4  E4D09001  ldrb      r9,[r0],0x1
+000011D8  E1833219  orr       r3,r3,r9,lsl r2
+000011DC  E24AA001  sub       r10,r10,0x1
+000011E0  E2322008  eors      r2,r2,0x8
+000011E4  00C130B2  strheq    r3,[r1],0x2
+000011E8  03A03000  moveq     r3,0x0
+000011EC  EA00001B  b         0x1260
+000011F0  E5D09000  ldrb      r9,[r0,0x0]
+000011F4  E3A08003  mov       r8,0x3
+000011F8  E0885249  add       r5,r8,r9,asr 0x4
+000011FC  E4D09001  ldrb      r9,[r0],0x1
+00001200  E209800F  and       r8,r9,0xF
+00001204  E1A04408  mov       r4,r8,lsl 0x8
+00001208  E4D09001  ldrb      r9,[r0],0x1
+0000120C  E1898004  orr       r8,r9,r4
+00001210  E2884001  add       r4,r8,0x1
+00001214  E2628008  rsb       r8,r2,0x8
+00001218  E2049001  and       r9,r4,0x1
+0000121C  E028E189  eor       lr,r8,r9,lsl 0x3
+00001220  E04AA005  sub       r10,r10,r5
+00001224  E22EE008  eor       lr,lr,0x8
+00001228  E2628008  rsb       r8,r2,0x8
+0000122C  E08481A8  add       r8,r4,r8,lsr 0x3
+00001230  E1A080A8  mov       r8,r8,lsr 0x1
+00001234  E1A08088  mov       r8,r8,lsl 0x1
+00001238  E11190B8  ldrh      r9,[r1,-r8]
+0000123C  E3A080FF  mov       r8,0xFF
+00001240  E0098E18  and       r8,r9,r8,lsl lr
+00001244  E1A08E58  mov       r8,r8,asr lr
+00001248  E1833218  orr       r3,r3,r8,lsl r2
+0000124C  E2322008  eors      r2,r2,0x8
+00001250  00C130B2  strheq    r3,[r1],0x2
+00001254  03A03000  moveq     r3,0x0
+00001258  E2555001  subs      r5,r5,0x1
+0000125C  CAFFFFF0  bgt       0x1224
+00001260  E35A0000  cmp       r10,0x0
+00001264  C1A06086  movgt     r6,r6,lsl 0x1
+00001268  CAFFFFD5  bgt       0x11C4
+0000126C  EAFFFFD0  b         0x11B4
+00001270  E8BD47F0  ldmfd     sp!,{r4,r5,r6,r7,r8,r9,r10,lr}
+00001274  E12FFF1E  bx        lr
+00001278  C808B5F0  stmedgt   r8,{r4,r5,r6,r7,r8,r10,r12,sp,pc}
+0000127C  1C3C0A1F  Undefined
+00001280  FC8CF7FF  Undefined
+00001284  2F00D019  swi       SoftReset
+00001288  7804DD17  stmedvc   r4,{r0,r1,r2,r4,r8,r10,r11,r12,lr,pc}
+0000128C  06621C40  strbeq    r1,[r2],-r0,asr 0x18
+00001290  0A230E52  beq       0x8C4BE0
+00001294  1C52D208  Undefined
+00001298  78031ABF  stmedvc   r3,{r0,r1,r2,r3,r4,r5,r7,r9,r11,r12}
+0000129C  1C40700B  Undefined
+000012A0  1E521C49  Undefined
+000012A4  E7EEDCF9  Undefined
+000012A8  1ABF1CD2  bne       0xFEFC85F8
+000012AC  1C407805  Undefined
+000012B0  1C49700D  Undefined
+000012B4  DCFB1E52  Undefined
+000012B8  BCF0E7E5  Undefined
+000012BC  4718BC08  ldrmi     r11,[r8,-r8,lsl 0x18]
+000012C0  B083B5F0  strshlt   r11,[r3],r0
+000012C4  C8082700  stmedgt   r8,{r8,r9,r10,sp}
+000012C8  1C2C0A1D  Undefined
+000012CC  FC66F7FF  Undefined
+000012D0  2400D02B  strcs     sp,[r0],-0x2B
+000012D4  DD282D00  Undefined
+000012D8  93017803  mrsls     r7,cpsr
+000012DC  9B011C40  blls      0x483E4
+000012E0  0E52065A  Undefined
+000012E4  0A339E01  beq       0xCE8AF0
+000012E8  1C52D20E  Undefined
+000012EC  78061AAD  stmedvc   r6,{r0,r2,r3,r5,r7,r9,r11,r12}
+000012F0  433740A6  teqmi     r7,0xA6
+000012F4  23081C40  mrscs     r1,cpsr
+000012F8  D102405C  mrsle     r4,cpsr
+000012FC  1C89800F  Undefined
+00001300  1E522700  Undefined
+00001304  E7E5DCF3  Undefined
+00001308  1AAD1CD2  bne       0xFEB48658
+0000130C  96027806  strls     r7,[r2],-r6,lsl 0x10
+00001310  9E021C40  Undefined
+00001314  433740A6  teqmi     r7,0xA6
+00001318  405C2308  subsmi    r2,r12,r8,lsl 0x6
+0000131C  800FD102  andhi     sp,pc,r2,lsl 0x2
+00001320  27001C89  strcs     r1,[r0,-r9,lsl 0x19]
+00001324  DCF41E52  Undefined
+00001328  B003E7D4  strsblt   lr,[r3-],r4
+0000132C  BC08BCF0  Undefined
+00001330  B5104718  ldrlt     r4,[r0,-0x718]
+00001334  0A24C810  beq       0x93337C
+00001338  FC30F7FF  Undefined
+0000133C  7802D00B  stmedvc   r2,{r0,r1,r3,r12,lr,pc}
+00001340  700A1C40  andvc     r1,r10,r0,asr 0x18
+00001344  1E641C49  Undefined
+00001348  7803DD05  stmedvc   r3,{r0,r2,r8,r10,r11,r12,lr,pc}
+0000134C  1C40189A  Undefined
+00001350  1C49700A  Undefined
+00001354  BC10E7F7  Undefined
+00001358  4718BC08  ldrmi     r11,[r8,-r8,lsl 0x18]
+0000135C  C808B5F0  stmedgt   r8,{r4,r5,r6,r7,r8,r10,r12,sp,pc}
+00001360  1C2C0A1D  Undefined
+00001364  FC1AF7FF  Undefined
+00001368  2408D013  strcs     sp,[r8],-0x13
+0000136C  1C407807  Undefined
+00001370  1E6D1C3A  Undefined
+00001374  7803DD0D  stmedvc   r3,{r0,r2,r3,r8,r10,r11,r12,lr,pc}
+00001378  1C4019DF  Undefined
+0000137C  0E36063E  Undefined
+00001380  433240A6  teqmi     r2,0xA6
+00001384  405C2308  subsmi    r2,r12,r8,lsl 0x6
+00001388  800AD1F3  strshhi   sp,[r10-],r3
+0000138C  22001C89  andcs     r1,r0,0x8900
+00001390  BCF0E7EF  Undefined
+00001394  4718BC08  ldrmi     r11,[r8,-r8,lsl 0x18]
+00001398  C810B510  ldmfagt   r0,{r4,r8,r10,r12,sp,pc}
+0000139C  F7FF0A24  ldrbnv    r0,[pc,r4,lsr 0x14]!
+000013A0  D00BFBFD  strshle   pc,[r11-],sp
+000013A4  1C808802  Undefined
+000013A8  1C89800A  Undefined
+000013AC  DD051EA4  Undefined
+000013B0  189A8803  ldmfdne   r10,{r0,r1,r11,pc}
+000013B4  800A1C80  andhi     r1,r10,r0,lsl 0x19
+000013B8  E7F71C89  ldrb      r1,[r7,r9,lsl 0x19]!
+000013BC  BC04BC10  Undefined
+000013C0  47084710  Undefined
+000013C4  1C14B5B0  Undefined
+000013C8  1C071C0D  Undefined
+000013CC  DB262A01  blle      0x98BBD8
+000013D0  DD002C10  Undefined
+000013D4  1C382410  Undefined
+000013D8  FFEAF000  swi       Unknown
+000013DC  481162FD  ldmfami   r1,{r0,r2,r3,r4,r5,r6,r7,r9,sp,lr}
+000013E0  6078723C  rsbsvs    r7,r8,r12,lsr r2
+000013E4  E0042000  and       r2,r4,r0
+000013E8  060C1E61  streq     r1,[r12],-r1,ror 0x1C
+000013EC  70280E24  eorvc     r0,r8,r4,lsr 0x1C
+000013F0  2C003550  Undefined
+000013F4  490CDCF8  stmfdmi   r12,{r3,r4,r5,r6,r7,r10,r11,r12,lr,pc}
+000013F8  6B094C0C  blvs      0x254430
+000013FC  42A2680A  adcmi     r6,r2,0xA0000
+00001400  3201D10D  andcc     sp,r1,0x40000003
+00001404  6A0A600A  bvs       0x299434
+00001408  D0032A00  andle     r2,r3,r0,lsl 0x14
+0000140C  6A4A63BA  bvs       0x129A2FC
+00001410  620863FA  andvs     r6,r8,0xE8000003
+00001414  624F4806  subvs     r4,=0xFFFA141C
+00001418  600C6208  andvs     r6,r12,r8,lsl 0x4
+0000141C  BCB0637C  Undefined
+00001420  4718BC08  ldrmi     r11,[r8,-r8,lsl 0x18]
+00001424  80000000  andhi     r0,r0,r0
+00001428  03007FC0  mrseq     r7,cpsr
+0000142C  68736D53  ldmfavs   r3!,{r0,r1,r4,r6,r8,r10,r11,sp,lr}^
+00001430  00002149  andeq     r2,r0,r9,asr 0x2
+00001434  1C07B5F0  Undefined
+00001438  4B206B40  blmi      0x81C140
+0000143C  42981C0C  addsmi    r1,r8,0xC00
+00001440  3001D138  andcc     sp,r1,r8,lsr r1
+00001444  21006378  mrscs     r6,cpsr
+00001448  603C6079  eorsvs    r6,r12,r9,ror r0
+0000144C  63386860  teqvs     r8,0x600000
+00001450  727878A0  rsbsvc    r7,r8,0xA00000
+00001454  83B82096  movshi    r2,0x96
+00001458  20FF8438  rscscs    r8,pc,r8,lsr r4
+0000145C  83F83001  mvnshi    r3,0x1
+00001460  84B98479  ldrhi     r8,[r9],0x479
+00001464  26006AFD  Undefined
+00001468  1C38E00B  Undefined
+0000146C  F0001C29  andnv     r1,r0,r9,lsr 0x18
+00001470  20C0FFBA  strhcs    pc,[r0],0xFA
+00001474  00B07028  adcseq    r7,r0,r8
+00001478  68801900  stmeavs   r0,{r8,r11,r12}
+0000147C  35506428  ldrbcc    r6,[r0,-0x428]
+00001480  78203601  stmedvc   r0!,{r0,r9,r10,r12,sp}
+00001484  DA0B4286  ble       0x2D1EA4
+00001488  42B07A38  adcsmi    r7,r0,0x38000
+0000148C  E007DCED  and       sp,r7,sp,ror 0x19
+00001490  1C291C38  Undefined
+00001494  FFA7F000  swi       Unknown
+00001498  70282000  eorvc     r2,r8,r0
+0000149C  36013550  Undefined
+000014A0  42B07A38  adcsmi    r7,r0,0x38000
+000014A4  78E0DCF4  stmeavc   r0!,{r2,r4,r5,r6,r7,r10,r11,r12,lr,pc}^
+000014A8  D3010A01  mrsle     r0,cpsr
+000014AC  F976F000  ldmeanv   r6!,{r12,sp,lr,pc}^
+000014B0  63784802  cmnvs     r8,0x20000
+000014B4  BC08BCF0  Undefined
+000014B8  00004718  andeq     r4,r0,r8,lsl r7
+000014BC  68736D53  ldmfavs   r3!,{r0,r1,r4,r6,r8,r10,r11,sp,lr}^
+000014C0  1C07B5F0  Undefined
+000014C4  4E0C6B40  Undefined
+000014C8  D11142B0  ldrhle    r4,[r1,-r0]
+000014CC  63783001  cmnvs     r8,0x1
+000014D0  07F36878  Undefined
+000014D4  60784318  rsbsvs    r4,r8,r8,lsl r3
+000014D8  6AFC7A3D  bvs       0xFFF1FDD4
+000014DC  1C38E005  Undefined
+000014E0  F0001C21  andnv     r1,r0,r1,lsr 0x18
+000014E4  3450FF80  ldrbcc    pc,[r0],-0xF80
+000014E8  2D003D01  Undefined
+000014EC  637EDCF7  cmnvs     lr,0xF700
+000014F0  BC08BCF0  Undefined
+000014F4  00004718  andeq     r4,r0,r8,lsl r7
+000014F8  68736D53  ldmfavs   r3!,{r0,r1,r4,r6,r8,r10,r11,sp,lr}^
+000014FC  49046B42  stmfdmi   r4,{r1,r6,r8,r9,r11,sp,lr}
+00001500  D104428A  mrsle     r4,cpsr
+00001504  63416842  mrsvs     r6,spsr
+00001508  08520052  ldmfaeq   r2,{r1,r4,r6}^
+0000150C  47706042  ldrbmi    r6,[r0,-r2]!
+00001510  68736D53  ldmfavs   r3!,{r0,r1,r4,r6,r8,r10,r11,sp,lr}^
+00001514  6B47B480  blvs      0x11EE71C
+00001518  42974A05  addsmi    r4,r7,0x5000
+0000151C  84C1D105  strbhi    sp,[r1],0x105
+00001520  21FF8481  mvnscs    r8,r1,lsl 0x9
+00001524  85013101  strhi     r3,[r1,-0x101]
+00001528  BC806342  Undefined
+0000152C  00004770  andeq     r4,r0,r0,ror r7
+00001530  68736D53  ldmfavs   r3!,{r0,r1,r4,r6,r8,r10,r11,sp,lr}^
+00001534  1C07B5F0  Undefined
+00001538  28008C80  stmedcs   r0,{r7,r10,r11,pc}
+0000153C  8CF9D019  Undefined
+00001540  04093901  streq     r3,[r9],-0x901
+00001544  84F90C09  ldrbhi    r0,[r9],0xC09
+00001548  8D39D113  Undefined
+0000154C  85393910  ldrhi     r3,[r9,-0x910]!
+00001550  14090409  strne     r0,[r9],-0x409
+00001554  DC0F2900  Undefined
+00001558  6AFC7A3D  bvs       0xFFF1FE54
+0000155C  E0062600  and       r2,r6,r0,lsl 0xC
+00001560  1C211C38  Undefined
+00001564  FF3FF000  swi       Unknown
+00001568  34507026  ldrbcc    r7,[r0],-0x26
+0000156C  2D003D01  Undefined
+00001570  BCF0DCF6  Undefined
+00001574  4718BC08  ldrmi     r11,[r8,-r8,lsl 0x18]
+00001578  7A3984F8  bvc       0xE62960
+0000157C  E00A6AF8  strsh     r6,[r10-],r8
+00001580  0A137802  beq       0x4DF590
+00001584  8D3BD305  Undefined
+00001588  74C3089B  strbvc    r0,[r3],0x89B
+0000158C  431A2303  tstmi     r10,0xC000000
+00001590  30507002  subscc    r7,r0,r2
+00001594  29003901  stmfdcs   r0,{r0,r8,r11,r12,sp}
+00001598  E7EADCF2  Undefined
+0000159C  780DB5B0  stmedvc   sp,{r4,r5,r7,r8,r10,r12,sp,pc}
+000015A0  08691C0F  stmedeq   r9!,{r0,r1,r2,r3,r10,r11,r12}^
+000015A4  7CB9D330  Undefined
+000015A8  7E3C7CFA  Undefined
+000015AC  094A4351  stmfdeq   r10,{r0,r4,r6,r8,r9,lr}^
+000015B0  D1022C01  mrsle     r2,cpsr
+000015B4  56F92316  Undefined
+000015B8  2314188A  tstcs     r4,0x8A0000
+000015BC  004956F9  strsheq   r5,[r9-],0x69
+000015C0  56FB2315  Undefined
+000015C4  2C0218C9  Undefined
+000015C8  2316D102  tstcs     r6,0x80000000
+000015CC  185956FB  ldmfane   r9,{r0,r1,r3,r4,r5,r6,r7,r9,r10,r12,lr}^
+000015D0  42D92380  sbcsmi    r2,r9,0x2
+000015D4  4259DA01  subsmi    sp,r9,0x1000
+000015D8  297FE002  ldmeacs   pc!,{r1,sp,lr,pc}^
+000015DC  217FDD00  cmncs     pc,r0,lsl 0x1A
+000015E0  33791DCB  cmncc     r9,0x32C0
+000015E4  0A1B4353  beq       0x6D2338
+000015E8  0E1B061B  Undefined
+000015EC  D9002BFF  stmfdle   r0,{r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r11,sp}
+000015F0  743B23FF  ldrvc     r2,[r11],-0x3FF
+000015F4  1A59237F  bne       0x164A3F8
+000015F8  0A094351  beq       0x252344
+000015FC  0E090609  Undefined
+00001600  D90029FF  stmfdle   r0,{r0,r1,r2,r3,r4,r5,r6,r7,r8,r11,sp}
+00001604  747921FF  ldrbvc    r2,[r9],-0x1FF
+00001608  D31C08E9  tstle     r12,0xE90000
+0000160C  56F9230E  ldrbpl    r2,[r9],lr,lsl 0x6
+00001610  43517BFA  cmpmi     r1,0x3E800
+00001614  230C0089  mrscs     r0,cpsr
+00001618  009256FA  ldrsheq   r5,[r2],r10
+0000161C  230A1889  mrscs     r1,cpsr
+00001620  021256FA  andseq    r5,r2,0xFA00000
+00001624  230B1889  mrscs     r1,cpsr
+00001628  021256FA  andseq    r5,r2,0xFA00000
+0000162C  7B7A1889  blvc      0x1E87858
+00001630  7E3A1889  Undefined
+00001634  D1032A00  mrsle     r2,cpsr
+00001638  56FA2316  Undefined
+0000163C  18510112  ldmfane   r1,{r1,r4,r8}^
+00001640  723A120A  eorsvc    r1,r10,0xA0000000
+00001644  4A067279  bmi       0x19E030
+00001648  6B121C39  blvs      0x488734
+0000164C  F7FF6BD2  Undefined
+00001650  7838FEB7  ldmfavc   r8!,{r0,r1,r2,r4,r5,r7,r9,r10,r11,r12,sp,lr,pc}
+00001654  43982305  orrsmi    r2,r8,0x14000000
+00001658  BCB07038  Undefined
+0000165C  4718BC08  ldrmi     r11,[r8,-r8,lsl 0x18]
+00001660  03007FC0  mrseq     r7,cpsr
+00001664  1C07B588  Undefined
+00001668  2000491C  andcs     r4,r0,r12,lsl r9
+0000166C  824880C8  subhi     r8,r8,0xC8
+00001670  228F481B  addcs     r4,=0x1B1678
+00001674  4A1B8082  bmi       0x6E1884
+00001678  7A428042  bvc       0x10A1788
+0000167C  0E920692  Undefined
+00001680  431A2340  tstmi     r10,0x1
+00001684  011B2335  tsteq     r11,r5,lsr r3
+00001688  18FA7242  ldmfdne   r10!,{r1,r6,r9,r12,sp,lr}^
+0000168C  481663C2  ldmfami   r6,{r1,r6,r7,r8,r9,sp,lr}
+00001690  01DB2313  bicseq    r2,r11,r3,lsl r3
+00001694  18F86008  ldmfdne   r8!,{r3,sp,lr}^
+00001698  48146088  ldmfami   r4,{r3,r7,sp,lr}
+0000169C  60C84A15  sbcvs     r4,r8,r5,lsl r10
+000016A0  63074813  mrsvs     r4,cpsr
+000016A4  90002000  andls     r2,r0,r0
+000016A8  1C394668  Undefined
+000016AC  FA4EF7FF  bnv       0x13BF6B0
+000016B0  71B82008  movsvc    r2,r8
+000016B4  71F8200F  mvnsvc    r2,pc
+000016B8  63B8480F  movsvs    r4,0xF0000
+000016BC  62B8480F  adcsvs    r4,r8,0xF0000
+000016C0  633862F8  teqvs     r8,0x8000000F
+000016C4  480E63F8  stmedmi   lr,{r3,r4,r5,r6,r7,r8,r9,sp,lr}
+000016C8  20016378  andcs     r6,r1,r8,ror r3
+000016CC  F0000480  andnv     r0,r0,r0,lsl 0x9
+000016D0  480CF81C  stmedmi   r12,{r2,r3,r4,r11,r12,sp,lr,pc}
+000016D4  BC886038  Undefined
+000016D8  4718BC08  ldrmi     r11,[r8,-r8,lsl 0x18]
+000016DC  040000C0  streq     r0,[r0],-0xC0
+000016E0  04000080  streq     r0,[r0],-0x80
+000016E4  0000A90E  andeq     r10,r0,lr,lsl 0x12
+000016E8  040000A0  streq     r0,[r0],-0xA0
+000016EC  040000A4  streq     r0,[r0],-0xA4
+000016F0  03007FC0  mrseq     r7,cpsr
+000016F4  050003EC  streq     r0,[r0,-0x3EC]
+000016F8  00002425  andeq     r2,r0,r5,lsr 0x8
+000016FC  00001709  andeq     r1,r0,r9,lsl 0xE
+00001700  00003738  andeq     r3,r0,r8,lsr r7
+00001704  68736D53  ldmfavs   r3!,{r0,r1,r4,r6,r8,r10,r11,sp,lr}^
+00001708  B5904770  ldrlt     r4,[r0,0x770]
+0000170C  230F491D  mrscs     r4,cpsr
+00001710  4018041B  andsmi    r0,r8,r11,lsl r4
+00001714  0C006B0F  Undefined
+00001718  491B7238  ldmeami   r11,{r3,r4,r5,r9,r12,sp,lr}
+0000171C  18400040  stmedne   r0,{r6}^
+00001720  8BC03820  blhi      0xFF00F7A8
+00001724  01092163  mrseq     r2,cpsr
+00001728  61381C04  teqvs     r8,r4,lsl 0x18
+0000172C  FFF8F001  swi       Unknown
+00001730  481672F8  ldmfami   r6,{r3,r4,r5,r6,r7,r9,r12,sp,lr}
+00001734  43604B16  msrmi     spsr_,0x5800
+00001738  005818C1  subseq    r1,r8,r1,asr 0x11
+0000173C  FFF0F001  swi       Unknown
+00001740  06092101  streq     r2,[r9],-r1,lsl 0x2
+00001744  F0016178  andnv     r6,r1,r8,ror r1
+00001748  3001FFEB  andcc     pc,r1,r11,ror 0x1F
+0000174C  61B81040  movsvs    r1,r0
+00001750  20004C10  andcs     r4,r0,r0,lsl r12
+00001754  69388060  ldmeavs   r8!,{r5,r6,pc}
+00001758  F001490F  andnv     r4,r1,pc,lsl 0x12
+0000175C  2101FFE1  mrscs     pc,cpsr
+00001760  1A080409  bne       0x20278C
+00001764  F0008020  andnv     r8,r0,r0
+00001768  2001F8AF  andcs     pc,r1,pc,lsr 0x11
+0000176C  79810680  stmfavc   r1,{r7,r9,r10}
+00001770  D0FC299F  smlalsle  r2,r12,r9,pc
+00001774  299F7981  ldmedcs   pc,{r0,r7,r8,r11,r12,sp,lr}
+00001778  2080D1FC  strshcs   sp,[r0],r12
+0000177C  BC908060  Undefined
+00001780  4718BC08  ldrmi     r11,[r8,-r8,lsl 0x18]
+00001784  03007FC0  mrseq     r7,cpsr
+00001788  000031E8  andeq     r3,r0,r8,ror 0x3
+0000178C  00091D1B  andeq     r1,r9,r11,lsl sp
+00001790  00001388  andeq     r1,r0,r8,lsl 0x7
+00001794  04000100  streq     r0,[r0],-0x100
+00001798  00044940  andeq     r4,r4,r0,asr 0x12
+0000179C  491EB5B0  ldmeami   lr,{r4,r5,r7,r8,r10,r12,sp,pc}
+000017A0  6B0F4D1E  blvs      0x3D4C20
+000017A4  42A96839  adcmi     r6,r9,0x390000
+000017A8  3101D133  mrscc     sp,cpsr
+000017AC  06016039  Undefined
+000017B0  D0020E09  andle     r0,r2,r9,lsl 0x1C
+000017B4  0E490649  Undefined
+000017B8  210F7179  mrscs     r7,cpsr
+000017BC  40010209  andmi     r0,r1,r9,lsl 0x4
+000017C0  0A09D009  beq       0x2757EC
+000017C4  210C71B9  strhcs    r7,[r12,-r9]
+000017C8  1DFA2300  Undefined
+000017CC  70133249  andsvc    r3,r3,r9,asr 0x4
+000017D0  39013240  stmfdcc   r1,{r6,r9,r12,sp}
+000017D4  210FD1FB  strshcs   sp,[pc,-r11]
+000017D8  40010309  andmi     r0,r1,r9,lsl 0x6
+000017DC  0B09D001  bleq      0x2757E8
+000017E0  210B71F9  strshcs   r7,[r11,-r9]
+000017E4  40010509  andmi     r0,r1,r9,lsl 0xA
+000017E8  2303D009  mrscs     sp,cpsr
+000017EC  4A0C051B  bmi       0x302C60
+000017F0  7A534019  bvc       0x14D185C
+000017F4  069B0B89  ldreq     r0,[r11],r9,lsl 0x17
+000017F8  43190E9B  tstmi     r9,0x9B0
+000017FC  240F7251  strcs     r7,[pc],-0x251
+00001800  40040424  andmi     r0,r4,r4,lsr 0x8
+00001804  F000D004  andnv     sp,r0,r4
+00001808  1C20F837  Undefined
+0000180C  FF7DF7FF  swi       Unknown
+00001810  BCB0603D  Undefined
+00001814  4718BC08  ldrmi     r11,[r8,-r8,lsl 0x18]
+00001818  03007FC0  mrseq     r7,cpsr
+0000181C  68736D53  ldmfavs   r3!,{r0,r1,r4,r6,r8,r10,r11,sp,lr}^
+00001820  04000080  streq     r0,[r0],-0x80
+00001824  4812B5F0  ldmfami   r2,{r4,r5,r6,r7,r8,r10,r12,sp,pc}
+00001828  6B074E12  blvs      0x1D5078
+0000182C  42B06838  adcsmi    r6,r0,0x380000
+00001830  3001D11A  andcc     sp,r1,r10,lsl r1
+00001834  1DF86038  Undefined
+00001838  3049210C  subcc     r2,r9,r12,lsl 0x2
+0000183C  70022200  andvc     r2,r2,r0,lsl 0x4
+00001840  39013040  stmfdcc   r1,{r6,r12,sp}
+00001844  DCF92900  Undefined
+00001848  2D0069FD  Undefined
+0000184C  2401D00B  strcs     sp,[r1],-0xB
+00001850  0E000620  Undefined
+00001854  F7FF6AF9  Undefined
+00001858  3401FDB4  strcc     pc,[r1],-0xDB4
+0000185C  2C043540  Undefined
+00001860  2200DDF6  andcs     sp,r0,0x3D80
+00001864  603E702A  eorsvs    r7,lr,r10
+00001868  BC08BCF0  Undefined
+0000186C  00004718  andeq     r4,r0,r8,lsl r7
+00001870  03007FC0  mrseq     r7,cpsr
+00001874  68736D53  ldmfavs   r3!,{r0,r1,r4,r6,r8,r10,r11,sp,lr}^
+00001878  480FB588  stmedmi   pc,{r3,r7,r8,r10,r12,sp,pc}
+0000187C  6B074B0F  blvs      0x1D44C0
+00001880  42986838  addsmi    r6,r8,0x380000
+00001884  3301D314  mrscc     sp,cpsr
+00001888  D8114298  ldmfale   r1,{r3,r4,r7,r9,lr}
+0000188C  60383001  eorsvs    r3,r8,r1
+00001890  490B2000  stmfdmi   r11,{sp}
+00001894  80C82335  sbchi     r2,r8,r5,lsr r3
+00001898  71388248  teqvc     r8,r8,asr 0x4
+0000189C  18F9011B  ldmfdne   r9!,{r0,r1,r3,r4,r8}^
+000018A0  46689000  strbmi    r9,[r8],-r0
+000018A4  F7FF4A07  ldrbnv    r4,[pc,r7,lsl 0x14]!
+000018A8  6838F951  ldmfavs   r8!,{r0,r4,r6,r8,r11,r12,sp,lr,pc}
+000018AC  60383801  eorsvs    r3,r8,r1,lsl 0x10
+000018B0  BC08BC88  Undefined
+000018B4  00004718  andeq     r4,r0,r8,lsl r7
+000018B8  03007FC0  mrseq     r7,cpsr
+000018BC  68736D53  ldmfavs   r3!,{r0,r1,r4,r6,r8,r10,r11,sp,lr}^
+000018C0  040000C0  streq     r0,[r0],-0xC0
+000018C4  05000318  streq     r0,[r0,-0x318]
+000018C8  4802215B  stmedmi   r2,{r0,r1,r3,r4,r6,r8,sp}
+000018CC  80C10249  sbchi     r0,r1,r9,asr 0x4
+000018D0  47708241  ldrbmi    r8,[r0,-r1,asr 0x4]!
+000018D4  040000C0  streq     r0,[r0],-0xC0
+000018D8  0612B5F0  Undefined
+000018DC  29B21C07  ldmedcs   r2!,{r0,r1,r2,r10,r11,r12}
+000018E0  4A0FDD01  bmi       0x3F8CEC
+000018E4  480F21B2  stmedmi   pc,{r1,r4,r5,r7,r8,sp}
+000018E8  071C5C43  ldreq     r5,[r12,-r3,asr 0x18]
+000018EC  00A40F24  adceq     r0,r4,r4,lsr 0x1E
+000018F0  35AD1DC5  strcc     r1,[sp,0xDC5]!
+000018F4  091E592C  ldmeaeq   lr,{r2,r3,r5,r8,r11,r12,lr}
+000018F8  184040F4  stmedne   r0,{r2,r4,r5,r6,r7,lr}^
+000018FC  07017840  streq     r7,[r1,-r0,asr 0x10]
+00001900  00890F09  addeq     r0,r9,r9,lsl 0x1E
+00001904  09005869  stmfdeq   r0,{r0,r3,r5,r6,r11,r12,lr}
+00001908  1B0840C1  blne      0x211C14
+0000190C  F0001C11  andnv     r1,r0,r1,lsl r12
+00001910  1901FA51  stmfdne   r1,{r0,r4,r6,r9,r11,r12,sp,lr,pc}
+00001914  F0006878  andnv     r6,r0,r8,ror r8
+00001918  BCF0FA4D  Undefined
+0000191C  4718BC08  ldrmi     r11,[r8,-r8,lsl 0x18]
+00001920  FF000000  swi       SoftReset
+00001924  00003104  andeq     r3,r0,r4,lsl 0x2
+00001928  B08DB5F0  strshlt   r11,[sp],r0
+0000192C  20002100  andcs     r2,r0,r0,lsl 0x2
+00001930  20109005  andscs    r9,r0,r5
+00001934  43CF9003  bicmi     r9,pc,0x3
+00001938  910420FF  strshls   r2,[r4,-pc]
+0000193C  F7FF9100  ldrbnv    r9,[pc,r0,lsl 0x2]!
+00001940  48FAF840  ldmfdmi   r10!,{r6,r11,r12,sp,lr,pc}^
+00001944  70052501  andvc     r2,r5,r1,lsl 0xA
+00001948  F7FE2001  ldrbnv    r2,[lr,r1]!
+0000194C  4EF8FF59  Undefined
+00001950  05C12008  strbeq    r2,[r1,0x8]
+00001954  80888035  addhi     r8,r8,r5,lsr r0
+00001958  0BC088B0  bleq      0xFF023C20
+0000195C  F7FED001  ldrbnv    sp,[lr,r1]!
+00001960  F7FEFC91  Undefined
+00001964  20EFFF87  rsccs     pc,pc,r7,lsl 0x1F
+00001968  210101C0  mrscs     r0,cpsr
+0000196C  81C80689  bichi     r0,r8,r9,lsl 0xD
+00001970  90022054  andls     r2,r2,r4,asr r0
+00001974  90012076  andls     r2,r1,r6,ror r0
+00001978  02802015  addeq     r2,r0,0x15
+0000197C  203B6388  eorscs    r6,r11,r8,lsl 0x7
+00001980  63C80240  bicvs     r0,r8,0x4
+00001984  48EB49EC  stmeami   r11!,{r2,r3,r5,r6,r7,r8,r11,lr}^
+00001988  F7FE6108  ldrbnv    r6,[lr,r8,lsl 0x2]!
+0000198C  F001FECC  andnv     pc,r1,r12,asr 0x1D
+00001990  48EAF9EB  stmeami   r10!,{r0,r1,r3,r5,r6,r7,r8,r11,r12,sp,lr,pc}^
+00001994  FE66F7FF  Undefined
+00001998  F7FF48E9  ldrbnv    r4,[pc,r9,ror 0x11]!
+0000199C  49E9FEFF  stmfami   r9!,{r0,r1,r2,r3,r4,r5,r6,r7,r9,r10,r11,r12,sp,lr,pc}^
+000019A0  220648E9  andcs     r4,r6,0xE90000
+000019A4  FD0EF7FF  Undefined
+000019A8  48E949E8  stmeami   r9!,{r3,r5,r6,r7,r8,r11,lr}^
+000019AC  F7FF2206  ldrbnv    r2,[pc,r6,lsl 0x4]!
+000019B0  E156FD09  cmp       r6,r9,lsl 0x1A
+000019B4  E0A82507  adc       r2,r8,r7,lsl 0xA
+000019B8  1B422006  blne      0x10899D8
+000019BC  18800090  stmeane   r0,{r4,r7}
+000019C0  42B83008  adcsmi    r3,r8,0x8
+000019C4  DC04920C  Undefined
+000019C8  00A94BE2  adceq     r4,r9,r2,ror 0x17
+000019CC  3201585A  andcc     r5,r1,0x5A0000
+000019D0  4BE0505A  blmi      0xFF815B40
+000019D4  585A00A9  ldmfapl   r10,{r0,r3,r5,r7}^
+000019D8  01294BDF  strsbeq   r4,[r9,-pc]!
+000019DC  00EC18C9  rsceq     r1,r12,r9,asr 0x11
+000019E0  92079106  andls     r9,r7,0x80000001
+000019E4  2307688E  mrscs     r6,cpsr
+000019E8  940B061B  strls     r0,[r11],-0x61B
+000019EC  2E0018E4  Undefined
+000019F0  42B8DA67  adcsmi    sp,r8,0x67000
+000019F4  3602DC01  strcc     sp,[r2],-r1,lsl 0x18
+000019F8  0428608E  streq     r6,[r8],-0x8E
+000019FC  99061400  stmfdls   r6,{r10,r12}
+00001A00  FE9AF7FE  Undefined
+00001A04  43682014  msrmi     spsr_f,0x14
+00001A08  184149D4  stmedne   r1,{r2,r4,r6,r7,r8,r11,lr}^
+00001A0C  9109910A  mrsls     r9,cpsr
+00001A10  F7FE9806  ldrbnv    r9,[lr,r6,lsl 0x10]!
+00001A14  0168FEA9  msreq     spsr_f,r9
+00001A18  22014BD1  andcs     r4,r1,0x34400
+00001A1C  980918C1  stmedls   r9,{r0,r6,r7,r11,r12}
+00001A20  300C2308  andcc     r2,r12,r8,lsl 0x6
+00001A24  FE84F001  Undefined
+00001A28  42DE2360  sbcsmi    r2,lr,0x80000001
+00001A2C  6820DD3E  stmedvs   r0!,{r1,r2,r3,r4,r5,r8,r10,r11,r12,lr,pc}
+00001A30  430200DA  mrsmi     r0,cpsr
+00001A34  43C0203F  bicmi     r2,r0,0x3F
+00001A38  42861C01  addmi     r1,r6,0x100
+00001A3C  DA016022  ble       0x59ACC
+00001A40  DA1F2D04  ble       0x7CCE58
+00001A44  42DE234B  sbcsmi    r2,lr,0x2C000001
+00001A48  2E00DB1C  Undefined
+00001A4C  8820DA13  stmedhi   r0!,{r0,r1,r4,r9,r11,r12,lr,pc}
+00001A50  03DB2301  bicseq    r2,r11,0x4000000
+00001A54  80204318  eorhi     r4,r0,r8,lsl r3
+00001A58  4AC2980B  bmi       0xFF0A7A8C
+00001A5C  88A21880  stmeahi   r2!,{r7,r11,r12}
+00001A60  0A928880  beq       0xFE4A3C68
+00001A64  30040292  mulcc     r4,r0,r2
+00001A68  0D800580  Undefined
+00001A6C  80A04310  adchi     r4,r0,r0,lsl r3
+00001A70  43C0201F  bicmi     r2,r0,0x1F
+00001A74  2303E006  mrscs     lr,cpsr
+00001A78  439A021B  orrsmi    r0,r10,0xB0000001
+00001A7C  43C0200F  bicmi     r2,r0,0xF
+00001A80  60220041  eorvs     r0,r2,r1
+00001A84  4BB89A0A  blmi      0xFEE282B4
+00001A88  18108912  ldmfane   r0,{r1,r4,r8,r11,pc}
+00001A8C  401A6822  andsmi    r6,r10,r2,lsr 0x10
+00001A90  0DC005C0  Undefined
+00001A94  43100400  tstmi     r0,0x0
+00001A98  9A0A6020  bls       0x299B20
+00001A9C  18518952  ldmfane   r1,{r1,r4,r6,r8,r11,pc}^
+00001AA0  02000A00  andeq     r0,r0,0x0
+00001AA4  0E090609  Undefined
+00001AA8  60204308  eorvs     r4,r0,r8,lsl 0x6
+00001AAC  07014270  Undefined
+00001AB0  00490F09  subeq     r0,r9,r9,lsl 0x1E
+00001AB4  11009A0C  mrsne     r9,cpsr
+00001AB8  30010092  mulcc     r1,r0,r0
+00001ABC  F7FE3201  ldrbnv    r3,[lr,r1,lsl 0x4]!
+00001AC0  9A07FE7D  bls       0x2014BC
+00001AC4  38381FD0  ldmfacc   r8!,{r4,r6,r7,r8,r9,r10,r11,r12}
+00001AC8  D80C2822  stmedle   r12,{r1,r5,r11,sp}
+00001ACC  9A0748A7  bls       0x1D3D70
+00001AD0  38401880  stmedcc   r0,{r7,r11,r12}^
+00001AD4  68207841  stmedvs   r0!,{r0,r6,r11,r12,sp,lr}
+00001AD8  02120A02  andseq    r0,r2,0x2000
+00001ADC  06001840  streq     r1,[r0],-r0,asr 0x10
+00001AE0  43100E00  tstmi     r0,0x0
+00001AE4  9A076020  bls       0x1D9B6C
+00001AE8  39591FD1  ldmeacc   r9,{r0,r4,r6,r7,r8,r9,r10,r11,r12}^
+00001AEC  D80C2950  stmedle   r12,{r4,r6,r8,r11,sp}
+00001AF0  F0012005  andnv     r2,r1,r5
+00001AF4  3808FE15  stmedcc   r8,{r0,r2,r4,r9,r10,r11,r12,sp,lr,pc}
+00001AF8  FC50F7FE  Undefined
+00001AFC  00819A0C  addeq     r9,r1,r12,lsl 0x14
+00001B00  1C420090  Undefined
+00001B04  F7FE2000  ldrbnv    r2,[lr,r0]!
+00001B08  3D01FE59  Undefined
+00001B0C  E753D400  ldrb      sp,[r3,-r0,lsl 0x8]
+00001B10  06242407  streq     r2,[r4],-r7,lsl 0x8
+00001B14  D0012F6C  andle     r2,r1,r12,ror 0x1E
+00001B18  D10D2FB4  strhle    r2,[sp,-r4]
+00001B1C  21069802  mrscs     r9,cpsr
+00001B20  90023838  andls     r3,r2,r8,lsr r8
+00001B24  91049801  mrsls     r9,cpsr
+00001B28  90013880  andls     r3,r1,r0,lsl 0x11
+00001B2C  9003200A  andls     r2,r3,r10
+00001B30  4981488F  stmfami   r1,{r0,r1,r2,r3,r7,r11,lr}
+00001B34  E0456108  sub       r6,r5,r8,lsl 0x2
+00001B38  DD3F2F6C  Undefined
+00001B3C  38039802  stmedcc   r3,{r1,r11,r12,pc}
+00001B40  98089002  stmedls   r8,{r1,r12,pc}
+00001B44  D1012800  mrsle     r2,cpsr
+00001B48  E0002001  and       r2,r0,r1
+00001B4C  23032002  mrscs     r2,cpsr
+00001B50  021B6CA1  andseq    r6,r11,0xA100
+00001B54  07804399  Undefined
+00001B58  02000F80  andeq     r0,r0,0x200
+00001B5C  49824308  stmfami   r2,{r3,r8,r9,lr}
+00001B60  23014001  mrscs     r4,cpsr
+00001B64  18C0049B  stmeane   r0,{r0,r1,r3,r4,r7,r10}^
+00001B68  43984B7F  orrsmi    r4,r8,0x1FC00
+00001B6C  64A04308  strvs     r4,[r0],0x308
+00001B70  00E82500  rsceq     r2,r8,r0,lsl 0xA
+00001B74  1DC11900  Undefined
+00001B78  22033179  andcs     r3,r3,0x4000001E
+00001B7C  F7FE1C0E  ldrbnv    r1,[lr,lr,lsl 0x18]!
+00001B80  8830FFE5  ldmfahi   r0!,{r0,r2,r5,r6,r7,r8,r9,r10,r11,r12,sp,lr,pc}
+00001B84  029B2303  addseq    r2,r11,0xC000000
+00001B88  35014058  strcc     r4,[r1,-0x58]
+00001B8C  80302D09  eorshi    r2,r0,r9,lsl 0x1A
+00001B90  2006DBEF  andcs     sp,r6,pc,ror 0x17
+00001B94  F0011C39  andnv     r1,r1,r9,lsr r12
+00001B98  2900FDC3  stmfdcs   r0,{r0,r1,r6,r7,r8,r10,r11,r12,sp,lr,pc}
+00001B9C  9904D109  stmfdls   r4,{r0,r3,r8,r12,lr,pc}
+00001BA0  31019803  mrscc     r9,cpsr
+00001BA4  90033801  andls     r3,r3,r1,lsl 0x10
+00001BA8  43080200  mrsmi     r0,cpsr
+00001BAC  49629104  stmfdmi   r2!,{r2,r8,r12,pc}^
+00001BB0  48708248  ldmfami   r0!,{r3,r6,r9,pc}^
+00001BB4  81484960  mrshi     r4,spsr
+00001BB8  E000486F  and       r4,r0,pc,ror 0x10
+00001BBC  2101486F  mrscs     r4,cpsr
+00001BC0  80080689  andhi     r0,r8,r9,lsl 0xD
+00001BC4  02009802  andeq     r9,r0,0x20000
+00001BC8  06892101  streq     r2,[r9],r1,lsl 0x2
+00001BCC  98016388  stmedls   r1,{r3,r7,r8,r9,sp,lr}
+00001BD0  63C80200  bicvs     r0,r8,0x0
+00001BD4  DB052F10  blle      0x14D81C
+00001BD8  F8F4F000  ldmfdnv   r4!,{r12,sp,lr,pc}^
+00001BDC  D1012F10  mrsle     r2,cpsr
+00001BE0  E0024967  and       r4,r2,r7,ror 0x12
+00001BE4  D1032FA2  mrsle     r2,cpsr
+00001BE8  48574966  ldmfami   r7,{r1,r2,r5,r6,r8,r11,lr}^
+00001BEC  FC22F7FF  Undefined
+00001BF0  383A1FF8  ldmfacc   r10!,{r3,r4,r5,r6,r7,r8,r9,r10,r11,r12}
+00001BF4  D211284F  andsle    r2,r1,0x4F0000
+00001BF8  28009808  stmedcs   r0,{r3,r11,r12,pc}
+00001BFC  4862D10E  stmedmi   r2!,{r1,r2,r3,r8,r12,lr,pc}^
+00001C00  6A402301  bvs       0x100A80C
+00001C04  D00942D8  strsble   r4,[r9-],r8
+00001C08  78004860  stmedvc   r0,{r5,r6,r11,lr}
+00001C0C  D10528F3  strshle   r2,[r5,-r3]
+00001C10  484F495F  stmedmi   pc,{r0,r1,r2,r3,r4,r6,r8,r11,lr}^
+00001C14  FC0EF7FF  Undefined
+00001C18  90082001  andls     r2,r8,r1
+00001C1C  DD0D2F38  Undefined
+00001C20  28009808  stmedcs   r0,{r3,r11,r12,pc}
+00001C24  9900D00A  stmfdls   r0,{r1,r3,r12,lr,pc}
+00001C28  DA022920  ble       0x8C0B0
+00001C2C  31029900  mrscc     r9,cpsr
+00001C30  221F9100  andscs    r9,pc,0x0
+00001C34  99002006  stmfdls   r0,{r1,r2,sp}
+00001C38  FDC0F7FE  Undefined
+00001C3C  FF7AF000  swi       Unknown
+00001C40  2001493B  andcs     r4,r1,r11,lsr r9
+00001C44  F0018108  andnv     r8,r1,r8,lsl 0x2
+00001C48  2F10FD6F  swi       BitUnPack
+00001C4C  9904DA09  stmfdls   r4,{r0,r3,r9,r11,r12,lr,pc}
+00001C50  31019803  mrscc     r9,cpsr
+00001C54  90033801  andls     r3,r3,r1,lsl 0x10
+00001C58  43080200  mrsmi     r0,cpsr
+00001C5C  49369104  ldmeami   r6!,{r2,r8,r12,pc}
+00001C60  37018248  strcc     r8,[r1,-r8,asr 0x4]
+00001C64  DC002FD2  Undefined
+00001C68  484AE6A4  stmedmi   r10,{r2,r5,r7,r9,r10,sp,lr,pc}^
+00001C6C  FD3CF7FE  Undefined
+00001C70  1C072600  Undefined
+00001C74  4D482800  Undefined
+00001C78  9808D102  stmedls   r8,{r1,r8,r12,lr,pc}
+00001C7C  D02B2800  eorle     r2,r11,r0,lsl 0x10
+00001C80  72E82001  rscvc     r2,r8,0x1
+00001C84  F00071EE  andnv     r7,r0,lr,ror 0x3
+00001C88  0600FF55  Undefined
+00001C8C  72A80E00  adcvc     r0,r8,0x0
+00001C90  F000D122  andnv     sp,r0,r2,lsr 0x2
+00001C94  F001F897  mulnv     r1,pc,r8
+00001C98  2F00FD47  swi       SoftReset
+00001C9C  79E8D1F3  stmfavc   r8!,{r0,r1,r4,r5,r6,r7,r8,r12,lr,pc}^
+00001CA0  D1F02800  mvnsle    r2,r0,lsl 0x10
+00001CA4  28007AE8  stmedcs   r0,{r3,r5,r6,r7,r9,r11,r12,sp,lr}
+00001CA8  4838D00B  ldmfami   r8!,{r0,r1,r3,r12,lr,pc}
+00001CAC  43C07800  bicmi     r7,r0,0x0
+00001CB0  401823F3  ldrshmi   r2,[r8-],r3
+00001CB4  4939D0E7  ldmeami   r9!,{r0,r1,r2,r5,r6,r7,r12,lr,pc}
+00001CB8  F7FF4825  ldrbnv    r4,[pc,r5,lsr 0x10]!
+00001CBC  72EEFBBB  rscvc     pc,lr,0x2EC00
+00001CC0  9900E7E1  stmfdls   r0,{r0,r5,r6,r7,r8,r9,r10,sp,lr,pc}
+00001CC4  DD072900  Undefined
+00001CC8  221F9900  andscs    r9,pc,0x0
+00001CCC  91003901  mrsls     r3,cpsr
+00001CD0  F7FE2006  ldrbnv    r2,[lr,r6]!
+00001CD4  E7D6FD73  Undefined
+00001CD8  48174931  ldmfami   r7,{r0,r4,r5,r8,r11,lr}
+00001CDC  61466101  mrsvs     r6,spsr
+00001CE0  00CA2100  sbceq     r2,r10,r0,lsl 0x2
+00001CE4  230358A7  mrscs     r5,cpsr
+00001CE8  439F029B  orrsmi    r0,pc,0xB0000009
+00001CEC  29093101  stmfdcs   r9,{r0,r8,r12,sp}
+00001CF0  DBF650A7  blle      0xFFD95F94
+00001CF4  43FF2700  mvnsmi    r2,0x0
+00001CF8  E00C1C04  and       r1,r12,r4,lsl 0x18
+00001CFC  F862F000  stmednv   r2!,{r12,sp,lr,pc}^
+00001D00  FD12F001  Undefined
+00001D04  D2060878  andle     r0,r6,0x780000
+00001D08  28109805  ldmfacs   r0,{r0,r2,r11,r12,pc}
+00001D0C  9805D003  stmedls   r5,{r0,r1,r12,lr,pc}
+00001D10  90053001  andls     r3,r5,r1
+00001D14  37016160  strcc     r6,[r1,-r0,ror 0x2]
+00001D18  DDEF2F32  Undefined
+00001D1C  FDACF7FF  Undefined
+00001D20  28007AA8  stmedcs   r0,{r3,r5,r7,r9,r11,r12,sp,lr}
+00001D24  20DED03E  sbcscs    sp,lr,lr,lsr r0
+00001D28  E03BE03D  eors      lr,r11,sp,lsr r0
+00001D2C  04000300  streq     r0,[r0],-0x300
+00001D30  04000200  streq     r0,[r0],-0x200
+00001D34  10003F5F  andne     r3,r0,pc,asr pc
+00001D38  04000040  streq     r0,[r0],-0x40
+00001D3C  03003B2C  mrseq     r3,cpsr
+00001D40  00940A00  addseq    r0,r4,r0,lsl 0x14
+00001D44  0300372C  mrseq     r3,cpsr
+00001D48  030036EC  mrseq     r3,cpsr
+00001D4C  0300394C  mrseq     r3,cpsr
+00001D50  0300390C  mrseq     r3,cpsr
+00001D54  03003564  mrseq     r3,cpsr
+00001D58  03003580  mrseq     r3,cpsr
+00001D5C  030035F0  mrseq     r3,cpsr
+00001D60  07000026  streq     r0,[r0,-r6]
+00001D64  0000369C  muleq     r0,r3,r6
+00001D68  FE00FFFF  Undefined
+00001D6C  000036EC  andeq     r3,r0,r12,ror 0xD
+00001D70  10001F5F  andne     r1,r0,pc,asr pc
+00001D74  00003F27  andeq     r3,r0,r7,lsr 0x1E
+00001D78  00009802  andeq     r9,r0,r2,lsl 0x10
+00001D7C  00001002  andeq     r1,r0,r2
+00001D80  00003908  andeq     r3,r0,r8,lsl 0x12
+00001D84  000039C0  andeq     r3,r0,r0,asr 0x13
+00001D88  03000064  mrseq     r0,cpsr
+00001D8C  04000130  streq     r0,[r0],-0x130
+00001D90  0000389C  muleq     r0,r3,r8
+00001D94  03000088  mrseq     r0,cpsr
+00001D98  03FFFFF0  mvnseq    pc,0x3C0
+00001D9C  00003818  andeq     r3,r0,r8,lsl r8
+00001DA0  00103FBF  ldrheq    r3,[r0-],pc
+00001DA4  F7FE20FF  Undefined
+00001DA8  B00DFE0C  andlt     pc,sp,r12,lsl 0x1C
+00001DAC  BC08BCF0  Undefined
+00001DB0  00004718  andeq     r4,r0,r8,lsl r7
+00001DB4  4710A200  ldrmi     r10,[r0,-r0,lsl 0x4]
+00001DB8  E0832190  umull     r2,r3,r1,r0
+00001DBC  E2830000  add       r0,r3,0x0
+00001DC0  E12FFF1E  bx        lr
+00001DC4  680048DE  stmedvs   r0,{r1,r2,r3,r4,r6,r7,r11,lr}
+00001DC8  68034ADE  stmedvs   r3,{r1,r2,r3,r4,r6,r7,r9,r11,lr}
+00001DCC  D000429A  mulle     r0,r4,r2
+00001DD0  1C5B4770  Undefined
+00001DD4  B5F06003  ldrblt    r6,[r0,0x3]!
+00001DD8  464A4641  strbmi    r4,[r10],-r1,asr 0xC
+00001DDC  465C4653  Undefined
+00001DE0  B085B41F  addlt     r11,r5,pc,lsl r4
+00001DE4  2B006A03  blcs      0x1C5F8
+00001DE8  6A40D003  bvs       0x1035DFC
+00001DEC  F989F000  stmfanv   r9,{r12,sp,lr,pc}
+00001DF0  6A839805  bvs       0xFE0E7E0C
+00001DF4  F985F000  stmfanv   r5,{r12,sp,lr,pc}
+00001DF8  69039805  stmfdvs   r3,{r0,r2,r11,r12,pc}
+00001DFC  4DC14698  Undefined
+00001E00  7904182D  stmfdvc   r4,{r0,r2,r3,r5,r11,r12}
+00001E04  D9041E67  stmfdle   r4,{r0,r1,r2,r5,r6,r9,r10,r11,r12}
+00001E08  1BC97AC1  blne      0xFF260914
+00001E0C  434A4642  mrsmi     r4,spsr
+00001E10  950218AD  strls     r1,[r2,-0x8AD]
+00001E14  79434EBC  stmfdvc   r3,{r2,r3,r4,r5,r7,r9,r10,r11,lr}^
+00001E18  D02B2B00  eorle     r2,r11,r0,lsl 0x16
+00001E1C  4708A100  strmi     r10,[r8,-r0,lsl 0x2]
+00001E20  E3540002  cmp       r4,0x2
+00001E24  02807E35  addeq     r7,r0,0x350
+00001E28  10857008  addne     r7,r5,r8
+00001E2C  E1A04008  mov       r4,r8
+00001E30  E19500D6  ldrsb     r0,[r5,r6]
+00001E34  E1D510D0  ldrsb     r1,[r5,0x0]
+00001E38  E0800001  add       r0,r0,r1
+00001E3C  E19710D6  ldrsb     r1,[r7,r6]
+00001E40  E0800001  add       r0,r0,r1
+00001E44  E0D710D1  ldrsb     r1,[r7],0x1
+00001E48  E0800001  add       r0,r0,r1
+00001E4C  E0010390  mul       r1,r0,r3
+00001E50  E1A004C1  mov       r0,r1,asr 0x9
+00001E54  E3100080  tst       r0,0x80
+00001E58  12800001  addne     r0,r0,0x1
+00001E5C  E7C50006  strb      r0,[r5,r6]
+00001E60  E4C50001  strb      r0,[r5],0x1
+00001E64  E2544001  subs      r4,r4,0x1
+00001E68  CAFFFFF0  bgt       0x1E30
+00001E6C  E28F002F  add       r0,=0x1EA3
+00001E70  E12FFF10  bx        r0
+00001E74  46412000  strbmi    r2,[r1],-r0
+00001E78  08C91976  stmeaeq   r9,{r1,r2,r4,r5,r6,r8,r11,r12}^
+00001E7C  C501D301  strgt     sp,[r1,-0x301]
+00001E80  0849C601  stmedeq   r9,{r0,r9,r10,lr,pc}^
+00001E84  C501D303  strgt     sp,[r1,-0x303]
+00001E88  C501C601  strgt     r12,[r1,-0x601]
+00001E8C  C501C601  strgt     r12,[r1,-0x601]
+00001E90  C501C601  strgt     r12,[r1,-0x601]
+00001E94  C501C601  strgt     r12,[r1,-0x601]
+00001E98  C501C601  strgt     r12,[r1,-0x601]
+00001E9C  1E49C601  Undefined
+00001EA0  9C05DCF5  Undefined
+00001EA4  46816960  strmi     r6,[r1],r0,ror 0x12
+00001EA8  468469A0  strmi     r6,[r4],r0,lsr 0x13
+00001EAC  345079A0  ldrbcc    r7,[r0],-0x9A0
+00001EB0  6A639001  bvs       0x18E5EBC
+00001EB4  20C77826  sbccs     r7,r7,r6,lsr 0x10
+00001EB8  D1004230  mrsle     r4,cpsr
+00001EBC  2080E112  addcs     lr,r0,r2,lsl r1
+00001EC0  D0144230  andsle    r4,r4,r0,lsr r2
+00001EC4  42302040  eorsmi    r2,r0,0x40
+00001EC8  2603D119  Undefined
+00001ECC  1C187026  Undefined
+00001ED0  62A03010  adcvs     r3,r0,0x10
+00001ED4  61A068D8  strsbvs   r6,[r0,r8]!
+00001ED8  72652500  rsbvc     r2,r5,0x0
+00001EDC  78DA61E5  ldmfdvc   r10,{r0,r2,r5,r6,r7,r8,sp,lr}^
+00001EE0  421020C0  andsmi    r2,r0,0xC0
+00001EE4  2010D02F  andscs    sp,r0,pc
+00001EE8  70264306  eorvc     r4,r6,r6,lsl 0x6
+00001EEC  7A65E02B  bvc       0x1979FA0
+00001EF0  42302004  eorsmi    r2,r0,0x4
+00001EF4  7B60D006  blvc      0x1835F14
+00001EF8  73601E40  msrvc     spsr_,0x400
+00001EFC  2000D82A  andcs     sp,r0,r10,lsr 0x10
+00001F00  E0EF7020  rsc       r7,pc,r0
+00001F04  42302040  eorsmi    r2,r0,0x40
+00001F08  79E0D00C  stmfavc   r0!,{r2,r3,r12,lr,pc}^
+00001F0C  0A2D4345  beq       0xB52C28
+00001F10  42857B20  addmi     r7,r5,0x8000
+00001F14  7B25D81E  blvc      0x977F94
+00001F18  D0F02D00  rscsle    r2,r0,r0,lsl 0x1A
+00001F1C  43062004  mrsmi     r2,cpsr
+00001F20  E0177026  ands      r7,r7,r6
+00001F24  40322203  eorsmi    r2,r2,r3,lsl 0x4
+00001F28  D10A2A02  mrsle     r2,cpsr
+00001F2C  43457960  mrsmi     r7,spsr
+00001F30  79A00A2D  stmfavc   r0!,{r0,r2,r3,r5,r9,r11}
+00001F34  D80D4285  stmedle   sp,{r0,r2,r7,r9,lr}
+00001F38  D0EC1C05  rscle     r1,r12,r5,lsl 0x18
+00001F3C  70261E76  eorvc     r1,r6,r6,ror lr
+00001F40  2A03E008  bcs       0xF9F68
+00001F44  7920D106  stmfdvc   r0!,{r1,r2,r8,r12,lr,pc}
+00001F48  2DFF182D  Undefined
+00001F4C  25FFD302  ldrbcs    sp,[pc,0x302]!
+00001F50  70261E76  eorvc     r1,r6,r6,ror lr
+00001F54  98057265  stmedls   r5,{r0,r2,r5,r6,r9,r12,sp,lr}
+00001F58  1C4079C0  Undefined
+00001F5C  09054368  stmfdeq   r5,{r3,r5,r6,r8,r9,lr}
+00001F60  436878A0  msrmi     spsr_f,0xA00000
+00001F64  72A00A00  adcvc     r0,r0,0x0
+00001F68  436878E0  msrmi     spsr_f,0xE00000
+00001F6C  72E00A00  rscvc     r0,r0,0x0
+00001F70  40302010  eorsmi    r2,r0,r0,lsl r0
+00001F74  D0079004  andle     r9,r7,r4
+00001F78  30101C18  andscc    r1,r0,r8,lsl r12
+00001F7C  18406899  stmedne   r0,{r0,r3,r4,r7,r11,sp,lr}^
+00001F80  68D89003  ldmfdvs   r8,{r0,r1,r12,pc}^
+00001F84  90041A40  andls     r1,r4,r0,asr 0x14
+00001F88  69A29D02  stmfavs   r2!,{r1,r8,r10,r11,r12,pc}
+00001F8C  A0016AA3  andge     r6,r1,r3,lsr 0x15
+00001F90  00004700  andeq     r4,r0,r0,lsl 0xE
+00001F94  E58D8000  str       r8,[sp,0x0]
+00001F98  E5D4A00A  ldrb      r10,[r4,0xA]
+00001F9C  E5D4B00B  ldrb      r11,[r4,0xB]
+00001FA0  E5D40001  ldrb      r0,[r4,0x1]
+00001FA4  E3100008  tst       r0,0x8
+00001FA8  0A000013  beq       0x1FFC
+00001FAC  E0D360D1  ldrsb     r6,[r3],0x1
+00001FB0  E0010B96  mul       r1,r0,r11
+00001FB4  E5D50630  ldrb      r0,[r5,0x630]
+00001FB8  E0800441  add       r0,r0,r1,asr 0x8
+00001FBC  E5C50630  strb      r0,[r5,0x630]
+00001FC0  E0010A96  mul       r1,r0,r10
+00001FC4  E5D50000  ldrb      r0,[r5,0x0]
+00001FC8  E0800441  add       r0,r0,r1,asr 0x8
+00001FCC  E4C50001  strb      r0,[r5],0x1
+00001FD0  E2522001  subs      r2,r2,0x1
+00001FD4  1A000005  bne       0x1FF0
+00001FD8  E59D2010  ldr       r2,[sp,0x10]
+00001FDC  E3520000  cmp       r2,0x0
+00001FE0  159D300C  ldrne     r3,[sp,0xC]
+00001FE4  1A000001  bne       0x1FF0
+00001FE8  E5C42000  strb      r2,[r4,0x0]
+00001FEC  EA000039  b         0x20D8
+00001FF0  E2588001  subs      r8,r8,0x1
+00001FF4  CAFFFFEC  bgt       0x1FAC
+00001FF8  EA000034  b         0x20D0
+00001FFC  E594701C  ldr       r7,[r4,0x1C]
+00002000  E594E020  ldr       lr,[r4,0x20]
+00002004  E1570109  cmp       r7,r9,lsl 0x2
+00002008  3A000006  bcc       0x2028
+0000200C  E3520004  cmp       r2,0x4
+00002010  DA00000D  ble       0x204C
+00002014  E2422004  sub       r2,r2,0x4
+00002018  E2833004  add       r3,r3,0x4
+0000201C  E0477109  sub       r7,r7,r9,lsl 0x2
+00002020  E1570109  cmp       r7,r9,lsl 0x2
+00002024  2AFFFFF8  bcs       0x200C
+00002028  E1570089  cmp       r7,r9,lsl 0x1
+0000202C  3A000004  bcc       0x2044
+00002030  E3520002  cmp       r2,0x2
+00002034  DA000004  ble       0x204C
+00002038  E2422002  sub       r2,r2,0x2
+0000203C  E2833002  add       r3,r3,0x2
+00002040  E0477089  sub       r7,r7,r9,lsl 0x1
+00002044  E1570009  cmp       r7,r9
+00002048  3A00000B  bcc       0x207C
+0000204C  E2522001  subs      r2,r2,0x1
+00002050  1A000005  bne       0x206C
+00002054  E59D2010  ldr       r2,[sp,0x10]
+00002058  E3520000  cmp       r2,0x0
+0000205C  159D300C  ldrne     r3,[sp,0xC]
+00002060  1A000002  bne       0x2070
+00002064  E5C42000  strb      r2,[r4,0x0]
+00002068  EA00001A  b         0x20D8
+0000206C  E2833001  add       r3,r3,0x1
+00002070  E0477009  sub       r7,r7,r9
+00002074  E1570009  cmp       r7,r9
+00002078  2AFFFFF3  bcs       0x204C
+0000207C  E1D300D0  ldrsb     r0,[r3,0x0]
+00002080  E1D310D1  ldrsb     r1,[r3,0x1]
+00002084  E0411000  sub       r1,r1,r0
+00002088  E0060791  mul       r6,r0,r7
+0000208C  E0010C96  mul       r1,r0,r12
+00002090  E0806BC1  add       r6,r0,r1,asr 0x17
+00002094  E0010B96  mul       r1,r0,r11
+00002098  E5D50630  ldrb      r0,[r5,0x630]
+0000209C  E0800441  add       r0,r0,r1,asr 0x8
+000020A0  E5C50630  strb      r0,[r5,0x630]
+000020A4  E0010A96  mul       r1,r0,r10
+000020A8  E5D50000  ldrb      r0,[r5,0x0]
+000020AC  E0800441  add       r0,r0,r1,asr 0x8
+000020B0  E4C50001  strb      r0,[r5],0x1
+000020B4  E087700E  add       r7,r7,lr
+000020B8  E2588001  subs      r8,r8,0x1
+000020BC  0A000002  beq       0x20CC
+000020C0  E1570009  cmp       r7,r9
+000020C4  3AFFFFEC  bcc       0x207C
+000020C8  EAFFFFCD  b         0x2004
+000020CC  E584701C  str       r7,[r4,0x1C]
+000020D0  E5842018  str       r2,[r4,0x18]
+000020D4  E5843028  str       r3,[r4,0x28]
+000020D8  E59D8000  ldr       r8,[sp,0x0]
+000020DC  E28F0001  add       r0,=0x20E5
+000020E0  E12FFF10  bx        r0
+000020E4  1E409801  Undefined
+000020E8  3440DD01  strbcc    sp,[r0],-0xD01
+000020EC  9805E6E0  stmedls   r5,{r5,r6,r7,r9,r10,sp,lr,pc}
+000020F0  60034B14  andvs     r4,r3,r4,lsl r11
+000020F4  BCFFB006  Undefined
+000020F8  46894680  strmi     r4,[r9],r0,lsl 0xD
+000020FC  469B4692  Undefined
+00002100  4718BC08  ldrmi     r11,[r8,-r8,lsl 0x18]
+00002104  00000350  andeq     r0,r0,r0,asr r3
+00002108  00000630  andeq     r0,r0,r0,lsr r6
+0000210C  6800480C  stmedvs   r0,{r2,r3,r11,lr}
+00002110  68034A0C  stmedvs   r3,{r2,r3,r9,r11,lr}
+00002114  D10E429A  swple     r4,r10,[lr]
+00002118  1E497901  Undefined
+0000211C  DC0A7101  Undefined
+00002120  71017AC1  mrsvc     r7,cpsr
+00002124  21B62000  movscs    r2,r0
+00002128  4A030209  bmi       0xC2954
+0000212C  80104B03  andshi    r4,r0,r3,lsl 0x16
+00002130  80118018  andshi    r8,r1,r8,lsl r0
+00002134  47708019  Undefined
+00002138  040000C6  streq     r0,[r0],-0xC6
+0000213C  040000D2  streq     r0,[r0],-0xD2
+00002140  03007FF0  mrseq     r7,cpsr
+00002144  68736D53  ldmfavs   r3!,{r0,r1,r4,r6,r8,r10,r11,sp,lr}^
+00002148  6B434A98  blvs      0x10D4BB0
+0000214C  D000429A  mulle     r0,r4,r2
+00002150  1C5B4770  Undefined
+00002154  B5F06343  ldrblt    r6,[r0,0x343]!
+00002158  464D4644  strbmi    r4,[sp],-r4,asr 0xC
+0000215C  465F4656  Undefined
+00002160  1C07B4F0  Undefined
+00002164  2B006BBB  blcs      0x1D058
+00002168  6BF8D002  blvs      0xFFE36178
+0000216C  FFC9F7FF  swi       Unknown
+00002170  28006878  stmedcs   r0,{r3,r4,r5,r6,r11,sp,lr}
+00002174  E10CDA00  mrs       sp,cpsr
+00002178  6800488B  stmedvs   r0,{r0,r1,r3,r7,r11,lr}
+0000217C  1C384680  Undefined
+00002180  F9D8F7FF  ldmednv   r8,{r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r12,sp,lr,pc}^
+00002184  8C398C78  Undefined
+00002188  E0A41840  adc       r1,r4,r0,asr 0x10
+0000218C  6AFD7A3A  bvs       0xFFF60A7C
+00002190  24002301  strcs     r2,[r0],-0x301
+00002194  21807828  orrcs     r7,r0,r8,lsr 0x10
+00002198  D1004201  mrsle     r4,cpsr
+0000219C  4691E08B  ldrmi     lr,[r1],r11,lsl 0x1
+000021A0  431C469A  tstmi     r12,0x9A00000
+000021A4  6A2C46A3  bvs       0xB13C38
+000021A8  D0132C00  andsle    r2,r3,r0,lsl 0x18
+000021AC  20C77821  sbccs     r7,r7,r1,lsr 0x10
+000021B0  D0094208  andle     r4,r9,r8,lsl 0x4
+000021B4  28007C20  stmedcs   r0,{r5,r10,r11,r12,sp,lr}
+000021B8  1E40D009  Undefined
+000021BC  D1067420  mrsle     r7,cpsr
+000021C0  43012040  mrsmi     r2,cpsr
+000021C4  E0027021  and       r7,r2,r1
+000021C8  F0001C20  andnv     r1,r0,r0,lsr 0x18
+000021CC  6B64F8FC  blvs      0x19405C4
+000021D0  D1EB2C00  mvnle     r2,r0,lsl 0x18
+000021D4  2040782B  subcs     r7,r0,r11,lsr 0x10
+000021D8  D03B4218  eorsle    r4,r11,r8,lsl r2
+000021DC  F0001C28  andnv     r1,r0,r8,lsr 0x18
+000021E0  2080F8E7  addcs     pc,r0,r7,ror 0x11
+000021E4  20027028  andcs     r7,r2,r8
+000021E8  204073E8  subcs     r7,r0,r8,ror 0x7
+000021EC  201674E8  andscs    r7,r6,r8,ror 0x9
+000021F0  20017668  andcs     r7,r1,r8,ror 0xC
+000021F4  77881DA9  strvc     r1,[r8,r9,lsr 0x1B]
+000021F8  6C2AE02C  Undefined
+000021FC  29807811  stmfacs   r0,{r0,r4,r11,r12,sp,lr}
+00002200  79E9D201  stmfavc   r9!,{r0,r9,r12,lr,pc}^
+00002204  1C52E004  Undefined
+00002208  29BD642A  ldmedcs   sp!,{r1,r3,r5,r10,sp,lr}
+0000220C  71E9D300  mvnvc     sp,r0,lsl 0x6
+00002210  D30829CF  mrsle     r2,cpsr
+00002214  6B834640  blvs      0xFE0D3B1C
+00002218  38CF1C08  stmeacc   pc,{r3,r10,r11,r12}^
+0000221C  1C2A1C39  Undefined
+00002220  FF6FF7FF  swi       Unknown
+00002224  29B0E016  ldmedcs   r0!,{r1,r2,r4,sp,lr,pc}
+00002228  1C08D90F  Undefined
+0000222C  72B838B1  adcsvc    r3,r8,0xB10000
+00002230  6B5B4643  blvs      0x16D3B44
+00002234  181B0080  ldmfane   r11,{r7}
+00002238  1C38681B  Undefined
+0000223C  F7FF1C29  ldrbnv    r1,[pc,r9,lsr 0x18]!
+00002240  7828FF60  stmedvc   r8!,{r5,r6,r8,r9,r10,r11,r12,sp,lr,pc}
+00002244  D0332800  eorsle    r2,r3,r0,lsl 0x10
+00002248  4856E004  ldmfami   r6,{r2,sp,lr,pc}^
+0000224C  18093980  stmedne   r9,{r7,r8,r11,r12,sp}
+00002250  70687808  rsbvc     r7,r8,r8,lsl 0x10
+00002254  28007868  stmedcs   r0,{r3,r5,r6,r11,r12,sp,lr}
+00002258  1E40D0CF  Undefined
+0000225C  7E697068  Undefined
+00002260  D0252900  eorle     r2,r5,r0,lsl 0x12
+00002264  28007DE8  stmedcs   r0,{r3,r5,r6,r7,r8,r10,r11,r12,sp,lr}
+00002268  7F28D022  swi       SoundDriverVSyncOff
+0000226C  D0022800  andle     r2,r2,r0,lsl 0x10
+00002270  77281E40  strvc     r1,[r8,-r0,asr 0x1C]!
+00002274  7EA8E01C  Undefined
+00002278  76A81840  strvc     r1,[r8],r0,asr 0x10
+0000227C  38401C01  stmedcc   r0,{r0,r10,r11,r12}^
+00002280  D5020600  strle     r0,[r2,-0x600]
+00002284  1612060A  ldrne     r0,[r2],-r10,lsl 0xC
+00002288  2080E001  addcs     lr,r0,r1
+0000228C  7DE81A42  Undefined
+00002290  11824350  orrne     r4,r2,r0,asr r3
+00002294  40507DA8  subsmi    r7,r0,r8,lsr 0x1B
+00002298  D0090600  andle     r0,r9,r0,lsl 0xC
+0000229C  782875AA  stmedvc   r8!,{r1,r3,r5,r7,r8,r10,r12,sp,lr}
+000022A0  29007E29  stmfdcs   r0,{r0,r3,r5,r9,r10,r11,r12,sp,lr}
+000022A4  210CD101  mrscs     sp,cpsr
+000022A8  2103E000  mrscs     lr,cpsr
+000022AC  70284308  eorvc     r4,r8,r8,lsl 0x6
+000022B0  4653464A  ldrbmi    r4,[r3],-r10,asr 0xC
+000022B4  1E52465C  Undefined
+000022B8  2050DD03  subscs    sp,r0,r3,lsl 0x1A
+000022BC  005B182D  subseq    r1,r11,sp,lsr 0x10
+000022C0  465EE768  ldrbmi    lr,[lr],-r8,ror 0xE
+000022C4  D1032E00  mrsle     r2,cpsr
+000022C8  06002080  streq     r2,[r0],-r0,lsl 0x1
+000022CC  E0606078  rsb       r6,r0,r8,ror r0
+000022D0  8C78607E  Undefined
+000022D4  84783896  ldrbhi    r3,[r8],-0x896
+000022D8  D3002896  mrsle     r2,cpsr
+000022DC  7A3AE756  bvc       0xEBC03C
+000022E0  78286AFD  stmedvc   r8!,{r0,r2,r3,r4,r5,r6,r7,r9,r11,sp,lr}
+000022E4  42012180  andmi     r2,r1,0x20
+000022E8  210FD04E  mrscs     sp,cpsr
+000022EC  D04B4201  suble     r4,r11,r1,lsl 0x4
+000022F0  1C384691  Undefined
+000022F4  F7FF1C29  ldrbnv    r1,[pc,r9,lsr 0x18]!
+000022F8  6A2CF951  bvs       0xB40844
+000022FC  D03E2C00  eorsle    r2,lr,r0,lsl 0x18
+00002300  20C77821  sbccs     r7,r7,r1,lsr 0x10
+00002304  D1034208  mrsle     r4,cpsr
+00002308  F0001C20  andnv     r1,r0,r0,lsr 0x18
+0000230C  E033F85C  eors      pc,r3,r12,asr r8
+00002310  26077860  strcs     r7,[r7],-r0,ror 0x10
+00002314  782B4006  stmedvc   r11!,{r1,r2,lr}
+00002318  42182003  andsmi    r2,r8,0x3
+0000231C  7CA1D00E  Undefined
+00002320  43487C28  mrsmi     r7,spsr
+00002324  70A011C0  adcvc     r1,r0,r0,asr 0x3
+00002328  43487C68  mrsmi     r7,spsr
+0000232C  70E011C0  rscvc     r1,r0,r0,asr 0x3
+00002330  D0032E00  andle     r2,r3,r0,lsl 0x1C
+00002334  21017F60  mrscs     r7,cpsr
+00002338  77604308  strbvc    r4,[r0,-r8,lsl 0x6]!
+0000233C  4218200C  andsmi    r2,r8,0xC
+00002340  7A21D01A  bvc       0x8763B0
+00002344  56282008  strpl     r2,[r8],-r8
+00002348  D500180A  strle     r1,[r0,-0x80A]
+0000234C  2E002200  Undefined
+00002350  4640D00C  strbmi    sp,[r0],-r12
+00002354  1C116B03  Undefined
+00002358  1C307A6A  Undefined
+0000235C  FED1F7FF  Undefined
+00002360  7F606220  swi       Unknown
+00002364  43082102  mrsmi     r2,cpsr
+00002368  E0057760  and       r7,r5,r0,ror 0xE
+0000236C  7A6A1C11  bvc       0x1A893B8
+00002370  F7FF6A60  ldrbnv    r6,[pc,r0,ror 0x14]!
+00002374  6220FAB1  eorvs     pc,r0,0xB1000
+00002378  2C006B64  Undefined
+0000237C  7828D1C0  stmedvc   r8!,{r6,r7,r8,r12,lr,pc}
+00002380  400821F0  strshmi   r2,[r8-],r0
+00002384  464A7028  strbmi    r7,[r10],-r8
+00002388  DD021E52  Undefined
+0000238C  182D2050  stmedne   sp!,{r4,r6,sp}
+00002390  4806DCA7  stmedmi   r6,{r0,r1,r2,r5,r7,r10,r11,r12,lr,pc}
+00002394  BCFF6378  Undefined
+00002398  46894680  strmi     r4,[r9],r0,lsl 0xD
+0000239C  469B4692  Undefined
+000023A0  4700BC01  strmi     r11,[r0,-r1,lsl 0x18]
+000023A4  000030D0  strsbeq   r3,[r0-],r0
+000023A8  03007FF0  mrseq     r7,cpsr
+000023AC  68736D53  ldmfavs   r3!,{r0,r1,r4,r6,r8,r10,r11,sp,lr}^
+000023B0  210046A4  mrscs     r4,cpsr
+000023B4  23002200  mrscs     r2,cpsr
+000023B8  C01E2400  andsgt    r2,lr,r0,lsl 0x8
+000023BC  C01EC01E  andsgt    r12,lr,lr,lsl r0
+000023C0  4664C01E  Undefined
+000023C4  6AC34770  bvs       0xFF0D418C
+000023C8  D00B2B00  andle     r2,r11,r0,lsl 0x16
+000023CC  6B026B41  blvs      0x9D0D8
+000023D0  D0012A00  andle     r2,r1,r0,lsl 0x14
+000023D4  E0006351  and       r6,r0,r1,asr r3
+000023D8  29006219  stmfdcs   r0,{r0,r3,r4,r9,sp,lr}
+000023DC  630AD000  mrsvs     sp,cpsr
+000023E0  62C12100  sbcvs     r2,r1,0x0
+000023E4  B5704770  ldrblt    r4,[r0,-0x770]!
+000023E8  78291C0D  stmedvc   r9!,{r0,r2,r3,r10,r11,r12}
+000023EC  42082080  andmi     r2,r8,0x80
+000023F0  6A2CD015  bvs       0xB3644C
+000023F4  D0112C00  andsle    r2,r1,r0,lsl 0x18
+000023F8  78202600  stmedvc   r0!,{r9,r10,sp}
+000023FC  D00A2800  andle     r2,r10,r0,lsl 0x10
+00002400  23077860  mrscs     r7,cpsr
+00002404  D0044018  andle     r4,r4,r8,lsl r0
+00002408  681B4B85  ldmfavs   r11,{r0,r2,r7,r8,r9,r11,lr}
+0000240C  F7FF6ADB  Undefined
+00002410  7026FE78  eorvc     pc,r6,r8,ror lr
+00002414  6B6462E6  blvs      0x191AFB4
+00002418  D1EE2C00  mvnle     r2,r0,lsl 0x18
+0000241C  BC70622C  Undefined
+00002420  4700BC01  strmi     r11,[r0,-r1,lsl 0x18]
+00002424  4644B5F0  Undefined
+00002428  4656464D  ldrbmi    r4,[r6],-sp,asr 0xC
+0000242C  B4F0465F  ldrblt    r4,[r0],0x65F
+00002430  9100B085  mrsls     r11,cpsr
+00002434  497A1C15  ldmeami   r10!,{r0,r2,r4,r10,r11,r12}^
+00002438  91016809  mrsls     r6,cpsr
+0000243C  18404979  stmedne   r0,{r0,r3,r4,r5,r6,r8,r11,lr}^
+00002440  71287800  msrvc     cpsr_f,r0
+00002444  78186C2B  ldmfavc   r8,{r0,r1,r3,r5,r10,r11,sp,lr}
+00002448  D20E2880  andle     r2,lr,0x800000
+0000244C  1C5B7168  Undefined
+00002450  28807818  stmeacs   r0,{r3,r4,r11,r12,sp,lr}
+00002454  71A8D208  movvc     sp,r8,lsl 0x4
+00002458  78181C5B  ldmfavc   r8,{r0,r1,r3,r4,r6,r10,r11,r12}
+0000245C  D2032880  andle     r2,r3,0x800000
+00002460  18097929  stmedne   r9,{r0,r3,r5,r8,r11,r12,sp,lr}
+00002464  1C5B7129  Undefined
+00002468  1C2C642B  Undefined
+0000246C  78223424  stmedvc   r2!,{r2,r5,r10,r12,sp}
+00002470  421020C0  andsmi    r2,r0,0xC0
+00002474  796BD024  stmfdvc   r11!,{r2,r5,r12,lr,pc}^
+00002478  42102040  andsmi    r2,r0,0x40
+0000247C  6AE9D003  bvs       0xFFA76490
+00002480  780818C9  stmedvc   r8,{r0,r3,r6,r7,r11,r12}
+00002484  1C18E000  Undefined
+00002488  18090041  stmedne   r9,{r0,r6}
+0000248C  6AA80089  bvs       0xFEA026B8
+00002490  46891809  strmi     r1,[r9],r9,lsl 0x10
+00002494  7831464E  ldmfavc   r1!,{r1,r2,r3,r6,r9,r10,lr}
+00002498  420820C0  andmi     r2,r8,0xC0
+0000249C  E0B6D000  adcs      sp,r6,r0
+000024A0  42102080  andsmi    r2,r0,0x80
+000024A4  78F1D00E  ldmfdvc   r1!,{r1,r2,r3,r12,lr,pc}^
+000024A8  42082080  andmi     r2,r8,0x80
+000024AC  39C0D006  stmfacc   r0,{r1,r2,r12,lr,pc}^
+000024B0  75690049  strbvc    r0,[r9,-0x49]!
+000024B4  21037828  mrscs     r7,cpsr
+000024B8  70284308  eorvc     r4,r8,r8,lsl 0x6
+000024BC  E0017873  and       r7,r1,r3,ror r8
+000024C0  796B46A1  stmfdvc   r11!,{r0,r5,r7,r9,r10,lr}^
+000024C4  9E009302  Undefined
+000024C8  7F687A71  swi       Unknown
+000024CC  28FF1840  ldmfdcs   pc!,{r6,r11,r12}^
+000024D0  20FFD900  rscscs    sp,pc,r0,lsl 0x12
+000024D4  464E9004  strbmi    r9,[lr],-r4
+000024D8  26077830  Undefined
+000024DC  96034006  strls     r4,[r3],-r6
+000024E0  9801D018  stmedls   r1,{r3,r4,r12,lr,pc}
+000024E4  2C0069C4  Undefined
+000024E8  E090D100  adds      sp,r0,r0,lsl 0x2
+000024EC  01B01E76  movseq    r1,r6,ror lr
+000024F0  78211824  stmedvc   r1!,{r2,r5,r11,r12}
+000024F4  420820C7  andmi     r2,r8,0xC7
+000024F8  2040D036  subcs     sp,r0,r6,lsr r0
+000024FC  D1334208  teqle     r3,r8,lsl 0x4
+00002500  98047CE1  stmedls   r4,{r0,r5,r6,r7,r10,r11,r12,sp,lr}
+00002504  D32F4281  msrle     cpsr_fsxc,0x10000008
+00002508  E080D000  add       sp,r0,r0
+0000250C  42A86AE0  adcmi     r6,r8,0xE0000
+00002510  E07CD22A  rsbs      sp,r12,r10,lsr 0x4
+00002514  1C2F9E04  Undefined
+00002518  46902200  ldrmi     r2,[r0],r0,lsl 0x4
+0000251C  79A39C01  stmfavc   r3!,{r0,r10,r11,r12,pc}
+00002520  78213450  stmedvc   r1!,{r4,r6,r10,r12,sp}
+00002524  420820C7  andmi     r2,r8,0xC7
+00002528  2040D01E  subcs     sp,r0,lr,lsl r0
+0000252C  D0054208  andle     r4,r5,r8,lsl 0x4
+00002530  D1052A00  mrsle     r2,cpsr
+00002534  7CE61C52  Undefined
+00002538  E00E6AE7  and       r6,lr,r7,ror 0x15
+0000253C  D10D2A00  mrsle     r2,cpsr
+00002540  42B07CE0  adcsmi    r7,r0,0xE000
+00002544  1C06D202  Undefined
+00002548  E0066AE7  and       r6,r6,r7,ror 0x15
+0000254C  6AE0D806  bvs       0xFF83856C
+00002550  D90142B8  stmfdle   r1,{r3,r4,r5,r7,r9,lr}
+00002554  E0001C07  and       r1,r0,r7,lsl 0x18
+00002558  46A0D300  strmi     sp,[r0],r0,lsl 0x6
+0000255C  1E5B3440  Undefined
+00002560  4644DCDF  Undefined
+00002564  D0522C00  subsle    r2,r2,r0,lsl 0x18
+00002568  F7FF1C20  ldrbnv    r1,[pc,r0,lsr 0x18]!
+0000256C  2100FF2C  mrscs     pc,cpsr
+00002570  6A2B6321  bvs       0xADB1FC
+00002574  2B006363  blcs      0x1B308
+00002578  631CD000  tstvs     r12,0x0
+0000257C  62E5622C  rscvs     r6,r5,0xC0000002
+00002580  77287EE8  strvc     r7,[r8,-r8,ror 0x1D]!
+00002584  D0014288  andle     r4,r1,r8,lsl 0x5
+00002588  75A976A9  strvc     r7,[r9,0x6A9]!
+0000258C  1C299800  Undefined
+00002590  F804F7FF  stmednv   r4,{r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r12,sp,lr,pc}
+00002594  61206868  msrvs     cpsr_,r8
+00002598  74E09804  strbvc    r9,[r0],0x804
+0000259C  72209802  eorvc     r9,r0,0x20000
+000025A0  7830464E  ldmfavc   r0!,{r1,r2,r3,r6,r9,r10,lr}
+000025A4  68777060  ldmfavs   r7!,{r5,r6,r12,sp,lr}^
+000025A8  68B06267  ldmfdvs   r0!,{r0,r1,r2,r5,r6,r9,sp,lr}
+000025AC  8BE86060  blhi      0xFFA1A734
+000025B0  7CA181A0  Undefined
+000025B4  43487C28  mrsmi     r7,spsr
+000025B8  70A011C0  adcvc     r1,r0,r0,asr 0x3
+000025BC  43487C68  mrsmi     r7,spsr
+000025C0  70E011C0  rscvc     r1,r0,r0,asr 0x3
+000025C4  20087A21  andcs     r7,r8,r1,lsr 0x14
+000025C8  180B5628  stmedne   r11,{r3,r5,r9,r10,r12,lr}
+000025CC  2300D500  mrscs     sp,cpsr
+000025D0  2E009E03  Undefined
+000025D4  464ED00F  strbmi    sp,[lr],-pc
+000025D8  77A078B0  Undefined
+000025DC  208078F1  strshcs   r7,[r0],r1
+000025E0  D1004208  mrsle     r4,cpsr
+000025E4  7A6A77E1  bvc       0x1AA0570
+000025E8  98031C19  stmedls   r3,{r0,r3,r4,r10,r11,r12}
+000025EC  6B1B9B01  blvs      0x6E91F8
+000025F0  FD87F7FF  Undefined
+000025F4  7A6AE004  bvc       0x1ABA60C
+000025F8  1C381C19  Undefined
+000025FC  F96CF7FF  stmfdnv   r12!,{r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r12,sp,lr,pc}^
+00002600  20806220  addcs     r6,r0,r0,lsr 0x4
+00002604  78297020  stmedvc   r9!,{r5,r12,sp,lr}
+00002608  400820F0  strshmi   r2,[r8-],r0
+0000260C  B0057028  andlt     r7,r5,r8
+00002610  4680BCFF  Undefined
+00002614  46924689  ldrmi     r4,[r2],r9,lsl 0xD
+00002618  BC01469B  Undefined
+0000261C  00004700  andeq     r4,r0,r0,lsl 0xE
+00002620  03007FF0  mrseq     r7,cpsr
+00002624  000030D0  strsbeq   r3,[r0-],r0
+00002628  6C0AB510  Undefined
+0000262C  2B807813  blcs      0xFE020680
+00002630  714BD203  mrsvc     sp,spsr
+00002634  640A1C52  strvs     r1,[r10],-0xC52
+00002638  794BE000  stmfdvc   r11,{sp,lr,pc}^
+0000263C  29006A09  stmfdcs   r0,{r0,r3,r9,r11,sp,lr}
+00002640  2483D00D  strcs     sp,[r3],0xD
+00002644  4222780A  eormi     r7,r2,0xA0000
+00002648  7C48D006  Undefined
+0000264C  D1034298  swple     r4,r8,[r3]
+00002650  43022040  mrsmi     r2,cpsr
+00002654  E002700A  and       r7,r2,r10
+00002658  29006B49  stmfdcs   r0,{r0,r3,r6,r8,r9,r11,sp,lr}
+0000265C  BC10D1F2  Undefined
+00002660  4700BC01  strmi     r11,[r0,-r1,lsl 0x18]
+00002664  1C0DB530  Undefined
+00002668  2C006A2C  Undefined
+0000266C  7821D00C  stmedvc   r1!,{r2,r3,r12,lr,pc}
+00002670  420820C7  andmi     r2,r8,0xC7
+00002674  2040D002  subcs     sp,r0,r2
+00002678  70214301  eorvc     r4,r1,r1,lsl 0x6
+0000267C  F7FF1C20  ldrbnv    r1,[pc,r0,lsr 0x18]!
+00002680  6B64FEA2  blvs      0x1942110
+00002684  D1F22C00  mvnsle    r2,r0,lsl 0x18
+00002688  70282000  eorvc     r2,r8,r0
+0000268C  BC01BC30  Undefined
+00002690  46F44700  ldrbmi    r4,[r4],r0,lsl 0xE
+00002694  4A0A2124  bmi       0x28AB2C
+00002698  F0006813  andnv     r6,r0,r3,lsl r8
+0000269C  C008F806  andgt     pc,r8,r6,lsl 0x10
+000026A0  1E491D12  Undefined
+000026A4  4760DCF8  Undefined
+000026A8  B4017813  strlt     r7,[r1],-0x813
+000026AC  D1050E50  mrsle     r0,cpsr
+000026B0  42824803  addmi     r4,r2,0x30000
+000026B4  0B90D301  bleq      0xFE4372C0
+000026B8  2300D000  mrscs     sp,cpsr
+000026BC  4770BC01  ldrbmi    r11,[r0,-r1,lsl 0x18]!
+000026C0  00003738  andeq     r3,r0,r8,lsr r7
+000026C4  1C536C0A  Undefined
+000026C8  7813640B  ldmfavc   r3,{r0,r1,r3,r10,sp,lr}
+000026CC  B500E7ED  strlt     lr,[r0,-0x7ED]
+000026D0  78D06C0A  ldmfdvc   r0,{r1,r3,r10,r11,sp,lr}^
+000026D4  78930200  ldmfdvc   r3,{r9}
+000026D8  02004318  andeq     r4,r0,0x60000000
+000026DC  43187853  tstmi     r8,0x530000
+000026E0  F7FF0200  ldrbnv    r0,[pc,r0,lsl 0x4]!
+000026E4  4318FFE1  tstmi     r8,0x384
+000026E8  BC016408  Undefined
+000026EC  788A4700  stmeavc   r10,{r8,r9,r10,lr}
+000026F0  D2082A03  andle     r2,r8,0x3000
+000026F4  188B0092  stmeane   r11,{r1,r4,r7}
+000026F8  1D126C0A  Undefined
+000026FC  788A645A  stmeavc   r10,{r1,r3,r4,r6,r10,sp,lr}
+00002700  708A1C52  addvc     r1,r10,r2,asr r12
+00002704  E7ADE7E3  str       lr,[sp,r3,ror 0xF]!
+00002708  2A00788A  bcs       0x20938
+0000270C  1E52D005  Undefined
+00002710  0092708A  addseq    r7,r2,r10,lsl 0x1
+00002714  6C5A188B  Undefined
+00002718  4770640A  ldrbmi    r6,[r0,-r10,lsl 0x8]!
+0000271C  6C0AB500  Undefined
+00002720  2B007813  blcs      0x20774
+00002724  1C52D102  Undefined
+00002728  E7D1640A  ldrb      r6,[r1,r10,lsl 0x8]
+0000272C  1C5B78CB  Undefined
+00002730  469C70CB  ldrmi     r7,[r12],r11,asr 0x1
+00002734  FFC6F7FF  swi       Unknown
+00002738  D200459C  andle     r4,r0,0x27000000
+0000273C  2300E7C8  mrscs     lr,cpsr
+00002740  1D5270CB  Undefined
+00002744  BC01640A  Undefined
+00002748  46F44700  ldrbmi    r4,[r4],r0,lsl 0xE
+0000274C  FFBAF7FF  swi       Unknown
+00002750  4760774B  strbmi    r7,[r0,-r11,asr 0xE]!
+00002754  F7FF46F4  Undefined
+00002758  005BFFB5  ldrheq    pc,[r11-],0xF5
+0000275C  8BC28383  blhi      0xFF0A3570
+00002760  0A1B4353  beq       0x6D34B4
+00002764  47608403  strbmi    r8,[r0,-r3,lsl 0x8]!
+00002768  F7FF46F4  Undefined
+0000276C  728BFFAB  addvc     pc,r11,0x2AC
+00002770  220C780B  andcs     r7,r12,0xB0000
+00002774  700B4313  andvc     r4,r11,r3,lsl r3
+00002778  46F44760  ldrbmi    r4,[r4],r0,ror 0xE
+0000277C  78136C0A  ldmfavc   r3,{r1,r3,r10,r11,sp,lr}
+00002780  640A1C52  strvs     r1,[r10],-0xC52
+00002784  18D2005A  ldmfdne   r2,{r1,r3,r4,r6}^
+00002788  6B030092  blvs      0xC29D8
+0000278C  681318D2  ldmfavs   r3,{r1,r4,r6,r7,r11,r12}
+00002790  FF8BF7FF  swi       Unknown
+00002794  6853624B  ldmfavs   r3,{r0,r1,r3,r6,r9,sp,lr}^
+00002798  FF87F7FF  swi       Unknown
+0000279C  6893628B  ldmfdvs   r3,{r0,r1,r3,r7,r9,sp,lr}
+000027A0  FF83F7FF  swi       Unknown
+000027A4  476062CB  strbmi    r6,[r0,-r11,asr 0x5]!
+000027A8  F7FF46F4  Undefined
+000027AC  748BFF8B  strvc     pc,[r11],0xF8B
+000027B0  2203780B  andcs     r7,r3,0xB0000
+000027B4  700B4313  andvc     r4,r11,r3,lsl r3
+000027B8  46F44760  ldrbmi    r4,[r4],r0,ror 0xE
+000027BC  FF82F7FF  swi       Unknown
+000027C0  750B3B40  strvc     r3,[r11,-0xB40]
+000027C4  2203780B  andcs     r7,r3,0xB0000
+000027C8  700B4313  andvc     r4,r11,r3,lsl r3
+000027CC  46F44760  ldrbmi    r4,[r4],r0,ror 0xE
+000027D0  FF78F7FF  swi       Unknown
+000027D4  738B3B40  orrvc     r3,r11,0x10000
+000027D8  220C780B  andcs     r7,r12,0xB0000
+000027DC  700B4313  andvc     r4,r11,r3,lsl r3
+000027E0  46F44760  ldrbmi    r4,[r4],r0,ror 0xE
+000027E4  FF6EF7FF  swi       Unknown
+000027E8  780B73CB  stmedvc   r11,{r0,r1,r3,r6,r7,r8,r9,r12,sp,lr}
+000027EC  4313220C  tstmi     r3,0xC0000000
+000027F0  4760700B  strbmi    r7,[r0,-r11]!
+000027F4  F7FF46F4  Undefined
+000027F8  764BFF65  strbvc    pc,[r11],-r5,ror 0x1E
+000027FC  D1002B00  mrsle     r2,cpsr
+00002800  4760758B  strbmi    r7,[r0,-r11,lsl 0xB]!
+00002804  F7FF46F4  Undefined
+00002808  76CBFF5D  Undefined
+0000280C  46F44760  ldrbmi    r4,[r4],r0,ror 0xE
+00002810  FF58F7FF  swi       Unknown
+00002814  2B0075CB  blcs      0x1FF48
+00002818  758BD100  strvc     sp,[r11,0x100]
+0000281C  46F44760  ldrbmi    r4,[r4],r0,ror 0xE
+00002820  FF50F7FF  swi       Unknown
+00002824  42987E08  addsmi    r7,r8,0x80
+00002828  760BD004  strvc     sp,[r11],-r4
+0000282C  220F780B  andcs     r7,pc,0xB0000
+00002830  700B4313  andvc     r4,r11,r3,lsl r3
+00002834  46F44760  ldrbmi    r4,[r4],r0,ror 0xE
+00002838  FF44F7FF  swi       Unknown
+0000283C  730B3B40  mrsvc     r3,cpsr
+00002840  220C780B  andcs     r7,r12,0xB0000
+00002844  700B4313  andvc     r4,r11,r3,lsl r3
+00002848  46F44760  ldrbmi    r4,[r4],r0,ror 0xE
+0000284C  78136C0A  ldmfavc   r3,{r1,r3,r10,r11,sp,lr}
+00002850  48031C52  stmedmi   r3,{r1,r4,r6,r10,r11,r12}
+00002854  F7FF18C0  ldrbnv    r1,[pc,r0,asr 0x11]!
+00002858  7003FF36  andvc     pc,r3,r6,lsr pc
+0000285C  00004760  andeq     r4,r0,r0,ror 0xE
+00002860  04000060  streq     r0,[r0],-0x60
+00002864  1C292620  Undefined
+00002868  086D4051  stmedeq   sp!,{r0,r4,r6,lr}^
+0000286C  D3000849  mrsle     r0,cpsr
+00002870  08524045  ldmfaeq   r2,{r0,r2,r6,lr}^
+00002874  D1F61E76  mvnsle    r1,r6,ror lr
+00002878  B5544770  ldrblt    r4,[r4,-0x770]
+0000287C  657B468C  ldrbvs    r4,[r11,-0x68C]!
+00002880  6BB96C7B  blvs      0xFEE5DA74
+00002884  10891AC9  addne     r1,r9,r9,asr 0x15
+00002888  2989DD17  stmfacs   r9,{r0,r1,r2,r4,r8,r10,r11,r12,lr,pc}
+0000288C  2189DD00  orrcs     sp,r9,r0,lsl 0x1A
+00002890  8C3D687C  Undefined
+00002894  46616539  Undefined
+00002898  1C64434C  Undefined
+0000289C  4062681A  rsbmi     r6,r2,r10,lsl r8
+000028A0  404A4259  submi     r4,r10,r9,asr r2
+000028A4  404A6D79  submi     r6,r10,r9,ror sp
+000028A8  847DC304  ldrbhi    r12,[sp],-0x304
+000028AC  FFDAF7FF  swi       Unknown
+000028B0  1E496D39  Undefined
+000028B4  843DD1EE  ldrhi     sp,[sp],-0x1EE
+000028B8  BD54607C  Undefined
+000028BC  F000B500  andnv     r11,r0,r0,lsl 0xA
+000028C0  BC02F8F2  Undefined
+000028C4  8931468E  ldmeahi   r1!,{r1,r2,r3,r7,r9,r10,lr}
+000028C8  D2FC0A09  rscsle    r0,r12,0x9000
+000028CC  B5FA4770  ldrblt    r4,[r10,0x770]!
+000028D0  A2CB23DF  sbcge     r2,r11,0x7C000003
+000028D4  F8E6F000  stmeanv   r6!,{r12,sp,lr,pc}^
+000028D8  24FF1C07  ldrbcs    r1,[pc],0xC07
+000028DC  F95EF7FE  ldmeanv   lr,{r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r12,sp,lr,pc}^
+000028E0  0D3CD045  Undefined
+000028E4  402323E8  eormi     r2,r3,r8,ror 0x7
+000028E8  D1402B20  mrsle     r2,spsr
+000028EC  29012400  stmfdcs   r1,{r10,sp}
+000028F0  2902D003  stmfdcs   r2,{r0,r1,r12,lr,pc}
+000028F4  4CC8DC3B  Undefined
+000028F8  877C430C  ldrbhi    r4,[r12,-r12,lsl 0x6]!
+000028FC  61386A38  teqvs     r8,r8,lsr r10
+00002900  1A246A7C  bne       0x91D2F8
+00002904  401C4BC0  andsmi    r4,r12,r0,asr 0x17
+00002908  F7FE60FC  Undefined
+0000290C  D02EF947  eorle     pc,lr,r7,asr 0x12
+00002910  89604CBE  stmfdhi   r0!,{r1,r2,r3,r4,r5,r7,r10,r11,lr}^
+00002914  43108AE2  tstmi     r0,0xE2000
+00002918  43108C62  tstmi     r0,0x6200
+0000291C  43108DE2  tstmi     r0,0x3880
+00002920  D2240C00  eorle     r0,r4,0x0
+00002924  7FB84EBA  swi       Unknown
+00002928  0F400700  swi       Unknown
+0000292C  8F7A8831  swi       Unknown
+00002930  D0022A00  andle     r2,r2,r0,lsl 0x14
+00002934  0FC007C0  swi       Unknown
+00002938  72387D39  eorsvc    r7,r8,0xE40
+0000293C  4BB67139  blmi      0xFED9EE28
+00002940  49FA0C1B  ldmedmi   r10!,{r0,r1,r3,r4,r10,r11}^
+00002944  4CFB2A00  Undefined
+00002948  49F9D102  ldmedmi   r9!,{r1,r8,r12,lr,pc}^
+0000294C  4CFA4BAE  Undefined
+00002950  873B87F9  Undefined
+00002954  69B9643C  ldmedvs   r9!,{r2,r3,r4,r5,r10,sp,lr}
+00002958  7F396039  swi       Unknown
+0000295C  1C347039  Undefined
+00002960  D3050840  mrsle     r0,cpsr
+00002964  297378E1  ldmeacs   r3!,{r0,r5,r6,r7,r11,r12,sp,lr}^
+00002968  1CA4D101  Undefined
+0000296C  E08EE7F8  strsh     lr,[lr],r8
+00002970  68FDD1FB  ldmfdvs   sp!,{r0,r1,r3,r4,r5,r6,r7,r8,r12,lr,pc}^
+00002974  383408A8  ldmfacc   r4!,{r3,r5,r7,r11}
+00002978  19496939  stmfdne   r9,{r0,r3,r4,r5,r8,r11,sp,lr}^
+0000297C  49A260F9  stmfami   r2!,{r0,r3,r4,r5,r6,r7,sp,lr}
+00002980  D1FD1E49  mvnsle    r1,r9,asr 0x1C
+00002984  FF9AF7FF  swi       Unknown
+00002988  71798871  cmnvc     r9,r1,ror r8
+0000298C  88F288B1  ldmfdhi   r2!,{r0,r4,r5,r7,r11,pc}^
+00002990  2B008F7B  blcs      0x26784
+00002994  21FFD001  mvnscs    sp,r1
+00002998  71B922FF  ldrshvc   r2,[r9,pc]!
+0000299C  240271FA  strcs     r7,[r2],-0x1FA
+000029A0  693B46A4  ldmeavs   r11!,{r2,r5,r7,r9,r10,lr}
+000029A4  1AC96A39  bne       0xFF25D290
+000029A8  8FB80889  swi       Unknown
+000029AC  681AD217  ldmfavs   r10,{r0,r1,r2,r4,r9,r12,lr,pc}
+000029B0  8F3D8FF8  swi       Unknown
+000029B4  FF56F7FF  swi       Unknown
+000029B8  6839873D  ldmfavs   r9!,{r0,r2,r3,r4,r5,r8,r9,r10,pc}
+000029BC  434148E1  mrsmi     r4,spsr
+000029C0  60391C49  eorsvs    r1,r9,r9,asr 0x18
+000029C4  40486818  submi     r6,r8,r8,lsl r8
+000029C8  1A5A6A39  bne       0x169D2B4
+000029CC  185249F1  ldmfane   r2,{r0,r4,r5,r6,r7,r8,r11,lr}^
+000029D0  6C3A4251  Undefined
+000029D4  40484051  submi     r4,r8,r1,asr r0
+000029D8  87BA0C02  ldrhi     r0,[r10,r2,lsl 0x18]!
+000029DC  F7FF4E8C  ldrbnv    r4,[pc,r12,lsl 0x1D]!
+000029E0  6A39FF72  bvs       0xE827B0
+000029E4  D0184299  mulsle    r8,r4,r2
+000029E8  1A5C46A6  bne       0x1714488
+000029EC  8F791EA4  swi       Unknown
+000029F0  D0002900  andle     r2,r0,r0,lsl 0x12
+000029F4  49E71EA4  stmfami   r7!,{r2,r5,r7,r9,r10,r11,r12}^
+000029F8  7A3A1864  bvc       0xE88B90
+000029FC  08521C35  ldmfaeq   r2,{r0,r2,r4,r5,r10,r11,r12}^
+00002A00  8869D305  stmedhi   r9!,{r0,r2,r8,r9,r12,lr,pc}^
+00002A04  04094061  streq     r4,[r9],-0x61
+00002A08  1CADD141  Undefined
+00002A0C  D1FCE7F7  ldrshle   lr,[r12,0x77]!
+00002A10  45624674  strbmi    r4,[r2,-0x674]!
+00002A14  2000D101  andcs     sp,r0,r1,lsl 0x2
+00002A18  F000E03A  andnv     lr,r0,r10,lsr r0
+00002A1C  2C00F844  Undefined
+00002A20  1C9BD00C  Undefined
+00002A24  29008F79  stmfdcs   r0,{r0,r3,r4,r5,r6,r8,r9,r10,r11,pc}
+00002A28  1C9BD000  Undefined
+00002A2C  D1022C02  mrsle     r2,cpsr
+00002A30  429968F9  addsmi    r6,r9,0xF90000
+00002A34  2065D1B6  strhcs    sp,[r5-],0x16
+00002A38  E7D01E64  ldrb      r1,[r0,r4,ror 0x1C]
+00002A3C  F7FF2401  ldrbnv    r2,[pc,r1,lsl 0x8]!
+00002A40  7A3AFF42  bvc       0xEC2750
+00002A44  08521C33  ldmfaeq   r2,{r0,r1,r4,r5,r10,r11,r12}^
+00002A48  8859D309  ldmfahi   r9,{r0,r3,r8,r9,r12,lr,pc}^
+00002A4C  D0042975  andle     r2,r4,r5,ror r9
+00002A50  D11C2865  tstle     r12,r5,ror 0x10
+00002A54  D11A2974  tstle     r10,r4,ror r9
+00002A58  1C9B2400  Undefined
+00002A5C  D1FCE7F3  ldrshle   lr,[r12,0x73]!
+00002A60  D0052866  andle     r2,r5,r6,ror 0x10
+00002A64  D0002C00  andle     r2,r0,r0,lsl 0x18
+00002A68  F0002066  andnv     r2,r0,r6
+00002A6C  E7E5F81C  Undefined
+00002A70  D00C2C00  andle     r2,r12,r0,lsl 0x18
+00002A74  8F3D8FF8  swi       Unknown
+00002A78  F7FF687A  Undefined
+00002A7C  4E64FEF3  Undefined
+00002A80  F7FF1C28  ldrbnv    r1,[pc,r8,lsr 0x18]!
+00002A84  2100FF1B  mrscs     pc,cpsr
+00002A88  1C04468C  Undefined
+00002A8C  2001E7B5  strhcs    lr,[r1-],r5
+00002A90  63F863B8  mvnsvs    r6,0xE0000002
+00002A94  1C396438  Undefined
+00002A98  C7013114  Undefined
+00002A9C  D1FC42B9  ldrhle    r4,[r12,0x29]!
+00002AA0  BC04BCFA  Undefined
+00002AA4  21964710  orrscs    r4,r6,r0,lsl r7
+00002AA8  D1FD1E49  mvnsle    r1,r9,asr 0x1C
+00002AAC  81706030  cmnhi     r0,r0,lsr r0
+00002AB0  29008F79  stmfdcs   r0,{r0,r3,r4,r5,r6,r8,r9,r10,r11,pc}
+00002AB4  49B8D100  ldmedmi   r8!,{r8,r12,lr,pc}
+00002AB8  47708131  Undefined
+00002ABC  48B7B500  ldmfdmi   r7!,{r8,r10,r12,sp,pc}
+00002AC0  29017801  stmfdcs   r1,{r0,r11,r12,sp,lr}
+00002AC4  7AB8D10E  bvc       0xFEE36F04
+00002AC8  D30B0640  mrsle     r0,cpsr
+00002ACC  7CF97CB8  Undefined
+00002AD0  D1094308  mrsle     r4,cpsr
+00002AD4  49AF6BB8  stmfami   pc!,{r3,r4,r5,r7,r8,r9,r11,sp,lr}
+00002AD8  DA031A09  ble       0xC9304
+00002ADC  74B82078  ldrvc     r2,[r8],0x78
+00002AE0  E2A94899  adc       r4,r9,0x990000
+00002AE4  BD002000  Undefined
+00002AE8  035168BA  cmpeq     r1,0xBA0000
+00002AEC  7D380F89  Undefined
+00002AF0  1E491CC0  Undefined
+00002AF4  7538D5FC  ldrvc     sp,[r8,-0x5FC]!
+00002AF8  06810880  streq     r0,[r1],r0,lsl 0x11
+00002AFC  40510312  subsmi    r0,r1,r2,lsl r3
+00002B00  404817C9  submi     r1,r8,r9,asr 0xF
+00002B04  4001211F  andmi     r2,r1,pc,lsl r1
+00002B08  025068BA  subseq    r6,r0,0xBA0000
+00002B0C  28070F40  stmedcs   r7,{r6,r8,r9,r10,r11}
+00002B10  2100DB05  mrscs     sp,cpsr
+00002B14  0F400310  swi       Unknown
+00002B18  DB002807  blle      0xCB3C
+00002B1C  221F2000  andscs    r2,pc,0x0
+00002B20  FE4CF7FD  Undefined
+00002B24  1E407CB8  Undefined
+00002B28  74B8DB01  ldrvc     sp,[r8],0xB01
+00002B2C  2005D1DA  strsbcs   sp,[r5-],r10
+00002B30  BD0074F8  Undefined
+00002B34  B500B4F0  strlt     r11,[r0,-0x4F0]
+00002B38  4C354F99  Undefined
+00002B3C  49806CF8  stmfami   r0,{r3,r4,r5,r6,r7,r10,r11,sp,lr}
+00002B40  1C404348  Undefined
+00002B44  E28064F8  add       r6,r0,0xF8000000
+00002B48  21E06CF8  strshcs   r6,[r0,0xC8]!
+00002B4C  21A04388  movcs     r4,r8,lsl 0x7
+00002B50  23804048  orrcs     r4,r0,0x48
+00002B54  4398021B  orrsmi    r0,r8,0xB0000001
+00002B58  780A4990  stmedvc   r10,{r4,r7,r8,r11,lr}
+00002B5C  D0032A01  andle     r2,r3,r1,lsl 0x14
+00002B60  6A4A492E  bvs       0x1295020
+00002B64  D1001C52  mrsle     r1,cpsr
+00002B68  60384318  eorsvs    r4,r8,r8,lsl r3
+00002B6C  7BBE7BFD  blvc      0xFEFA1B68
+00002B70  28007B78  stmedcs   r0,{r3,r4,r5,r6,r8,r9,r11,r12,sp,lr}
+00002B74  F000D11B  andnv     sp,r0,r11,lsl r1
+00002B78  7B3BF8F1  blvc      0xF00F44
+00002B7C  2E028A20  Undefined
+00002B80  1E5BD104  Undefined
+00002B84  2600D510  Undefined
+00002B88  E00A2306  and       r2,r10,r6,lsl 0x6
+00002B8C  D1042E01  mrsle     r2,cpsr
+00002B90  D5091E5B  strle     r1,[r9,-0xE5B]
+00002B94  23062602  mrscs     r2,cpsr
+00002B98  1E5BE003  Undefined
+00002B9C  2601D504  strcs     sp,[r1],-r4,lsl 0xA
+00002BA0  491C231E  ldmeami   r12,{r1,r2,r3,r4,r8,r9,sp}
+00002BA4  25006379  strcs     r6,[r0,-0x379]
+00002BA8  F000733B  andnv     r7,r0,r11,lsr r3
+00002BAC  2D00F8DB  Undefined
+00002BB0  613DD136  teqvs     sp,r6,lsr r1
+00002BB4  4A6472BD  bmi       0x191F6B0
+00002BB8  4A7663BA  bmi       0x1D9BAA8
+00002BBC  647A63FA  ldrbvs    r6,[r10],-0x3FA
+00002BC0  73FA2201  mvnsvc    r2,0x10000000
+00002BC4  2E0073BE  Undefined
+00002BC8  22C0D10B  sbccs     sp,r0,0xC0000002
+00002BCC  82A20212  adchi     r0,r2,0x20000001
+00002BD0  63656B21  msrvs     spsr_sc,0x8400
+00002BD4  21078725  mrscs     r8,cpsr
+00002BD8  21AD8421  movcs     r8,r1,lsr 0x8
+00002BDC  84390149  ldrhi     r0,[r9],-0x149
+00002BE0  2E01E0B9  Undefined
+00002BE4  82A5D106  adchi     sp,r5,0x80000001
+00002BE8  49074A58  stmfdmi   r7,{r3,r4,r6,r9,r11,lr}
+00002BEC  81658122  msrhi     spsr_sc,r2
+00002BF0  E7F46025  ldrb      r6,[r4,r5]!
+00002BF4  4ADA82A5  bmi       0xFF6A3690
+00002BF8  49070C12  stmfdmi   r7,{r1,r4,r10,r11}
+00002BFC  E7F50C09  ldrb      r0,[r5,r9,lsl 0x18]!
+00002C00  E129F003  msr       cpsr_fc,r3
+00002C04  E12FFF1E  bx        lr
+00002C08  0003FFF8  strsheq   pc,[r3-],r8
+00002C0C  040000B0  streq     r0,[r0],-0xB0
+00002C10  04000120  streq     r0,[r0],-0x120
+00002C14  0000301D  andeq     r3,r0,sp,lsl r0
+00002C18  C3871089  orrgt     r1,r7,0x89
+00002C1C  03000064  mrseq     r0,cpsr
+00002C20  D1192D01  tstle     r9,r1,lsl 0x1A
+00002C24  F89AF000  ldmfdnv   r10,{r12,sp,lr,pc}
+00002C28  80592180  subshi    r2,r9,r0,lsl 0x3
+00002C2C  430A881A  mrsmi     r8,cpsr
+00002C30  811D801A  tsthi     sp,r10,lsl r0
+00002C34  D1052E00  mrsle     r2,cpsr
+00002C38  84212147  strhi     r2,[r1],-0x147
+00002C3C  E007A2C9  and       r10,r7,r9,asr 0x5
+00002C40  E00349C7  and       r4,r3,r7,asr 0x13
+00002C44  D1FB2E01  mvnsle    r2,r1,lsl 0x1C
+00002C48  0C094940  Undefined
+00002C4C  A2558121  subsge    r8,r5,0x40000008
+00002C50  73F92102  mvnsvc    r2,0x80000000
+00002C54  E07E637A  rsbs      r6,lr,r10,ror r3
+00002C58  D1002D02  mrsle     r2,cpsr
+00002C5C  F7FFE07B  Undefined
+00002C60  2D03FF2D  Undefined
+00002C64  2800D002  stmedcs   r0,{r1,r12,lr,pc}
+00002C68  E075D075  rsbs      sp,r5,r5,ror r0
+00002C6C  F876F000  ldmfanv   r6!,{r12,sp,lr,pc}^
+00002C70  1E406B38  Undefined
+00002C74  2E00D509  Undefined
+00002C78  8F21D104  swi       MusicPlayerStart
+00002C7C  40112230  andsmi    r2,r1,r0,lsr r2
+00002C80  E780D004  str       sp,[r0,r4]
+00002C84  D1852E01  orrle     r2,r5,r1,lsl 0x1C
+00002C88  6338E789  teqvs     r8,0x2240000
+00002C8C  81182001  tsthi     r8,r1
+00002C90  28007C78  stmedcs   r0,{r3,r4,r5,r6,r10,r11,r12,sp,lr}
+00002C94  2E00D15C  Undefined
+00002C98  483FD129  ldmfami   pc!,{r0,r3,r5,r8,r12,lr,pc}
+00002C9C  49F80C00  ldmedmi   r8!,{r10,r11}^
+00002CA0  F7FF4B26  ldrbnv    r4,[pc,r6,lsr 0x16]!
+00002CA4  647BFDEA  ldrbvs    pc,[r11],-0xDEA
+00002CA8  428B6BF9  addmi     r6,r11,0x3E400
+00002CAC  6BB8D153  blvs      0xFEE37200
+00002CB0  D1504058  cmple     r0,r8,asr r0
+00002CB4  880A1F09  stmedhi   r10,{r0,r3,r8,r9,r10,r11,r12}
+00002CB8  42938C7B  addsmi    r8,r3,0x7B00
+00002CBC  6008D114  andvs     sp,r8,r4,lsl r1
+00002CC0  4AF668B9  bmi       0xFFD9CFAC
+00002CC4  42914011  addsmi    r4,r1,0x11
+00002CC8  7AB9D10E  bvc       0xFEE77108
+00002CCC  18897A3A  stmeane   r9,{r1,r3,r4,r5,r9,r11,r12,sp,lr}
+00002CD0  18897A7A  stmeane   r9,{r1,r3,r4,r5,r6,r9,r11,r12,sp,lr}
+00002CD4  1A897AFA  bne       0xFE2618C4
+00002CD8  D1050649  mrsle     r0,cpsr
+00002CDC  210148F0  strshcs   r4,[r1,-r0]
+00002CE0  F99DF000  ldmednv   sp,{r12,sp,lr,pc}
+00002CE4  D0332800  eorsle    r2,r3,r0,lsl 0x10
+00002CE8  73F82000  mvnsvc    r2,0x0
+00002CEC  6BFAE033  blvs      0xFFEBADC0
+00002CF0  42936C7B  addsmi    r6,r3,0x7B00
+00002CF4  480ED02F  stmedmi   lr,{r0,r1,r2,r3,r5,r12,lr,pc}
+00002CF8  2E024B0F  Undefined
+00002CFC  480BD101  stmedmi   r11,{r0,r8,r12,lr,pc}
+00002D00  49104B0C  ldmeami   r0,{r2,r3,r8,r9,r11,lr}
+00002D04  FDB9F7FF  Undefined
+00002D08  D10C429A  swple     r4,r10,[r12]
+00002D0C  F7FF69FA  Undefined
+00002D10  843DFDA9  ldrhi     pc,[sp],-0xDA9
+00002D14  210448E3  mrscs     r4,cpsr
+00002D18  1B897BBE  blne      0xFE261C18
+00002D1C  F97FF000  ldmeanv   pc!,{r12,sp,lr,pc}^
+00002D20  D1E12800  mvnle     r2,r0,lsl 0x10
+00002D24  647B6BFB  ldrbvs    r6,[r11],-0xBFB
+00002D28  0000E015  andeq     lr,r0,r5,lsl r0
+00002D2C  0000C37B  andeq     r12,r0,r11,ror r3
+00002D30  0000A517  andeq     r10,r0,r7,lsl r5
+00002D34  43202F2F  msrmi     cpsr_,0xBC
+00002D38  6465646F  strbvs    r6,[r5],-0x46F
+00002D3C  20796220  rsbscs    r6,r9,r0,lsr 0x4
+00002D40  6177614B  cmnvs     r7,r11,asr 0x2
+00002D44  6F646573  swi       Unknown
+00002D48  02000000  andeq     r0,r0,0x0
+00002D4C  60032003  andvs     r2,r3,r3
+00002D50  74782004  ldrbvc    r2,[r8],-0x4
+00002D54  200073F8  strshcs   r7,[r0-],r8
+00002D58  4718BCF8  Undefined
+00002D5C  4BCA2000  blmi      0xFF28AD64
+00002D60  47708118  Undefined
+00002D64  E7FA2001  ldrb      r2,[r10,r1]!
+00002D68  21004BCB  mrscs     r4,cpsr
+00002D6C  477073D9  Undefined
+00002D70  88114AC1  ldmfahi   r1,{r0,r6,r7,r9,r11,lr}
+00002D74  7B984BC8  blvc      0xFE615C9C
+00002D78  D1042801  mrsle     r2,cpsr
+00002D7C  09C08910  stmfaeq   r0,{r4,r8,r11,pc}^
+00002D80  6B58D26F  blvs      0x1637744
+00002D84  28024687  stmedcs   r2,{r0,r1,r2,r7,r9,r10,lr}
+00002D88  8C11D0FB  Undefined
+00002D8C  20078411  andcs     r8,r7,r1,lsl r4
+00002D90  E7F64001  ldrb      r4,[r6,r1]!
+00002D94  020000C0  andeq     r0,r0,0xC0
+00002D98  A1C12083  bicge     r2,r1,r3,lsl 0x1
+00002D9C  03007FFB  mrseq     r7,cpsr
+00002DA0  0300000C  mrseq     r0,cpsr
+00002DA4  28620A08  stmedcs   r2!,{r3,r9,r11}^
+00002DA8  7B98D16C  blvc      0xFE637360
+00002DAC  D1012802  mrsle     r2,cpsr
+00002DB0  E0022001  and       r2,r2,r1
+00002DB4  06808910  Undefined
+00002DB8  75980F80  ldrvc     r0,[r8,0xF80]
+00002DBC  2101D051  mrscs     sp,cpsr
+00002DC0  75594081  ldrbvc    r4,[r9,-0x81]
+00002DC4  A00A8811  andge     r8,r10,r1,lsl r8
+00002DC8  74196358  ldrvc     r6,[r9],-0x358
+00002DCC  7318200B  tstvc     r8,0xB
+00002DD0  40082011  andmi     r2,r8,r1,lsl r0
+00002DD4  0908D145  stmfdeq   r8,{r0,r2,r6,r8,r12,lr,pc}
+00002DD8  090A4308  stmfdeq   r10,{r3,r8,r9,lr}
+00002DDC  4042404A  submi     r4,r2,r10
+00002DE0  D13E0712  teqle     lr,r2,lsl r7
+00002DE4  02002072  andeq     r2,r0,0x72
+00002DE8  43017D59  mrsmi     r7,cpsr
+00002DEC  0000E0A7  andeq     lr,r0,r7,lsr 0x1
+00002DF0  28620A08  stmedcs   r2!,{r3,r9,r11}^
+00002DF4  2861D0E9  stmedcs   r1!,{r0,r3,r5,r6,r7,r12,lr,pc}^
+00002DF8  2003D133  andcs     sp,r3,r3,lsr r1
+00002DFC  735873D8  cmpvc     r8,0x60000003
+00002E00  639A4AA4  orrsvs    r4,r10,0xA4000
+00002E04  A0012260  andge     r2,r1,r0,ror 0x4
+00002E08  0000E008  andeq     lr,r0,r8
+00002E0C  80116B9A  mulshi    r1,r6,r11
+00002E10  639A1C92  orrsvs    r1,r10,0x9200
+00002E14  1E526C9A  Undefined
+00002E18  A003D100  andge     sp,r3,r0,lsl 0x2
+00002E1C  0212649A  andseq    r6,r2,0x9A000000
+00002E20  43117D59  tstmi     r1,0x1640
+00002E24  0000E08A  andeq     lr,r0,r10,lsl 0x1
+00002E28  28630A08  stmedcs   r3!,{r3,r9,r11}^
+00002E2C  20FFD1E1  rscscs    sp,pc,r1,ror 0x3
+00002E30  76D87698  Undefined
+00002E34  76197299  Undefined
+00002E38  28027B98  stmedcs   r2,{r3,r4,r7,r8,r9,r11,r12,sp,lr}
+00002E3C  7DD8D102  Undefined
+00002E40  E0057658  and       r7,r5,r8,asr r6
+00002E44  76588850  Undefined
+00002E48  76988890  Undefined
+00002E4C  76D888D0  Undefined
+00002E50  60586998  Undefined
+00002E54  75DA785A  ldrbvc    r7,[r10,0x85A]
+00002E58  2173A002  cmncs     r3,r2
+00002E5C  43110209  tstmi     r1,0x90000000
+00002E60  E078E06C  rsbs      lr,r8,r12
+00002E64  28630A08  stmedcs   r3!,{r3,r9,r11}^
+00002E68  2864D0E4  stmedcs   r4!,{r2,r5,r6,r7,r12,lr,pc}^
+00002E6C  7719D173  Undefined
+00002E70  7B98789A  blvc      0xFE6210E0
+00002E74  D1032802  mrsle     r2,cpsr
+00002E78  20FF775A  rscscs    r7,pc,r10,asr r7
+00002E7C  77D87798  Undefined
+00002E80  E7EAA001  strb      r10,[r10,r1]!
+00002E84  0000E05E  andeq     lr,r0,lr,asr r0
+00002E88  28027B98  stmedcs   r2,{r3,r4,r7,r8,r9,r11,r12,sp,lr}
+00002E8C  8850D005  ldmfahi   r0,{r0,r2,r12,lr,pc}^
+00002E90  88907758  ldmfdhi   r0,{r3,r4,r6,r8,r9,r10,r12,sp,lr}
+00002E94  88D07798  ldmfdhi   r0,{r3,r4,r7,r8,r9,r10,r12,sp,lr}^
+00002E98  008977D8  strsbeq   r7,[r9],r8
+00002E9C  487731C8  ldmfami   r7!,{r3,r6,r7,r8,r12,sp}^
+00002EA0  40414008  submi     r4,r1,r8
+00002EA4  4979D157  ldmeami   r9!,{r0,r1,r2,r4,r6,r8,r12,lr,pc}^
+00002EA8  3208180A  andcc     r1,r8,0xA0000
+00002EAC  A00163DA  strsbge   r6,[r1-],r10
+00002EB0  0000E044  andeq     lr,r0,r4
+00002EB4  28027B98  stmedcs   r2,{r3,r4,r7,r8,r9,r11,r12,sp,lr}
+00002EB8  80016B98  mulhi     r1,r6,r11
+00002EBC  6811D102  ldmfavs   r1,{r1,r8,r12,lr,pc}
+00002EC0  1C806001  Undefined
+00002EC4  63991C81  orrsvs    r1,r9,0x8100
+00002EC8  42886BD8  addmi     r6,r8,0x36000
+00002ECC  A001D137  andge     sp,r1,r7,lsr r1
+00002ED0  0000E034  andeq     lr,r0,r4,lsr r0
+00002ED4  D13E2965  teqle     lr,r5,ror 0x12
+00002ED8  6BDA6C59  blvs      0xFF69E044
+00002EDC  D0014291  mulle     r1,r4,r2
+00002EE0  E02C2174  eor       r2,r12,r4,ror r1
+00002EE4  A0012175  andge     r2,r1,r5,ror r1
+00002EE8  0000E028  andeq     lr,r0,r8
+00002EEC  D0F92965  rscsle    r2,r9,r5,ror 0x12
+00002EF0  D1302966  teqle     r0,r6,ror 0x12
+00002EF4  A0018C19  andge     r8,r1,r9,lsl r12
+00002EF8  0000E020  andeq     lr,r0,r0
+00002EFC  42888C18  addmi     r8,r8,0x1800
+00002F00  7B99D129  blvc      0xFE6773AC
+00002F04  D10C2901  mrsle     r2,cpsr
+00002F08  071B7C1B  Undefined
+00002F0C  085B0F5B  ldmfaeq   r11,{r0,r1,r3,r4,r6,r8,r9,r10,r11}^
+00002F10  8851D304  ldmfahi   r1,{r2,r8,r9,r12,lr,pc}^
+00002F14  D1024288  mrsle     r4,cpsr
+00002F18  E7F81C92  Undefined
+00002F1C  4B5ED1FC  blmi      0x17B7714
+00002F20  69D8D119  ldmedvs   r8,{r0,r3,r4,r8,r12,lr,pc}^
+00002F24  1A407E59  bne       0x1022890
+00002F28  1A407E99  bne       0x1022994
+00002F2C  1A407ED9  bne       0x1022A98
+00002F30  06003811  Undefined
+00002F34  21FFD10F  mvnscs    sp,pc,lsl 0x2
+00002F38  A0387459  eorsge    r7,r8,r9,asr r4
+00002F3C  4A4E6358  bmi       0x139BCA4
+00002F40  80518151  subshi    r8,r1,r1,asr r1
+00002F44  28027B98  stmedcs   r2,{r3,r4,r7,r8,r9,r11,r12,sp,lr}
+00002F48  4A4BD102  bmi       0x12F7358
+00002F4C  81104804  tsthi     r0,r4,lsl 0x10
+00002F50  6318200B  tstvs     r8,0xB
+00002F54  21004770  mrscs     r4,cpsr
+00002F58  A03073D9  ldrsbge   r7,[r0-],r9
+00002F5C  0000E7EE  andeq     lr,r0,lr,ror 0xF
+00002F60  10085088  andne     r5,r8,r8,lsl 0x1
+00002F64  D1F62901  mvnsle    r2,r1,lsl 0x12
+00002F68  60586818  subsvs    r6,r8,r8,lsl r8
+00002F6C  40484945  submi     r4,r8,r5,asr 0x12
+00002F70  200B6350  andcs     r6,r11,r0,asr r3
+00002F74  21107318  tstcs     r0,r8,lsl r3
+00002F78  E04BA000  sub       r10,r11,r0
+00002F7C  D1EA2904  mvnle     r2,r4,lsl 0x12
+00002F80  73D82003  bicsvc    r2,r8,0x3
+00002F84  A0017358  andge     r7,r1,r8,asr r3
+00002F88  0000E046  andeq     lr,r0,r6
+00002F8C  D1E22902  mvnle     r2,r2,lsl 0x12
+00002F90  21026B10  mrscs     r6,cpsr
+00002F94  40010209  andmi     r0,r1,r9,lsl 0x4
+00002F98  A23909C9  eorsge    r0,r9,0x324000
+00002F9C  68111852  ldmfavs   r1,{r1,r4,r6,r11,r12}
+00002FA0  60984048  addsvs    r4,r8,r8
+00002FA4  227F0A01  rsbscs    r0,pc,0x1000
+00002FA8  04004011  streq     r4,[r0],-0x11
+00002FAC  3180D300  orrcc     sp,r0,r0,lsl 0x6
+00002FB0  40100C00  andsmi    r0,r0,r0,lsl 0x18
+00002FB4  430101C9  mrsmi     r0,cpsr
+00002FB8  00C9313F  sbceq     r3,r9,pc,lsr r1
+00002FBC  4008482F  andmi     r4,r8,pc,lsr 0x10
+00002FC0  D0054288  andle     r4,r5,r8,lsl 0x5
+00002FC4  06407A98  Undefined
+00002FC8  72980E40  addsvc    r0,r8,0x400
+00002FCC  01C02089  biceq     r2,r0,r9,lsl 0x1
+00002FD0  4930300C  ldmeami   r0!,{r2,r3,r12,sp}
+00002FD4  64191809  ldrvs     r1,[r9],-0x809
+00002FD8  A0012120  andge     r2,r1,r0,lsr 0x2
+00002FDC  0000E01A  andeq     lr,r0,r10,lsl r0
+00002FE0  D1B82902  movsle    r2,r2,lsl 0x12
+00002FE4  21108F10  tstcs     r0,r0,lsl pc
+00002FE8  6B104041  blvs      0x4130F4
+00002FEC  6B998711  blvs      0xFE664C38
+00002FF0  6399C101  orrsvs    r12,r9,0x40000000
+00002FF4  42886BD8  addmi     r6,r8,0x36000
+00002FF8  4924D1A4  stmfdmi   r4!,{r2,r5,r7,r8,r12,lr,pc}
+00002FFC  D1024288  mrsle     r4,cpsr
+00003000  63D86C18  bicsvs    r6,r8,0x1800
+00003004  4822E79E  stmedmi   r2!,{r1,r2,r3,r4,r7,r8,r9,r10,sp,lr,pc}
+00003008  68006841  stmedvs   r0,{r0,r6,r11,sp,lr}
+0000300C  63504348  cmpvs     r0,0x20000001
+00003010  A0022100  andge     r2,r2,r0,lsl 0x2
+00003014  87114A18  Undefined
+00003018  E7936358  Undefined
+0000301C  B5004770  strlt     r4,[r0,-0x770]
+00003020  60104A1C  andsvs    r4,r0,r12,lsl r10
+00003024  71194B19  tstvc     r9,r9,lsl r11
+00003028  D0012901  andle     r2,r1,r1,lsl 0x12
+0000302C  71587DB8  ldrhvc    r7,[r8,-0xD8]
+00003030  F7FD1D10  Undefined
+00003034  BD00FB59  Undefined
+00003038  F7FD1D00  ldrbnv    r1,[sp,r0,lsl 0x1A]!
+0000303C  8CB8FC86  Undefined
+00003040  D1012800  mrsle     r2,cpsr
+00003044  84B8203C  ldrhi     r2,[r8],0x3C
+00003048  7CB8E54E  Undefined
+0000304C  D1022877  mrsle     r2,cpsr
+00003050  FC90F7FD  Undefined
+00003054  2876E003  ldmfacs   r6!,{r0,r1,sp,lr,pc}^
+00003058  F7FDD101  ldrbnv    sp,[sp,r1,lsl 0x2]!
+0000305C  8CB8FC92  Undefined
+00003060  D0072800  andle     r2,r7,r0,lsl 0x10
+00003064  84B81E40  ldrhi     r1,[r8],0xE40
+00003068  D1032839  mrsle     r2,cpsr
+0000306C  490F480E  stmfdmi   pc,{r1,r2,r3,r11,lr}
+00003070  F9E0F7FE  stmfanv   r0!,{r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r12,sp,lr,pc}^
+00003074  0000E568  andeq     lr,r0,r8,ror 0xA
+00003078  04000120  streq     r0,[r0],-0x120
+0000307C  0003FFF8  strsheq   pc,[r3-],r8
+00003080  6177614B  cmnvs     r7,r11,asr 0x2
+00003084  6F646573  swi       Unknown
+00003088  04000200  streq     r0,[r0],-0x200
+0000308C  020000C0  andeq     r0,r0,0xC0
+00003090  020001F8  andeq     r0,r0,0x3E
+00003094  02000000  andeq     r0,r0,0x0
+00003098  0300000C  mrseq     r0,cpsr
+0000309C  80808080  addhi     r8,r0,r0,lsl 0x1
+000030A0  EA000036  b         0x3180
+000030A4  EA00002E  b         0x3164
+000030A8  0300390C  mrseq     r3,cpsr
+000030AC  00003980  andeq     r3,r0,r0,lsl 0x13
+000030B0  00280022  eoreq     r0,r8,r2
+000030B4  00880082  addeq     r0,r8,r2,lsl 0x1
+000030B8  00E800E2  rsceq     r0,r8,r2,ror 0x1
+000030BC  01480142  mrseq     r0,spsr
+000030C0  08020200  stmedeq   r2,{r9}
+000030C4  00000000  andeq     r0,r0,r0
+000030C8  080101C0  stmedeq   r1,{r6,r7,r8}
+000030CC  0000001E  andeq     r0,r0,lr,lsl r0
+000030D0  03020100  mrseq     r0,cpsr
+000030D4  07060504  streq     r0,[r6,-r4,lsl 0xA]
+000030D8  0B0A0908  bleq      0x285500
+000030DC  0F0E0D0C  swi       BgAffineSet
+000030E0  13121110  tstne     r2,0x4
+000030E4  17161514  Undefined
+000030E8  201E1C18  andscs    r1,lr,r8,lsl r12
+000030EC  2C2A2824  Undefined
+000030F0  38363430  ldmfacc   r6!,{r4,r5,r10,r12,sp}
+000030F4  4442403C  strbmi    r4,[r2],-0x3C
+000030F8  504E4C48  subpl     r4,lr,r8,asr 0x18
+000030FC  5C5A5854  Undefined
+00003100  00000060  andeq     r0,r0,r0
+00003104  E3E2E1E0  mvn       lr,0x38
+00003108  E7E6E5E4  strb      lr,[r6,r4,ror 0xB]!
+0000310C  EBEAE9E8  bl        0xFFABD8B4
+00003110  D3D2D1D0  bicsle    sp,r2,0x34
+00003114  D7D6D5D4  Undefined
+00003118  DBDAD9D8  blle      0xFF6B9880
+0000311C  C3C2C1C0  bicgt     r12,r2,0x30
+00003120  C7C6C5C4  strbgt    r12,[r6,r4,asr 0xB]
+00003124  CBCAC9C8  blgt      0xFF2B584C
+00003128  B3B2B1B0  movslt    r11,0x2C
+0000312C  B7B6B5B4  Undefined
+00003130  BBBAB9B8  bllt      0xFEEB1818
+00003134  A3A2A1A0  movge     r10,0x28
+00003138  A7A6A5A4  strge     r10,[r6,r4,lsr 0xB]!
+0000313C  ABAAA9A8  blge      0xFEAAD7E4
+00003140  93929190  orrsls    r9,r2,0x24
+00003144  97969594  Undefined
+00003148  9B9A9998  blls      0xFE6A97B0
+0000314C  83828180  orrhi     r8,r2,0x20
+00003150  87868584  strhi     r8,[r6,r4,lsl 0xB]
+00003154  8B8A8988  blhi      0xFE2A577C
+00003158  73727170  cmnvc     r2,0x1C
+0000315C  77767574  Undefined
+00003160  7B7A7978  blvc      0x1EA1748
+00003164  63626160  msrvs     spsr_x,0x18
+00003168  67666564  strbvs    r6,[r6,-r4,ror 0xA]!
+0000316C  6B6A6968  blvs      0x1A9D714
+00003170  53525150  cmppl     r2,0x14
+00003174  57565554  Undefined
+00003178  5B5A5958  blpl      0x16996E0
+0000317C  43424140  mrsmi     r4,spsr
+00003180  47464544  strbmi    r4,[r6,-r4,asr 0xA]
+00003184  4B4A4948  blmi      0x12956AC
+00003188  33323130  teqcc     r2,0xC
+0000318C  37363534  Undefined
+00003190  3B3A3938  blcc      0xE91678
+00003194  23222120  msrcs     cpsr_x,0x8
+00003198  27262524  strcs     r2,[r6,-r4,lsr 0xA]!
+0000319C  2B2A2928  blcs      0xA8D644
+000031A0  13121110  tstne     r2,0x4
+000031A4  17161514  Undefined
+000031A8  1B1A1918  blne      0x689610
+000031AC  03020100  mrseq     r0,cpsr
+000031B0  07060504  streq     r0,[r6,-r4,lsl 0xA]
+000031B4  0B0A0908  bleq      0x2855DC
+000031B8  80000000  andhi     r0,r0,r0
+000031BC  879C7C97  Undefined
+000031C0  8FACD61E  swi       Unknown
+000031C4  9837F052  ldmfals   r7!,{r1,r4,r6,r12,sp,lr,pc}
+000031C8  A14517CC  mrsge     r1,spsr
+000031CC  AADC0848  bge       0xFF7052F4
+000031D0  B504F334  strlt     pc,[r4,-0x334]
+000031D4  BFC886BB  swi       Unknown
+000031D8  CB2FF52A  blgt      0xC00688
+000031DC  D744FCCB  strble    pc,[r4,-r11,asr 0x19]
+000031E0  E411F03A  ldr       pc,[r1],-0x3A
+000031E4  F1A1BF39  movnv     r11,r9,lsr pc
+000031E8  00840060  addeq     r0,r4,r0
+000031EC  00E000B0  strheq    r0,[r0],0x0
+000031F0  01300108  teqeq     r0,r8,lsl 0x2
+000031F4  01C00160  biceq     r0,r0,r0,ror 0x2
+000031F8  02600210  rsbeq     r0,r0,0x1
+000031FC  02C002A0  sbceq     r0,r0,0xA
+00003200  FFFFFFFF  swi       Unknown
+00003204  01F0001F  mvnseq    r0,pc,lsl r0
+00003208  01F0281F  mvnseq    r2,pc,lsl r8
+0000320C  01F0581F  mvnseq    r5,pc,lsl r8
+00003210  01F00000  mvnseq    r0,r0
+00003214  01F0280A  mvnseq    r2,r10,lsl 0x10
+00003218  01F05816  mvnseq    r5,r6,lsl r8
+0000321C  01F07C00  mvnseq    r7,r0,lsl 0x18
+00003220  01F07C0A  mvnseq    r7,r10,lsl 0x18
+00003224  01F07C16  mvnseq    r7,r6,lsl r12
+00003228  00007C00  andeq     r7,r0,r0,lsl 0x18
+0000322C  00A07C0A  adceq     r7,r0,r10,lsl 0x18
+00003230  01607C16  msreq     spsr_,r6
+00003234  00007C1F  andeq     r7,r0,pc,lsl r12
+00003238  00A07C1F  adceq     r7,r0,pc,lsl r12
+0000323C  01607C1F  msreq     spsr_,pc
+00003240  0000001F  andeq     r0,r0,pc,lsl r0
+00003244  00A0281F  adceq     r2,r0,pc,lsl r8
+00003248  0160581F  msreq     spsr_,pc
+0000324C  01F0001F  mvnseq    r0,pc,lsl r0
+00003250  01F0281F  mvnseq    r2,pc,lsl r8
+00003254  01F0581F  mvnseq    r5,pc,lsl r8
+00003258  01F07C1F  mvnseq    r7,pc,lsl r12
+0000325C  01F07C1F  mvnseq    r7,pc,lsl r12
+00003260  01F07C1F  mvnseq    r7,pc,lsl r12
+00003264  FF1F7C00  swi       MidiKey2Freq
+00003268  7C1FFD5F  Undefined
+0000326C  0000D424  andeq     sp,r0,r4,lsr 0x8
+00003270  0000400F  andeq     r4,r0,pc
+00003274  82810100  addhi     r0,r1,0x0
+00003278  830F8382  mrshi     r8,cpsr
+0000327C  8303C30C  mrshi     r12,cpsr
+00003280  C3048301  mrsgt     r8,cpsr
+00003284  C2020E08  andgt     r0,r2,0x80
+00003288  0B07C20D  bleq      0x1F3AC4
+0000328C  09050A06  stmfdeq   r5,{r1,r2,r9,r11}
+00003290  51AEFF24  movpl     pc,r4,lsr 0x1E
+00003294  21A29A69  movcs     r9,r9,ror 0x14
+00003298  0A82843D  beq       0xFE0A4394
+0000329C  AD09E484  Undefined
+000032A0  988B2411  stmeals   r11,{r0,r4,r10,sp}
+000032A4  217F81C0  cmncs     pc,r0,asr 0x3
+000032A8  19BE52A3  ldmedne   lr!,{r0,r1,r5,r7,r9,r12,lr}
+000032AC  20CE0993  smullcs   r0,lr,r9,r3
+000032B0  4A4A4610  bmi       0x1294AF8
+000032B4  EC3127F8  Undefined
+000032B8  33E8C758  mvncc     r12,0x1600000
+000032BC  BFCEE382  swi       Unknown
+000032C0  94DFF485  ldrbls    pc,[pc],0x485
+000032C4  C1094BCE  mrsgt     r4,cpsr
+000032C8  C08A5694  umullgt   r5,r10,r6,r4
+000032CC  FCA77213  Undefined
+000032D0  734D849F  mrsvc     r8,spsr
+000032D4  619ACAA3  orrsvs    r12,r10,r3,lsr 0x15
+000032D8  27A39758  Undefined
+000032DC  769803FC  Undefined
+000032E0  61C71D23  bicvs     r1,r7,r3,lsr 0x1A
+000032E4  56AE0403  strpl     r0,[lr],r3,lsl 0x8
+000032E8  008438BF  strheq    r3,[r4],pc
+000032EC  FD0EA740  Undefined
+000032F0  03FE52FF  mvnseq    r5,0xF000000F
+000032F4  F130956F  teqnv     r0,pc,ror 0xA
+000032F8  85C0FB97  strbhi    pc,[r0,0xB97]
+000032FC  2580D660  strcs     sp,[r0,0x660]
+00003300  03BE63A9  movseq    r6,0xA4000002
+00003304  E2384E01  eors      r4,r8,0x10
+00003308  FF34A2F9  swi       Unknown
+0000330C  44033EBB  strmi     r3,[r3],-0xEBB
+00003310  CB900078  blgt      0xFE4034F8
+00003314  943A1188  ldrls     r1,[r10],-0x188
+00003318  637CC065  cmnvs     r12,0x65
+0000331C  AF3CF087  swi       Unknown
+00003320  8BE425D6  blhi      0xFF90CA80
+00003324  72AC0A38  adcvc     r0,r12,0x38000
+00003328  07F8D421  ldrbeq    sp,[r8,r1,lsr 0x8]!
+0000332C  0003C024  andeq     r12,r3,r4
+00003330  0180000F  orreq     r0,r0,pc
+00003334  42014100  andmi     r4,r1,0x0
+00003338  43C20502  bicmi     r0,r2,0x800000
+0000333C  C4430143  strbgt    r0,[r3],-0x143
+00003340  03C30F0A  biceq     r0,r3,0x28
+00003344  09C302C3  stmfaeq   r3,{r0,r1,r6,r7,r9}^
+00003348  0807040B  stmedeq   r7,{r0,r1,r3,r10}
+0000334C  0E0C0D06  Undefined
+00003350  38540300  ldmfacc   r4,{r8,r9}^
+00003354  481C0C02  ldmfami   r12,{r1,r10,r11}
+00003358  9956C0C3  ldmeals   r6,{r0,r1,r6,r7,lr,pc}^
+0000335C  756D8008  strbvc    r8,[sp,-0x8]!
+00003360  441AA6D9  ldrmi     r10,[r10],-0x6D9
+00003364  80844021  addhi     r4,r4,r1
+00003368  1035B7A6  eorsne    r11,r5,r6,lsr 0xF
+0000336C  F1DB6C98  Undefined
+00003370  66D415A2  ldrbvs    r1,[r4],r2,lsr 0xB
+00003374  002C0A07  eoreq     r0,r12,r7,lsl 0x14
+00003378  B1AC0418  movlt     r0,r8,lsl r4
+0000337C  55E19DEB  strbpl    r9,[r1,0xDEB]!
+00003380  45B048DE  ldrmi     r4,[r0,0x8DE]!
+00003384  46EC6C1A  Undefined
+00003388  6004D858  andvs     sp,r4,r8,asr r8
+0000338C  292E0104  stmfdcs   lr!,{r2,r8}
+00003390  E2AF60C7  adc       r6,pc,0xC7
+00003394  1061D661  rsbne     sp,r1,r1,ror 0xC
+00003398  E40FC69D  str       r12,[pc],-0x69D
+0000339C  40381379  eorsmi    r1,r8,r9,ror r3
+000033A0  1B775617  blne      0x1DD8C04
+000033A4  5AB06E8D  bpl       0xFEC1EDE0
+000033A8  BC36E230  Undefined
+000033AC  C33D6C28  teqgt     sp,0x2800
+000033B0  C1F0E1E7  mvnsgt    lr,r7,ror 0x3
+000033B4  B49A9D14  ldrlt     r9,[r10],0xD14
+000033B8  0AA08094  beq       0xFE823610
+000033BC  56746946  ldrbpl    r6,[r4],-r6,asr 0x12
+000033C0  DA0DB505  ble       0x3707DC
+000033C4  5B043079  blpl      0x10F5B0
+000033C8  220D1268  andcs     r1,sp,0x80000006
+000033CC  46A51990  Undefined
+000033D0  91F0E3D0  ldrsbls   lr,[r0,0x30]!
+000033D4  E225724D  eor       r7,r5,0xD0000004
+000033D8  C9401866  stmfdgt   r0,{r1,r2,r5,r6,r11,r12}^
+000033DC  A0AC0618  adcge     r0,r12,r8,lsl r6
+000033E0  83C84C85  bichi     r4,r8,0x8500
+000033E4  B486F181  strlt     pc,[r6],0x181
+000033E8  E5D9286D  ldrb      r2,[r9,0x86D]
+000033EC  6A280AB6  bvs       0xA05ECC
+000033F0  2F94B1B7  swi       Unknown
+000033F4  57A34D5B  Undefined
+000033F8  CD1BF87E  Undefined
+000033FC  D3AF430D  movle     r4,0x34000000
+00003400  FA379A37  bnv       0xDE9CE4
+00003404  95B69BDA  ldrls     r9,[r6,0xBDA]!
+00003408  B69112C4  ldrlt     r1,[r1],r4,asr 0x5
+0000340C  00A85A1D  adceq     r5,r8,sp,lsl r10
+00003410  79B4A013  ldmedvc   r4!,{r0,r1,r4,sp,pc}
+00003414  928110D2  addls     r1,r1,0xD2
+00003418  0A86DA46  beq       0xFE1B9D38
+0000341C  88DC30A3  ldmfdhi   r12,{r0,r1,r5,r7,r12,sp}^
+00003420  306CD6C0  rsbcc     sp,r12,r0,asr 0xD
+00003424  E686F19C  Undefined
+00003428  00C300F4  strsheq   r0,[r3],0x4
+0000342C  161E82C6  ldrne     r8,[lr],-r6,asr 0x5
+00003430  6ABBD060  bvs       0xFEEF75B8
+00003434  24056320  strcs     r6,[r5],-0x320
+00003438  2BFBA50A  blcs      0xFFEEC868
+0000343C  1B9E5438  blne      0xFE798524
+00003440  5A909790  bpl       0xFE429288
+00003444  3890DE7F  ldmfdcc   r0,{r0,r1,r2,r3,r4,r5,r6,r9,r10,r11,r12,lr,pc}
+00003448  0A328283  beq       0xCA3E5C
+0000344C  8012B5B0  ldrhhi    r11,[r2-],r0
+00003450  98C37904  stmeals   r3,{r2,r8,r11,r12,sp,lr}^
+00003454  D03862E3  eorsle    r6,r8,r3,ror 0x5
+00003458  DF465D5F  swi       Unknown
+0000345C  D91F29C3  ldmeale   pc,{r0,r1,r6,r7,r8,r11,sp}
+00003460  54A1E55F  strpl     lr,[r1],0x55F
+00003464  CA480069  bgt       0x1203610
+00003468  6C16ECA3  Undefined
+0000346C  B30C3506  mrslt     r3,cpsr
+00003470  F6ADF5B7  Undefined
+00003474  F0DA065B  sbcsnv    r0,r10,r11,asr r6
+00003478  6DBC9BC0  Undefined
+0000347C  4B4B69AE  blmi      0x12DDB3C
+00003480  21870F2A  orrcs     r0,r7,r10,lsr 0x1E
+00003484  100CA45B  andne     r10,r12,r11,asr r4
+00003488  6510AFDA  ldrvs     r10,[r0,-0xFDA]
+0000348C  5B86DCF2  blpl      0xFE1BA85C
+00003490  B8D11BC3  ldmfdlt   r1,{r0,r1,r6,r7,r8,r9,r11,r12}^
+00003494  E6987A51  Undefined
+00003498  D8B69675  ldmfdle   r6!,{r0,r2,r4,r5,r6,r9,r10,r12,pc}
+0000349C  ADE739DD  Undefined
+000034A0  CE37DBE7  Undefined
+000034A4  28CFCE74  stmeacs   pc,{r2,r4,r5,r6,r9,r10,r11,lr,pc}^
+000034A8  5066DCD8  strsbpl   sp,[r6-],0xC8
+000034AC  B6DADB4A  ldrblt    sp,[r10],r10,asr 0x16
+000034B0  DBC826A1  blle      0xFF20CF3C
+000034B4  F620D542  strnv     sp,[r0],-r2,asr 0xA
+000034B8  DEE14B19  Undefined
+000034BC  AA8D37BA  bge       0xFE3513AC
+000034C0  BCCCF29C  Undefined
+000034C4  B479EEC7  ldrblt    lr,[r9],-0xEC7
+000034C8  CF202C02  swi       MusicPlayerOpen
+000034CC  D25B4CCE  subsle    r4,r11,0xCE00
+000034D0  8D7ABB63  Undefined
+000034D4  0364DAFA  msreq     spsr_s,0xFA000
+000034D8  F999FE70  ldmednv   r9,{r4,r5,r6,r9,r10,r11,r12,sp,lr,pc}
+000034DC  7520AA9F  strvc     r10,[r0,-0xA9F]!
+000034E0  836F272E  msrhi     spsr_fsxc,0xB80000
+000034E4  39F55052  ldmedcc   r5!,{r1,r4,r6,r12,lr}^
+000034E8  6EB2587E  Undefined
+000034EC  9AF255B9  bls       0xFFC98BD8
+000034F0  8A05DA0D  bhi       0x179D2C
+000034F4  BAB079AB  blt       0xFEC21BA8
+000034F8  7EADF5B7  Undefined
+000034FC  E8E68F99  stmea     r6!,{r0,r3,r4,r7,r8,r9,r10,r11,pc}^
+00003500  77EE9248  strbvc    r9,[lr,r8,asr 0x4]!
+00003504  18851954  stmeane   r5,{r2,r4,r6,r8,r11,r12}
+00003508  08485CDE  stmedeq   r8,{r1,r2,r3,r4,r6,r7,r10,r11,r12,lr}^
+0000350C  73685A4C  msrvc     spsr_f,0x4C000
+00003510  8441E67D  strbhi    lr,[r1],-0x67D
+00003514  F0D44883  sbcsnv    r4,r4,r3,lsl 0x11
+00003518  36BC37B7  Undefined
+0000351C  E53A726A  ldr       r7,[r10,-0x26A]!
+00003520  90999EAE  addsls    r9,r9,lr,lsr 0x1D
+00003524  2403190A  strcs     r1,[r3],-0x90A
+00003528  F0AE8574  adcnv     r8,lr,r4,ror r5
+0000352C  ECC5AD35  Undefined
+00003530  61BC48DF  ldrsbvs   r4,[r12,pc]!
+00003534  3F4A628F  swi       Unknown
+00003538  93325CCD  teqls     r2,0xCD00
+0000353C  99B3CCAD  ldmedls   r3!,{r0,r2,r3,r5,r7,r10,r11,lr,pc}
+00003540  8E650C2A  Undefined
+00003544  BBAA4950  bllt      0xFEA95A8C
+00003548  306D29CB  rsbcc     r2,sp,r11,asr 0x13
+0000354C  5F4E9FA3  swi       Unknown
+00003550  5333746D  teqpl     r3,0x6D000000
+00003554  386B15A5  stmedcc   r11!,{r0,r2,r5,r7,r8,r10,r12}^
+00003558  C62D0996  Undefined
+0000355C  8A31F64E  bhi       0xC80E9C
+00003560  7EA53DE2  Undefined
+00003564  A8485C24  stmedge   r8,{r2,r5,r10,r11,r12,lr}^
+00003568  31086895  swpcc     r6,r5,[r8]
+0000356C  8B99421C  blhi      0xFE653DE4
+00003570  18B5C3BB  ldmfdne   r5!,{r0,r1,r3,r4,r5,r7,r8,r9,lr,pc}
+00003574  9A3BD91C  bls       0xEF99EC
+00003578  CDA2B5DE  Undefined
+0000357C  AA776D38  bge       0x1DDEA64
+00003580  6F438ED0  swi       Unknown
+00003584  EF4AE4F1  swi       Unknown
+00003588  9C2FA805  Undefined
+0000358C  65A50651  strvs     r0,[r5,0x651]!
+00003590  A766EA6C  strbge    lr,[r6,-r12,ror 0x14]!
+00003594  FFB3F0D9  swi       Unknown
+00003598  86EE4C37  Undefined
+0000359C  B46FAD09  strblt    r10,[pc],-0xD09
+000035A0  D069D293  Undefined
+000035A4  A4CC2219  strbge    r2,[r12],0x219
+000035A8  7BBE7CCD  blvc      0xFEFA28E4
+000035AC  107CBA0B  rsbsne    r11,r12,r11,lsl 0x14
+000035B0  FF2AAB4E  swi       SoundGetJumpList
+000035B4  81079132  mrshi     r9,cpsr
+000035B8  5265A550  rsbpl     r10,r5,0x14000000
+000035BC  B1733016  cmnlt     r3,r6,lsl r0
+000035C0  AD046645  Undefined
+000035C4  825BAB5A  subshi    r10,r11,0x16800
+000035C8  ED4884D2  Undefined
+000035CC  6429185E  strvs     r1,[r9],-0x85E
+000035D0  4BEACB32  blmi      0xFFAB62A0
+000035D4  025FBB58  subseq    r11,=0xFFFED5DC
+000035D8  5AEFDB5C  bpl       0xFFBFA350
+000035DC  AE6D77DA  Undefined
+000035E0  4FEBC4DB  swi       Unknown
+000035E4  76517466  ldrbvc    r7,[r1],-r6,ror 0x8
+000035E8  156DCB58  strbne    r12,[sp,-0xB58]!
+000035EC  955EF43F  ldrbls    pc,[lr,-0x43F]
+000035F0  73A2FA52  movvc     pc,0x52000
+000035F4  484CE119  stmedmi   r12,{r0,r3,r4,r8,sp,lr,pc}^
+000035F8  1FCD1934  swi       Unknown
+000035FC  D1143998  Undefined
+00003600  77D57FA0  ldrbvc    r7,[r5,r0,lsr 0x1F]
+00003604  E51A4A37  ldr       r4,[r10,-0xA37]
+00003608  216D2AF6  strshcs   r2,[sp,-0xA6]!
+0000360C  A531EC87  ldrge     lr,[r1,-0xC87]!
+00003610  E79F2600  ldr       r2,[pc,r0,lsl 0xC]
+00003614  0502100A  streq     r1,[r2,-0xA]
+00003618  8108815C  mrshi     r8,cpsr
+0000361C  88222098  stmedhi   r2!,{r3,r4,r7,sp}
+00003620  854440B0  strbhi    r4,[r4,-0xB0]
+00003624  68051581  stmedvs   r5,{r0,r7,r8,r10,r12}
+00003628  D2488844  suble     r8,r8,0x440000
+0000362C  5A2442C4  bpl       0x914144
+00003630  135AFD91  cmpne     r10,0x2440
+00003634  1022E832  eorne     lr,r2,r2,lsr r8
+00003638  22C88044  sbccs     r8,r8,0x44
+0000363C  88810888  stmeahi   r1,{r3,r7,r11}
+00003640  AC461514  Undefined
+00003644  21AA21C4  movcs     r2,r4,asr 0x3
+00003648  6197C5AA  orrsvs    r12,r7,r10,lsr 0xB
+0000364C  64900888  ldrvs     r0,[r0],0x888
+00003650  B4C46B88  strblt    r6,[r4],0xB88
+00003654  45C4235B  strbmi    r2,[r4,0x35B]
+00003658  69882F83  stmfavs   r8,{r0,r1,r7,r8,r9,r10,r11,sp}
+0000365C  A59ED758  ldrge     sp,[lr,0x758]
+00003660  8C21159B  Undefined
+00003664  AA70487D  bge       0x1C15860
+00003668  5A02E967  bpl       0xBDC0C
+0000366C  B5A62362  strlt     r2,[r6,0x362]!
+00003670  3EC5900D  Undefined
+00003674  421100A8  andsmi    r0,r1,0xA8
+00003678  0E8298AB  Undefined
+0000367C  B9986158  ldmedlt   r8,{r3,r4,r6,r8,sp,lr}
+00003680  2FA95019  swi       Unknown
+00003684  4199BEDC  ldrsbmi   r11,[r9,r12]
+00003688  0B448804  bleq      0x11256A0
+0000368C  A1244400  msrge     cpsr_s,r0
+00003690  D45D9088  ldrble    r9,[sp],-0x88
+00003694  74294E00  strvc     r4,[r9],-0xE00
+00003698  00000000  andeq     r0,r0,r0
+0000369C  C2AD2620  adcgt     r2,sp,0x2000000
+000036A0  01000A40  mrseq     r0,cpsr
+000036A4  C4962620  ldrgt     r2,[r6],0x620
+000036A8  0040098C  subeq     r0,r0,r12,lsl 0x13
+000036AC  C67F2620  ldrbgt    r2,[pc],-r0,lsr 0xC
+000036B0  00000980  andeq     r0,r0,r0,lsl 0x13
+000036B4  C8682620  stmedgt   r8!,{r5,r9,r10,sp}^
+000036B8  000008CC  andeq     r0,r0,r12,asr 0x11
+000036BC  CA502620  bgt       0x140CF44
+000036C0  000008C0  andeq     r0,r0,r0,asr 0x11
+000036C4  CC392620  Undefined
+000036C8  0000080C  andeq     r0,r0,r12,lsl 0x10
+000036CC  CE222620  Undefined
+000036D0  00000800  andeq     r0,r0,r0,lsl 0x10
+000036D4  C0376466  eorsgt    r6,r7,r6,ror 0x8
+000036D8  00005B40  andeq     r5,r0,r0,asr 0x16
+000036DC  C0776466  rsbsgt    r6,r7,r6,ror 0x8
+000036E0  00005B50  andeq     r5,r0,r0,asr r11
+000036E4  81742268  cmnhi     r4,r8,ror 0x4
+000036E8  00000290  muleq     r0,r0,r2
+000036EC  FFFEFEFE  swi       Unknown
+000036F0  FF00FFFF  swi       SoftReset
+000036F4  00010000  andeq     r0,r1,r0
+000036F8  02010101  andeq     r0,r1,0x40000000
+000036FC  FFFF0202  swi       Unknown
+00003700  0000FF00  andeq     pc,r0,r0,lsl 0x1E
+00003704  01010001  mrseq     r0,cpsr
+00003708  0000FF00  andeq     pc,r0,r0,lsl 0x1E
+0000370C  00000001  andeq     r0,r0,r1
+00003710  00004778  andeq     r4,r0,r8,ror r7
+00003714  EAFFF2A1  b         0x1A0
+00003718  00004778  andeq     r4,r0,r8,ror r7
+0000371C  EAFFF29A  b         0x18C
+00003720  00004778  andeq     r4,r0,r8,ror r7
+00003724  EAFFF31F  b         0x3A8
+00003728  00004778  andeq     r4,r0,r8,ror r7
+0000372C  EAFFF2FD  b         0x328
+00003730  00004778  andeq     r4,r0,r8,ror r7
+00003734  EAFFF569  b         0xCE0
+00003738  00002665  andeq     r2,r0,r5,ror 0xC
+0000373C  000026CF  andeq     r2,r0,pc,asr 0xD
+00003740  000026EF  andeq     r2,r0,pc,ror 0xD
+00003744  00002709  andeq     r2,r0,r9,lsl 0xE
+00003748  0000271D  andeq     r2,r0,sp,lsl r7
+0000374C  00002665  andeq     r2,r0,r5,ror 0xC
+00003750  00002665  andeq     r2,r0,r5,ror 0xC
+00003754  00002665  andeq     r2,r0,r5,ror 0xC
+00003758  00002665  andeq     r2,r0,r5,ror 0xC
+0000375C  0000274B  andeq     r2,r0,r11,asr 0xE
+00003760  00002755  andeq     r2,r0,r5,asr r7
+00003764  00002769  andeq     r2,r0,r9,ror 0xE
+00003768  0000277B  andeq     r2,r0,r11,ror r7
+0000376C  000027A9  andeq     r2,r0,r9,lsr 0xF
+00003770  000027BB  strheq    r2,[r0-],r11
+00003774  000027CF  andeq     r2,r0,pc,asr 0xF
+00003778  000027E3  andeq     r2,r0,r3,ror 0xF
+0000377C  000027F5  strsheq   r2,[r0-],r5
+00003780  00002805  andeq     r2,r0,r5,lsl 0x10
+00003784  0000280F  andeq     r2,r0,pc,lsl 0x10
+00003788  0000281F  andeq     r2,r0,pc,lsl r8
+0000378C  00002665  andeq     r2,r0,r5,ror 0xC
+00003790  00002665  andeq     r2,r0,r5,ror 0xC
+00003794  00002837  andeq     r2,r0,r7,lsr r8
+00003798  00002665  andeq     r2,r0,r5,ror 0xC
+0000379C  00002665  andeq     r2,r0,r5,ror 0xC
+000037A0  00002665  andeq     r2,r0,r5,ror 0xC
+000037A4  0000284B  andeq     r2,r0,r11,asr 0x10
+000037A8  00002665  andeq     r2,r0,r5,ror 0xC
+000037AC  00002629  andeq     r2,r0,r9,lsr 0xC
+000037B0  0000170B  andeq     r1,r0,r11,lsl 0xE
+000037B4  000023E7  andeq     r2,r0,r7,ror 0x7
+000037B8  00001535  andeq     r1,r0,r5,lsr r5
+000037BC  0000159D  muleq     r0,r1,r5
+000037C0  000023C7  andeq     r2,r0,r7,asr 0x7
+000037C4  000023B1  strheq    r2,[r0-],r1
+000037C8  00003C00  andeq     r3,r0,r0,lsl 0x18
+000037CC  0000382C  andeq     r3,r0,r12,lsr 0x10
+000037D0  BC4D00FF  Undefined
+000037D4  00003C00  andeq     r3,r0,r0,lsl 0x18
+000037D8  000039D0  strsbeq   r3,[r0-],r0
+000037DC  F99AA5FF  ldmednv   r10,{r0,r1,r2,r3,r4,r5,r6,r7,r8,r10,sp,pc}
+000037E0  00003C00  andeq     r3,r0,r0,lsl 0x18
+000037E4  0000382C  andeq     r3,r0,r12,lsr 0x10
+000037E8  F680A5FF  Undefined
+000037EC  5FBB00BC  swi       Unknown
+000037F0  4BBE00BD  blmi      0xFEF83AEC
+000037F4  D58F40BF  strle     r4,[pc,0xBF]
+000037F8  B186705B  orrlt     r7,r6,r11,asr r0
+000037FC  00BD00BC  ldrheq    r0,[sp],r12
+00003800  40BF4BBE  ldrhmi    r4,[pc],lr
+00003804  7056D58A  subsvc    sp,r6,r10,lsl 0xB
+00003808  00BCB186  adcseq    r11,r12,r6,lsl 0x3
+0000380C  4BBE00BD  blmi      0xFEF83B08
+00003810  D58540BF  strle     r4,[r5,0xBF]
+00003814  B1867053  orrlt     r7,r6,r3,asr r0
+00003818  BC000003  Undefined
+0000381C  000037C8  andeq     r3,r0,r8,asr 0xF
+00003820  000037EC  andeq     r3,r0,r12,ror 0xF
+00003824  000037FC  strsheq   r3,[r0-],r12
+00003828  0000380A  andeq     r3,r0,r10,lsl 0x10
+0000382C  40000000  andmi     r0,r0,r0
+00003830  0082B495  umulleq   r11,r2,r4,r5
+00003834  00000001  andeq     r0,r0,r1
+00003838  00000021  andeq     r0,r0,r1
+0000383C  47311900  ldrmi     r1,[r1,-r0,lsl 0x12]!
+00003840  7D756A5A  Undefined
+00003844  6A757D7F  bvs       0x1D62E48
+00003848  1931475A  ldmeane   r1!,{r1,r3,r4,r6,r8,r9,r10,lr}
+0000384C  B9CFE700  stmfalt   pc,{r8,r9,r10,sp,lr,pc}^
+00003850  838B96A6  orrhi     r9,r11,0xA600000
+00003854  968B8381  strls     r8,[r11],r1,lsl 0x7
+00003858  E7CFB9A6  strb      r11,[pc,r6,lsr 0x13]
+0000385C  00001900  andeq     r1,r0,r0,lsl 0x12
+00003860  54BB00BC  ldrpl     r0,[r11],0xBC
+00003864  55BE00BD  ldrpl     r0,[lr,0xBD]!
+00003868  D58F40BF  strle     r4,[pc,0xBF]
+0000386C  B1867056  orrlt     r7,r6,r6,asr r0
+00003870  00BD00BC  ldrheq    r0,[sp],r12
+00003874  40BF55BE  ldrhmi    r5,[pc],lr
+00003878  705BD58A  subsvc    sp,r11,r10,lsl 0xB
+0000387C  00BCB186  adcseq    r11,r12,r6,lsl 0x3
+00003880  55BE00BD  ldrpl     r0,[lr,0xBD]!
+00003884  D58540BF  strle     r4,[r5,0xBF]
+00003888  B1867056  orrlt     r7,r6,r6,asr r0
+0000388C  00BD00BC  ldrheq    r0,[sp],r12
+00003890  40BF55BE  ldrhmi    r5,[pc],lr
+00003894  86705BD5  Undefined
+00003898  000000B1  strheq    r0,[r0-],r1
+0000389C  B7000004  strlt     r0,[r0,-r4]
+000038A0  000037C8  andeq     r3,r0,r8,asr 0xF
+000038A4  00003860  andeq     r3,r0,r0,ror 0x10
+000038A8  00003870  andeq     r3,r0,r0,ror r8
+000038AC  0000387E  andeq     r3,r0,lr,ror r8
+000038B0  0000388C  andeq     r3,r0,r12,lsl 0x11
+000038B4  4ABB00BC  bmi       0xFEEC3BAC
+000038B8  78BE01BD  ldmfdvc   lr!,{r0,r2,r3,r4,r5,r7,r8}
+000038BC  41E740BF  strhmi    r4,[r7,0xF]!
+000038C0  BCB19860  Undefined
+000038C4  BE01BD00  Undefined
+000038C8  E740BF78  Undefined
+000038CC  B1987048  orrslt    r7,r8,r8
+000038D0  01BD00BC  ldrheq    r0,[sp,r12]!
+000038D4  40BF78BE  ldrhmi    r7,[pc],lr
+000038D8  6C4CE782  Undefined
+000038DC  00BCB198  umlalseq  r11,r12,r1,r8
+000038E0  78BE01BD  ldmfdvc   lr!,{r0,r2,r3,r4,r5,r7,r8}
+000038E4  E78440BF  Undefined
+000038E8  B1986C4F  orrslt    r6,r8,pc,asr 0x18
+000038EC  01BD00BC  ldrheq    r0,[sp,r12]!
+000038F0  40BF78BE  ldrhmi    r7,[pc],lr
+000038F4  6C53E786  Undefined
+000038F8  00BCB198  umlalseq  r11,r12,r1,r8
+000038FC  78BE01BD  ldmfdvc   lr!,{r0,r2,r3,r4,r5,r7,r8}
+00003900  E78A40BF  Undefined
+00003904  B1986056  orrslt    r6,r8,r6,asr r0
+00003908  D0000006  andle     r0,r0,r6
+0000390C  000037C8  andeq     r3,r0,r8,asr 0xF
+00003910  000038B4  strheq    r3,[r0-],r4
+00003914  000038C3  andeq     r3,r0,r3,asr 0x11
+00003918  000038D0  strsbeq   r3,[r0-],r0
+0000391C  000038DE  strsbeq   r3,[r0-],lr
+00003920  000038EC  andeq     r3,r0,r12,ror 0x11
+00003924  000038FA  strsheq   r3,[r0-],r10
+00003928  63BB00BC  movsvs    r0,0xBC
+0000392C  5EBE00BD  Undefined
+00003930  D58F40BF  strle     r4,[pc,0xBF]
+00003934  B1867864  orrlt     r7,r6,r4,ror 0x10
+00003938  00BD00BC  ldrheq    r0,[sp],r12
+0000393C  40BF5EBE  ldrhmi    r5,[pc],lr
+00003940  7862D58A  stmedvc   r2!,{r1,r3,r7,r8,r10,r12,lr,pc}^
+00003944  00BCB186  adcseq    r11,r12,r6,lsl 0x3
+00003948  5EBE00BD  Undefined
+0000394C  D58540BF  strle     r4,[r5,0xBF]
+00003950  B1867860  orrlt     r7,r6,r0,ror 0x10
+00003954  00BD00BC  ldrheq    r0,[sp],r12
+00003958  40BF5EBE  ldrhmi    r5,[pc],lr
+0000395C  86505FD5  Undefined
+00003960  BD00BCB1  Undefined
+00003964  BF5EBE00  swi       Unknown
+00003968  66D59440  ldrbvs    r9,[r5],r0,asr 0x8
+0000396C  BCB18678  Undefined
+00003970  BE00BD00  Undefined
+00003974  9840BF5E  stmedls   r0,{r1,r2,r3,r4,r6,r8,r9,r10,r11,r12,sp,pc}^
+00003978  7867DB81  stmedvc   r7!,{r0,r7,r8,r9,r11,r12,lr,pc}^
+0000397C  0000B18C  andeq     r11,r0,r12,lsl 0x3
+00003980  B2000006  andlt     r0,r0,0x6
+00003984  000037C8  andeq     r3,r0,r8,asr 0xF
+00003988  00003928  andeq     r3,r0,r8,lsr 0x12
+0000398C  00003938  andeq     r3,r0,r8,lsr r9
+00003990  00003946  andeq     r3,r0,r6,asr 0x12
+00003994  00003954  andeq     r3,r0,r4,asr r9
+00003998  00003961  andeq     r3,r0,r1,ror 0x12
+0000399C  0000396F  andeq     r3,r0,pc,ror 0x12
+000039A0  4ABB00BC  bmi       0xFEEC3C98
+000039A4  55BE02BD  ldrpl     r0,[lr,0x2BD]!
+000039A8  D38440BF  orrle     r4,r4,0xBF
+000039AC  B185786C  orrlt     r7,r5,r12,ror 0x10
+000039B0  02BD00BC  adcseq    r0,sp,0xBC
+000039B4  40BF55BE  ldrhmi    r5,[pc],lr
+000039B8  847060D3  ldrbhi    r6,[r0],-0xD3
+000039BC  000000B1  strheq    r0,[r0-],r1
+000039C0  D0000002  andle     r0,r0,r2
+000039C4  000037C8  andeq     r3,r0,r8,asr 0xF
+000039C8  000039A0  andeq     r3,r0,r0,lsr 0x13
+000039CC  000039B0  strheq    r3,[r0-],r0
+000039D0  40000000  andmi     r0,r0,r0
+000039D4  002F5658  eoreq     r5,pc,r8,asr r6
+000039D8  00000000  andeq     r0,r0,r0
+000039DC  00000520  andeq     r0,r0,r0,lsr 0xA
+000039E0  3E483B0B  Undefined
+000039E4  C6C3EB24  strbgt    lr,[r3],r4,lsr 0x16
+000039E8  37350FDF  Undefined
+000039EC  ADC0FF2A  Undefined
+000039F0  321AE2BD  andscc    lr,r10,0xD000000B
+000039F4  B0D61027  sbcslt    r1,r6,r7
+000039F8  440DD9BD  strmi     sp,[sp],-0x9BD
+000039FC  D10D3346  mrsle     r3,cpsr
+00003A00  32F4D1BE  rscscc    sp,r4,0x8000002F
+00003A04  053E5258  ldreq     r5,[lr,-0x258]!
+00003A08  F6C9B5C4  strbnv    r11,[r9],r4,asr 0xB
+00003A0C  1B3B4431  blne      0xED4AD8
+00003A10  C9ACA5D4  stmfagt   r12!,{r2,r4,r6,r7,r8,r10,sp,pc}
+00003A14  23353503  teqcs     r5,0xC00000
+00003A18  C7AEB3F3  Undefined
+00003A1C  415134F1  ldrshmi   r3,[r1,-0x41]
+00003A20  C4BAE927  ldrgt     lr,[r10],0x927
+00003A24  5C5115DF  Undefined
+00003A28  B0DB264D  sbcslt    r2,r11,sp,asr 0xC
+00003A2C  4619DDBB  Undefined
+00003A30  B1F63045  mvnslt    r3,r5
+00003A34  26E5B8A2  strbcs    r11,[r5],r2,lsr 0x11
+00003A38  CB0E2F3D  blgt      0x38F734
+00003A3C  15D8B8A6  ldrbne    r11,[r8,0x8A6]
+00003A40  08374D4E  ldmfaeq   r7!,{r1,r2,r3,r6,r8,r10,r11,lr}
+00003A44  F8CFB7C6  stmeanv   pc,{r1,r2,r6,r7,r8,r9,r10,r12,sp,pc}^
+00003A48  3D58603A  Undefined
+00003A4C  CAAFBBFF  bgt       0xFEBF2A50
+00003A50  3E4E39FC  Undefined
+00003A54  A9A0CE15  stmfage   r0!,{r0,r2,r4,r9,r10,r11,lr,pc}
+00003A58  3C3C09CD  Undefined
+00003A5C  A9AEEC22  stmfage   lr!,{r1,r5,r10,r11,sp,lr,pc}
+00003A60  5639F6C7  ldrpl     pc,[r9],-r7,asr 0xD
+00003A64  B4E32244  strblt    r2,[r3],0x244
+00003A68  561AE2BE  Undefined
+00003A6C  D61E4C64  ldrle     r4,[lr],-r4,ror 0x18
+00003A70  1DE2B8AA  Undefined
+00003A74  F02A4C4D  eornv     r4,r10,sp,asr 0x18
+00003A78  ECBA9DAF  Undefined
+00003A7C  06314529  ldreq     r4,[r1],-r9,lsr 0xA
+00003A80  DFB5A3C9  swi       Unknown
+00003A84  32535019  subscc    r5,r3,0x19
+00003A88  CFB1C501  swi       Unknown
+00003A8C  5B663BFF  blpl      0x1992A90
+00003A90  A9B7FA34  ldmedge   r7!,{r2,r4,r5,r9,r11,r12,sp,lr,pc}
+00003A94  563A00CE  ldrpl     r0,[r10],-lr,asr 0x1
+00003A98  9DCE0C3C  Undefined
+00003A9C  400CD5A8  andmi     sp,r12,r8,lsr 0xB
+00003AA0  B0E71A41  rsclt     r1,r7,r1,asr 0x14
+00003AA4  38FECAA4  ldmfdcc   lr!,{r2,r5,r7,r9,r11,lr,pc}^
+00003AA8  E217435B  ands      r4,r7,0x6C000001
+00003AAC  1DE9BAB2  Undefined
+00003AB0  15466A57  strbne    r6,[r6,-0xA57]
+00003AB4  EBBAA6D7  bl        0xFEEAD618
+00003AB8  1F4F521C  swi       Unknown
+00003ABC  C19AB2EE  orrsgt    r11,r10,lr,ror 0x5
+00003AC0  2D4B28F2  Undefined
+00003AC4  B3A2CDFD  movlt     r12,0x3F40
+00003AC8  564F19E9  strbpl    r1,[pc],-r9,ror 0x13
+00003ACC  ACC8FD29  Undefined
+00003AD0  6A3805D3  bvs       0xE05224
+00003AD4  B9F9275B  ldmedlt   r9!,{r0,r1,r3,r4,r6,r8,r9,r10,sp}^
+00003AD8  3902D7A7  stmfdcc   r2,{r0,r1,r2,r5,r7,r8,r9,r10,r12,lr,pc}
+00003ADC  D403345C  strle     r3,[r3],-0x45C
+00003AE0  09DFAA9C  ldmedeq   pc,{r2,r3,r4,r7,r9,r11,sp,pc}^
+00003AE4  E70D4341  str       r4,[sp,-r1,asr 0x6]
+00003AE8  03D2A1B7  bicseq    r10,r2,0xC000002D
+00003AEC  0C3E5C33  Undefined
+00003AF0  F3BAB3E7  movsnv    r11,0x9C000003
+00003AF4  3A6B541C  bcc       0x1AD8B6C
+00003AF8  BFA5DB0E  swi       Unknown
+00003AFC  4D5319F2  Undefined
+00003B00  9AB7F113  bls       0xFEDFFF54
+00003B04  4D24F5CA  Undefined
+00003B08  A4D6F625  ldrbge    pc,[r6],0x625
+00003B0C  4B17F2B6  blmi      0x6005EC
+00003B10  CDFB1D53  Undefined
+00003B14  340ADAAB  strcc     sp,[r10],-0xAAB
+00003B18  FB1C5369  blnv      0x7188C4
+00003B1C  03E0ABBB  mvneq     r10,0x2EC00
+00003B20  00295B37  eoreq     r5,r9,r7,lsr r11
+00003B24  E6B19FDB  Undefined
+00003B28  033E3E06  teqeq     lr,0x60
+00003B2C  DAA3BEEB  ble       0xFE8F36E0
+00003B30  35582D05  ldrbcc    r2,[r8,-0xD05]
+00003B34  BFB6EC06  swi       Unknown
+00003B38  66501AFA  Undefined
+00003B3C  AAE00B2F  bge       0xFF806800
+00003B40  5117F5C7  tstpl     r7,r7,asr 0xB
+00003B44  BDF50B44  Undefined
+00003B48  20F5D2A0  rscscs    sp,r5,r0,lsr 0x5
+00003B4C  DEF51B47  Undefined
+00003B50  14F8BCAA  ldrbne    r11,[r8],0xCAA
+00003B54  FD154B44  Undefined
+00003B58  0BE1B1D4  bleq      0xFF8702B0
+00003B5C  1649622F  strbne    r6,[r9],-pc,lsr 0x4
+00003B60  E4B4C3FC  ldr       r12,[r4],0x3FC
+00003B64  20513302  subscs    r3,r1,r2,lsl 0x6
+00003B68  BAA9E100  blt       0xFEA7BF70
+00003B6C  333704E9  teqcc     r7,0xE9000000
+00003B70  ACC6F000  Undefined
+00003B74  4C2705E0  Undefined
+00003B78  BEF0052C  Undefined
+00003B7C  4919FDC7  ldmeami   r9,{r0,r1,r2,r6,r7,r8,r10,r11,r12,sp,lr,pc}
+00003B80  E40A2858  str       r2,[r10],-0x858
+00003B84  15F5CFB6  ldrbne    r12,[r5,0xFB6]!
+00003B88  F80A3847  stmednv   r10,{r0,r1,r2,r6,r11,r12,sp}
+00003B8C  F6D7ADC6  ldrbnv    r10,[r7],r6,asr 0x1B
+00003B90  F914391B  ldmeanv   r4,{r0,r1,r3,r4,r8,r11,r12,sp}
+00003B94  F8C5B5E4  stmeanv   r5,{r2,r5,r6,r7,r8,r10,r12,sp,pc}^
+00003B98  123D3911  eorsne    r3,sp,0x44000
+00003B9C  E5BEDBFF  ldr       sp,[lr,0xBFF]!
+00003BA0  3D522C0A  Undefined
+00003BA4  C1CFFD15  bicgt     pc,pc,r5,lsl sp
+00003BA8  412C02E4  msrmi     cpsr_fs,r4
+00003BAC  B8E7021D  stmealt   r7!,{r0,r2,r3,r4,r9}^
+00003BB0  2A04E8C2  bcs       0x13DEC0
+00003BB4  D1F50227  mvnsle    r0,r7,lsr 0x4
+00003BB8  2004E1BA  strhcs    lr,[r4-],r10
+00003BBC  F308253A  mrsnv     r2,cpsr
+00003BC0  18FAD1CD  ldmfdne   r10!,{r0,r2,r3,r6,r7,r8,r12,lr,pc}^
+00003BC4  0927483C  stmfdeq   r7!,{r2,r3,r4,r5,r11,lr}
+00003BC8  F4D3C9EB  ldrbnv    r12,[r3],0x9EB
+00003BCC  0E2E3514  Undefined
+00003BD0  D6BDD5FA  Undefined
+00003BD4  132612F6  msrne     cpsr_sx,0x6000000F
+00003BD8  CCC7EAFF  Undefined
+00003BDC  2F280FF5  swi       SoundDriverVSyncOff
+00003BE0  CEE50016  Undefined
+00003BE4  3E2609E6  Undefined
+00003BE8  DFFE1736  swi       Unknown
+00003BEC  2002E2CE  andcs     lr,r2,lr,asr 0x5
+00003BF0  EE051F2F  Undefined
+00003BF4  01E6C7CD  mvneq     r12,sp,asr 0xF
+00003BF8  F90B1C16  stmfdnv   r11,{r1,r2,r4,r10,r11,r12}
+00003BFC  02DFCADF  sbcseq    r12,pc,0xDF000
+00003C00  0C242515  Undefined
+00003C04  F7D9DEF7  Undefined
+00003C08  28372B16  ldmfacs   r7!,{r1,r2,r4,r8,r9,r11,sp}
+00003C0C  D5DBF50A  ldrble    pc,[r11,0x50A]
+00003C10  27210FF2  Undefined
+00003C14  CBE5FD15  blgt      0xFF983070
+00003C18  1405F5D3  strne     pc,[r5],-0x5D3
+00003C1C  DAF10417  ble       0xFFC44C80
+00003C20  1309F1D2  mrsne     pc,cpsr
+00003C24  F1021B23  mrsnv     r1,cpsr
+00003C28  1B06E4DE  blne      0x1BCFA8
+00003C2C  011A3229  tsteq     r10,r9,lsr 0x4
+00003C30  00E0D9F1  strsheq   sp,[r0],0x91
+00003C34  09231F10  stmfdeq   r3!,{r4,r8,r9,r10,r11,r12}
+00003C38  E3CCE0F8  bic       lr,r12,0xF8
+00003C3C  131603FB  tstne     r6,0xEC000003
+00003C40  DDD8EFFE  Undefined
+00003C44  241306FD  ldrcs     r0,[r3],-0x6FD
+00003C48  E0F0FE11  rscs      pc,r0,r1,lsl lr
+00003C4C  2B180FF3  blcs      0x607C20
+00003C50  EC000D2A  Undefined
+00003C54  0F04EFD9  swi       IntrWait
+00003C58  F7021A24  strnv     r1,[r2,-r4,lsr 0x14]
+00003C5C  F7EFD2D8  Undefined
+00003C60  FC0B1B06  Undefined
+00003C64  FFEBD6EB  swi       Unknown
+00003C68  08201B01  stmedeq   r0!,{r0,r8,r9,r11,r12}
+00003C6C  00E5EBFE  strsheq   lr,[r5],0xBE
+00003C70  1E2D180C  Undefined
+00003C74  DFE3000A  swi       Unknown
+00003C78  251500F8  ldrcs     r0,[r5,-0xF8]
+00003C7C  D0EF0310  rscle     r0,pc,r0,lsl r3
+00003C80  13F4EEDE  mvnsne    lr,0xDE0
+00003C84  E3FC061A  mvns      r0,0x1A00000
+00003C88  07F6F2DC  Undefined
+00003C8C  FC071823  Undefined
+00003C90  0802EFE6  stmedeq   r2,{r1,r2,r5,r6,r7,r8,r9,r10,r11,sp,lr,pc}
+00003C94  0B162A21  bleq      0x58E520
+00003C98  F7E8DDF7  Undefined
+00003C9C  0D202002  Undefined
+00003CA0  E3D2E102  bics      lr,r2,0x80000000
+00003CA4  151EFFE8  ldrne     pc,[lr,-0xFE8]
+00003CA8  E3DDF607  bics      pc,sp,0x700000
+00003CAC  2315F6ED  tstcs     r5,0xED00000
+00003CB0  E7F30814  Undefined
+00003CB4  270EFEF4  Undefined
+00003CB8  EB071624  bl        0x1C9550
+00003CBC  0EF5EADE  Undefined
+00003CC0  F80E1C26  stmednv   lr,{r1,r2,r5,r10,r11,r12}
+00003CC4  EDDED5D7  Undefined
+00003CC8  05142110  ldreq     r2,[r4,-0x110]
+00003CCC  E9E1DCEC  stmfa     r1!,{r2,r3,r5,r6,r7,r10,r11,r12,lr,pc}^
+00003CD0  13222001  msrne     cpsr_x,0x1
+00003CD4  F1E9EE01  mvnnv     lr,r1,lsl 0x1C
+00003CD8  242A1800  strcs     r1,[r10],-0x800
+00003CDC  DDE3FD13  Undefined
+00003CE0  291BFEE8  ldmeacs   r11,{r3,r5,r6,r7,r9,r10,r11,r12,sp,lr,pc}
+00003CE4  D2EB081C  rscle     r0,r11,0x1C0000
+00003CE8  1EFDDFD1  Undefined
+00003CEC  E4FC1123  ldrb      r1,[r12],0x123
+00003CF0  10F0DBD6  ldrsbne   sp,[r0],0xB6
+00003CF4  FA0D2327  bnv       0x34C998
+00003CF8  08F1E3E9  ldmfdeq   r1!,{r0,r3,r5,r6,r7,r8,r9,sp,lr,pc}^
+00003CFC  0A222F21  beq       0x88F988
+00003D00  F0D9DBF4  ldrshnv   sp,[r9],0xB4
+00003D04  162C270A  strne     r2,[r12],-r10,lsl 0xE
+00003D08  D0C7DFFE  strshle   sp,[r7],0xFE
+00003D0C  232A0EEC  msrcs     cpsr_fx,0xEC0
+00003D10  CCD9F408  Undefined
+00003D14  301DFFE1  andscc    pc,sp,r1,ror 0x1F
+00003D18  DDF5031D  Undefined
+00003D1C  2D11FBDF  Undefined
+00003D20  E8011734  stmed     r1,{r2,r4,r5,r8,r9,r10,r12}
+00003D24  18FDDECE  ldmfdne   sp!,{r1,r2,r3,r6,r7,r9,r10,r11,r12,lr,pc}^
+00003D28  F40A2A35  strnv     r2,[r10],-0xA35
+00003D2C  FCDCBFCD  Undefined
+00003D30  FF19341F  swi       SoundBias
+00003D34  F1CCC6EA  bicnv     r12,r12,r10,ror 0xD
+00003D38  0E322E0B  Undefined
+00003D3C  E9D0E8FF  ldmed     r0,{r0,r1,r2,r3,r4,r5,r6,r7,r11,sp,lr,pc}^
+00003D40  2C3E1D04  Undefined
+00003D44  CAD4FB0A  bgt       0xFF542974
+00003D48  3D2A08EE  Undefined
+00003D4C  B9E3001A  stmfalt   r3!,{r1,r3,r4}^
+00003D50  340CEFC7  strcc     lr,[r12],-0xFC7
+00003D54  D3F90930  mvnsle    r0,0xC0000
+00003D58  1DFEDFB9  Undefined
+00003D5C  F804233F  stmednv   r4,{r0,r1,r2,r3,r4,r5,r8,r9,sp}
+00003D60  0CF9D2D0  Undefined
+00003D64  04184133  ldreq     r4,[r8],-0x133
+00003D68  FDD8C0E8  Undefined
+00003D6C  0A334116  beq       0xCD41CC
+00003D70  DEB2C6F8  Undefined
+00003D74  1D4224FE  Undefined
+00003D78  C4B6EA00  ldrgt     lr,[r6],0xA00
+00003D7C  3D3809F2  Undefined
+00003D80  C1E1000F  mvngt     r0,pc
+00003D84  493B0BE5  ldmeami   r11!,{r0,r2,r5,r6,r7,r8,r9,r11}
+00003D88  B9E30319  stmfalt   r3!,{r0,r3,r4,r8,r9}^
+00003D8C  4B1BFFD6  blmi      0x703CEC
+00003D90  BEF70B39  Undefined
+00003D94  2B00E0AC  blcs      0x3C04C
+00003D98  E300204A  mrs       r2,cpsr
+00003D9C  0DF2C0AB  Undefined
+00003DA0  FC10423F  Undefined
+00003DA4  00E1BBD7  strsbeq   r11,[r1],0xB7
+00003DA8  09334F24  ldmeaeq   r3!,{r2,r5,r8,r9,r10,r11,lr}
+00003DAC  EFC0C6F5  swi       Unknown
+00003DB0  1F4E390B  swi       Unknown
+00003DB4  C4A8DA00  strgt     sp,[r8],0xA00
+00003DB8  3C4615F6  Undefined
+00003DBC  AABFF30A  bge       0xFF0009EC
+00003DC0  4D2900DC  Undefined
+00003DC4  BFE90029  swi       Unknown
+00003DC8  4111F4C8  tstmi     r1,r8,asr 0x9
+00003DCC  DBFD1A4A  blle      0xFFF4A6FC
+00003DD0  2400D7BA  strcs     sp,[r0],-0x7BA
+00003DD4  ED0A3B4E  Undefined
+00003DD8  08E2AEB9  stmeaeq   r2!,{r0,r3,r4,r5,r7,r9,r10,r11,sp,pc}^
+00003DDC  FB224C33  blnv      0x896EB0
+00003DE0  F4C0A9D6  strbnv    r10,[r0],0x9D6
+00003DE4  10424316  subne     r4,r2,r6,lsl r3
+00003DE8  DDBBCEF1  Undefined
+00003DEC  354F2D05  strbcc    r2,[pc,-0xD05]
+00003DF0  C3C5E904  bicgt     lr,r5,0x10000
+00003DF4  4E3F15EF  Undefined
+00003DF8  ABD1F820  blge      0xFF481E80
+00003DFC  4821FCC8  stmedmi   r1!,{r3,r6,r7,r10,r11,r12,sp,lr,pc}
+00003E00  B8E4093D  stmealt   r4!,{r0,r2,r3,r4,r5,r8,r11}^
+00003E04  3109DCAD  mrscc     sp,cpsr
+00003E08  DAF92A4B  ble       0xFFE4E73C
+00003E0C  1DF4C7BF  Undefined
+00003E10  F0194944  andsnv    r4,r9,r4,asr 0x12
+00003E14  07D7C0D4  Undefined
+00003E18  063C4E2F  ldreq     r4,[r12],-pc,lsr 0x1C
+00003E1C  E5B4BADF  ldr       r11,[r4,0xADF]!
+00003E20  244A3914  strbcs    r3,[r10],-0x914
+00003E24  C1ADC8F0  strshgt   r12,[sp,r0]!
+00003E28  404322F8  strshmi   r2,[r3-],0x28
+00003E2C  BFC9E00D  swi       Unknown
+00003E30  4C350EDB  Undefined
+00003E34  CADBFC34  bgt       0xFF702F0C
+00003E38  4322F2C9  msrmi     cpsr_x,0x9000000C
+00003E3C  C9EA204B  stmfagt   r10!,{r0,r1,r3,r6,sp}^
+00003E40  2D03CCB4  Undefined
+00003E44  D3043C47  mrsle     r3,cpsr
+00003E48  14DDB3B7  ldrbne    r11,[sp],0x3B7
+00003E4C  ED294636  Undefined
+00003E50  F8C8C3CD  stmeanv   r8,{r0,r2,r3,r6,r7,r8,r9,lr,pc}^
+00003E54  15454229  strbne    r4,[r5,-0x229]
+00003E58  DCC9D1E0  Undefined
+00003E5C  3A4A3811  bcc       0x1291EA8
+00003E60  BDBFD2FE  Undefined
+00003E64  463D21EC  ldrmi     r2,[sp],-r12,ror 0x3
+00003E68  B4BFE121  ldrlt     lr,[pc],0x121
+00003E6C  402C00C5  eormi     r0,r12,r5,asr 0x1
+00003E70  C7D0053E  Undefined
+00003E74  3919DEC3  ldmeacc   r9,{r0,r1,r6,r7,r9,r10,r11,r12,lr,pc}
+00003E78  D1EF3047  mvnle     r3,r7
+00003E7C  2DFBD0D0  Undefined
+00003E80  DC1A4743  Undefined
+00003E84  0FD5BFC6  swi       Unknown
+00003E88  FA384435  bnv       0xE14F64
+00003E8C  E4BABAC5  ldr       r11,[r10],0xAC5
+00003E90  2242381F  subcs     r3,r2,0x1F0000
+00003E94  CDC6C6DE  Undefined
+00003E98  40403101  submi     r3,r0,r1,lsl 0x2
+00003E9C  D2D1D40A  sbcsle    sp,r1,0xA000000
+00003EA0  473C1DE6  ldrmi     r1,[r12,-r6,ror 0x1B]!
+00003EA4  C5C9F133  strbgt    pc,[r9,0x133]
+00003EA8  3E2BF8C9  Undefined
+00003EAC  BBD21741  bllt      0xFF489BB8
+00003EB0  320ACEBA  andcc     r12,r10,0xBA0
+00003EB4  C6F8363D  Undefined
+00003EB8  22E9C9C7  rsccs     r12,r9,0x31C000
+00003EBC  E3234039  msr       cpsr_xc,0x39
+00003EC0  07DED7CF  ldrbeq    sp,[lr,pc,asr 0xF]
+00003EC4  0C3C3E31  Undefined
+00003EC8  E6CECCD6  Undefined
+00003ECC  293A3318  ldmeacs   r10!,{r3,r4,r8,r9,r12,sp}
+00003ED0  CBC5C5ED  blgt      0xFF17568C
+00003ED4  333121F2  teqcc     r1,0x8000003C
+00003ED8  D1CBD810  bicle     sp,r11,r0,lsl r8
+00003EDC  332B0BDE  msrcc     cpsr_fxc,0x37800
+00003EE0  DBD7FC2C  blle      0xFF602F98
+00003EE4  301EF8E1  andscc    pc,lr,r1,ror 0x11
+00003EE8  D5EB1E35  strble    r1,[r11,0xE35]!
+00003EEC  2504E1D7  strcs     lr,[r4,-0x1D7]
+00003EF0  D7052C2F  strle     r2,[r5,-pc,lsr 0x18]
+00003EF4  0DE6D2CE  Undefined
+00003EF8  EF1C2A24  swi       SoundDriverMain
+00003EFC  FADED7D4  bnv       0xFF7B9E54
+00003F00  0000000B  andeq     r0,r0,r11
+00003F04  00000000  andeq     r0,r0,r0
+00003F08  00000000  andeq     r0,r0,r0
+00003F0C  00000000  andeq     r0,r0,r0
+00003F10  00000000  andeq     r0,r0,r0
+00003F14  00000000  andeq     r0,r0,r0
+00003F18  00000000  andeq     r0,r0,r0
+00003F1C  00000000  andeq     r0,r0,r0
+00003F20  00000000  andeq     r0,r0,r0
+00003F24  00000000  andeq     r0,r0,r0
+00003F28  00000000  andeq     r0,r0,r0
+00003F2C  00000000  andeq     r0,r0,r0
+00003F30  00000000  andeq     r0,r0,r0
+00003F34  00000000  andeq     r0,r0,r0
+00003F38  00000000  andeq     r0,r0,r0
+00003F3C  00000000  andeq     r0,r0,r0
+00003F40  00000000  andeq     r0,r0,r0
+00003F44  00000000  andeq     r0,r0,r0
+00003F48  00000000  andeq     r0,r0,r0
+00003F4C  00000000  andeq     r0,r0,r0
+00003F50  00000000  andeq     r0,r0,r0
+00003F54  00000000  andeq     r0,r0,r0
+00003F58  00000000  andeq     r0,r0,r0
+00003F5C  00000000  andeq     r0,r0,r0
+00003F60  00000000  andeq     r0,r0,r0
+00003F64  00000000  andeq     r0,r0,r0
+00003F68  00000000  andeq     r0,r0,r0
+00003F6C  00000000  andeq     r0,r0,r0
+00003F70  00000000  andeq     r0,r0,r0
+00003F74  00000000  andeq     r0,r0,r0
+00003F78  00000000  andeq     r0,r0,r0
+00003F7C  00000000  andeq     r0,r0,r0
+00003F80  00000000  andeq     r0,r0,r0
+00003F84  00000000  andeq     r0,r0,r0
+00003F88  00000000  andeq     r0,r0,r0
+00003F8C  00000000  andeq     r0,r0,r0
+00003F90  00000000  andeq     r0,r0,r0
+00003F94  00000000  andeq     r0,r0,r0
+00003F98  00000000  andeq     r0,r0,r0
+00003F9C  00000000  andeq     r0,r0,r0
+00003FA0  00000000  andeq     r0,r0,r0
+00003FA4  00000000  andeq     r0,r0,r0
+00003FA8  00000000  andeq     r0,r0,r0
+00003FAC  00000000  andeq     r0,r0,r0
+00003FB0  00000000  andeq     r0,r0,r0
+00003FB4  00000000  andeq     r0,r0,r0
+00003FB8  00000000  andeq     r0,r0,r0
+00003FBC  00000000  andeq     r0,r0,r0
+00003FC0  00000000  andeq     r0,r0,r0
+00003FC4  00000000  andeq     r0,r0,r0
+00003FC8  00000000  andeq     r0,r0,r0
+00003FCC  00000000  andeq     r0,r0,r0
+00003FD0  00000000  andeq     r0,r0,r0
+00003FD4  00000000  andeq     r0,r0,r0
+00003FD8  00000000  andeq     r0,r0,r0
+00003FDC  00000000  andeq     r0,r0,r0
+00003FE0  00000000  andeq     r0,r0,r0
+00003FE4  00000000  andeq     r0,r0,r0
+00003FE8  00000000  andeq     r0,r0,r0
+00003FEC  00000000  andeq     r0,r0,r0
+00003FF0  00000000  andeq     r0,r0,r0
+00003FF4  00000000  andeq     r0,r0,r0
+00003FF8  00000000  andeq     r0,r0,r0
+00003FFC  00000000  andeq     r0,r0,r0

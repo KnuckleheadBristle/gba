@@ -289,7 +289,7 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                 /* This guy has to handle byte and word value types */
                 match core.cycle {
                     0 => {
-                        core.abus = core.reg.read(15);
+                        core.abus = core.reg.read(rn as usize);
                         core.bbus = 
                         if i == 1 {
                             core.decode_shift(off&0xFF0);
@@ -301,15 +301,11 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         };
 
                         core.barrel_shift();
-                        println!("abus: {}", core.abus);
-                        println!("bbus: {}", core.bbus);
-                        println!("barrelbus: {}", core.barrelbus);
-                        println!("sum: {}", core.abus + core.barrelbus);
                         core.aluop = 0b10 << (u & 0b1); /* if u==0 add else sub */
                         core.alu();
-                        println!("aluop: {}", core.aluop);
-                        println!("alubus: {}", core.alubus);
-                        println!("addrbus: {:08x}", core.addrbus);
+                        core.addrbus = core.alubus;
+                        core.datareg = core.alubus;
+                        println!("Load/Store address: 0x{:08x}", core.alubus);
                         None
                     },
                     1 => {
@@ -320,25 +316,23 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                             if b==1 { //byte or word quantity
                               bus.mem_write(core.addrbus as usize, core.reg.read(rd as usize) as u8); //byte
                             } else {
-                                println!("addrbus: 0x{:08x}", core.addrbus as usize);
-                                println!("Destination reg: 0x{:08x}", core.reg.read(rd as usize));
                                 bus.mem_write_32(core.addrbus as usize, core.reg.read(rd as usize));   //word
                             }
                             Some(true)
                             /* end of store */
                         } else { /* The load instruction */
                             if a==1 || p==0 { //register write-back
-                              core.reg.write(rn as usize, core.alubus);
+                                println!("Alubus: {:08x}", core.alubus);
+                                core.reg.write(rn as usize, core.alubus);
                             }
                             if b==1 {
                                 core.datareg = bus.mem_read(core.addrbus as usize) as u32; //byte (zero extended)
-                                println!("datareg written to with a byte value: 0x{:08x}", core.datareg);
+                                println!("Addr")
                             } else {
-                                println!("addrbus: 0x{:08x}", core.addrbus);
+                                println!("Datareg before: {:08x}", core.datareg);
                                 core.datareg = bus.mem_read_32(core.addrbus as usize); //word
-                                println!("datareg written to with word value: 0x{:08x}", core.datareg);
-                                println!("{}", core.addrbus);
-                                core.reg.write(rn as usize, core.datareg);
+                                println!("Addrbus: {:08x}", core.addrbus);
+                                println!("Datareg after: {:08x}", core.datareg);
                             }
                             /* End of load unless rn = pc */
                             if rd == 15 { //source/dest is pc
@@ -348,9 +342,8 @@ pub fn step_arm(core: &mut arm7tdmi::Core, bus: &mut bus::Bus, inst: u32) -> Opt
                         }
                     },
                     2 => {
-                        println!("0x{:08x}", rn);
-                        println!("0x{:08x}", core.datareg);
-                        core.reg.write(rn as usize, core.datareg);
+                        println!("Datareg: 0x{:08x}", core.datareg);
+                        core.reg.write(rd as usize, core.datareg);
                         if rd == 15 {
                             None
                         } else {
